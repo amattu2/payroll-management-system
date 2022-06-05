@@ -1,0 +1,16 @@
+[APPLICATION]
+NAME=
+BASE_URL="http://localhost"
+ADMIN_EMAIL=webmaster@localhost
+
+[PHPMAILER]
+HOST="smtp.gmail.com"
+PORT=587
+USERNAME=
+PASSWORD=
+
+[DATABASE]
+HOST=localhost
+USER=
+PASS=
+DB=

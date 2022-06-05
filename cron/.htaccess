@@ -1,0 +1,5 @@
+# Remove Directory Listing
+Options All -Indexes
+
+# Block All Access
+Require all denied

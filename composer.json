@@ -1,0 +1,18 @@
+{
+    "name": "amattu/payroll-tracker",
+    "description": "A payroll tracking system based on Bootstrap 5 and PHP 8+",
+    "type": "project",
+    "require": {
+        "fpdf/fpdf": "^1.84",
+        "catfan/medoo": "^2.1",
+        "amattu2/ini-parser": "dev-master",
+        "phpmailer/phpmailer": "^6.6"
+    },
+    "license": "AGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Alec M.",
+            "email": "alecmattu1234@gmail.com"
+        }
+    ]
+}

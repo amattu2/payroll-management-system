@@ -1,0 +1,5 @@
+# Rewrite Engine
+RewriteEngine On
+
+# Block Directory Listing
+Options -Indexes

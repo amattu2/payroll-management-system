@@ -8,3 +8,5 @@ node_modules/
 *.ini
 *.gch
 *.exe
+
+/vendor/
