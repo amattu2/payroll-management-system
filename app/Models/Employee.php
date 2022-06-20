@@ -41,6 +41,7 @@ class Employee extends Model
         'middlename',
         'lastname',
         'email',
+        'employment_status',
         'created_at',
     ];
 }

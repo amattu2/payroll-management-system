@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
- </head>
+  </head>
 
   <body>
     @include("partials.navbar")
@@ -31,55 +31,8 @@
 
     <!-- Scripts -->
     <script src="{{asset('js/app.js')}}" defer></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://unpkg.com/chart.js"></script>
     <script>
-      feather.replace({'aria-hidden': 'true'})
 
-      // Graphs
-      const ctx = document.getElementById('myChart');
-      const myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: [
-            'Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday'
-          ],
-          datasets: [{
-            data: [
-              15339,
-              21345,
-              18483,
-              24003,
-              23489,
-              24092,
-              12034
-            ],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false
-          }
-        }
-      });
     </script>
   </body>
 </html>

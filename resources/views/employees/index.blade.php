@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
- </head>
+  </head>
 
   <body class="h-100 w-100">
     @include("partials.navbar")
@@ -24,7 +24,27 @@
             </a>
           </div>
         @else
-          @include("partials.overview", ["employees" => $employees])
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2">Top Employees</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <a class="btn btn-sm btn-outline-secondary me-2" href="{{Route("employees.employee", "create")}}">Create</a>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+          </div>
+          <div class="row text-center">
+            @for ($i = 0; $i < 4; $i++)
+            <div class="col-xl-3 col-sm-6 mb-3">
+              <div class="bg-white rounded shadow-sm p-3" role="button" onclick="window.location.href = '{{route("employees.employee", $i)}}';">
+                <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                <h5 class="mb-0">{First Last}</h5>
+                <span class="small text-uppercase text-muted">{Employee Role}</span>
+              </div>
+            </div>
+            @endfor
+          </div>
+
+          <h2>Employees</h2>
+          @include("partials.employeeTable", ["employees" => $employees])
         @endif
       </main>
     </div>

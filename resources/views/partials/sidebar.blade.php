@@ -3,7 +3,7 @@
     <ul class="nav flex-column">
       <li class="nav-item">
         <a class="nav-link {{Route::is('index') ? 'active' : ''}}" aria-current="page" href="{{Route("index")}}">
-          <span data-feather="index" class="align-text-bottom"></span>
+          <span data-feather="home" class="align-text-bottom"></span>
           Overview
         </a>
       </li>

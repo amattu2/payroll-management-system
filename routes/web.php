@@ -20,13 +20,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use App\Models\Employee;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 
 /*
  * Authentication Routes
@@ -97,16 +98,14 @@ Route::prefix('authenticate')->group(function() {
  * Normal Routes
  */
 Route::middleware(['auth', 'auth.session'])->group(function() {
-  // Index
-  Route::get('/', function() {
-    $employees = DB::table('employees')->get();
+  $employees = DB::table('employees')->get();
 
+  // Index
+  Route::get('/', function() use ($employees) {
     return view('index', ["employees" => $employees]);
   })->name("index");
 
-  Route::get('/employees', function() {
-    $employees = DB::table('employees')->get();
-
+  Route::get('/employees', function() use ($employees) {
     return view('employees.index', ["employees" => $employees]);
   })->name("employees");
 
@@ -135,25 +134,32 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     return Redirect::back()->withErrors("Not supported yet");
   });
 
-  Route::get('/employees/{id}', function($id) {
+  Route::get('/employees/{id}', function($id) use ($employees) {
     if (is_numeric($id)) {
       $employee = DB::table('employees')->where('id', $id)->first();
 
-      //return view('employees.employee', ["employee" => $employee]);
+      return view('employees.employee', [
+        "employee" => $employee,
+        "employees" => $employees
+      ]);
     } else {
-      return view('employees.create');
+      return view('employees.create', ["employees" => $employees]);
     }
   })->name("employees.employee");
 
   Route::get('/reports', function() {
-    return view('index');
+    return "Not supported yet";
   })->name("reports");
 
+  Route::get('/reports/{report}', function($report) {
+    return $report . " is not supported yet";
+  })->name("reports.report");
+
   Route::get('/integrations', function() {
-    return view('index');
+    return "Not supported yet";
   })->name("integrations");
 
   Route::get('/settings', function() {
-    return view('index');
+    return "Not supported yet";
   })->name("settings");
 });

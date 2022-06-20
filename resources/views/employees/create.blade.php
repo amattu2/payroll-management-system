@@ -12,7 +12,7 @@
 
     <div class="container-fluid">
       @include("partials.sidebar")
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3 bg-light">
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-3 bg-light">
         @include("partials.errors")
 
         <div class="card">
@@ -101,7 +101,7 @@
                 <input type="text" class="form-control @error('title') is-invalid @enderror" name="title">
               </div>
               <button type="submit" class="btn btn-primary">Create</button>
-              <a class="btn text-danger" href="{{route("employees")}}">Cancel</button>
+              <a class="btn text-danger" href="{{route("employees")}}">Cancel</a>
             </form>
           </div>
         </div>
