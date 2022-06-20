@@ -25,6 +25,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use App\Models\Employee;
 
 /*
  * Authentication Routes
@@ -40,11 +42,11 @@ Route::any("logout.do", function(Request $r) {
 
   // Redirect to login
   return redirect('/');
-})->name("logout");
+})->name("auth.logout");
 
 Route::prefix('authenticate')->group(function() {
   if (Auth::check()) {
-    return redirect()->route('home')->withErrors([
+    return redirect()->route('index')->withErrors([
       "You are already logged in"
     ]);
   }
@@ -61,7 +63,7 @@ Route::prefix('authenticate')->group(function() {
     ]);
 
     if (Auth::attempt($request, request('remember'))) {
-      return redirect()->route('home');
+      return redirect()->route('index');
     }
 
     return redirect()->back()->withErrors([
@@ -87,7 +89,7 @@ Route::prefix('authenticate')->group(function() {
     ]);
     Auth::login($user);
 
-    return redirect()->route('home');
+    return redirect()->route('index');
   })->name("auth.create");
 });
 
@@ -95,8 +97,63 @@ Route::prefix('authenticate')->group(function() {
  * Normal Routes
  */
 Route::middleware(['auth', 'auth.session'])->group(function() {
-  // Home
+  // Index
   Route::get('/', function() {
-    return view('home');
-  })->name("home");
+    $employees = DB::table('employees')->get();
+
+    return view('index', ["employees" => $employees]);
+  })->name("index");
+
+  Route::get('/employees', function() {
+    $employees = DB::table('employees')->get();
+
+    return view('employees.index', ["employees" => $employees]);
+  })->name("employees");
+
+  Route::post('/employees', function() {
+    $validated = request()->validate([
+      'firstname' => 'required|string|max:255',
+      'middlename' => 'nullable|string|max:255',
+      'lastname' => 'required|string|max:255',
+      'email' => 'required|string|email|max:255',
+      'telephone' => 'required|string|max:255',
+      'street1' => 'required|string|max:255',
+      'street2' => 'nullable|string|max:255',
+      'city' => 'required|string|max:255',
+      'state' => 'required|string|max:2',
+      'zip' => 'required|string|max:5',
+      'birthdate' => 'required|date',
+      'datehired' => 'required|date',
+      'paytype' => 'required|in:hourly,salary',
+      'payperiod' => 'required|in:daily,weekly,biweekly,monthly',
+      'salary' => 'required|numeric',
+      'title' => 'required|string|max:255',
+    ]);
+
+    Employee::create($validated);
+
+    return Redirect::back()->withErrors("Not supported yet");
+  });
+
+  Route::get('/employees/{id}', function($id) {
+    if (is_numeric($id)) {
+      $employee = DB::table('employees')->where('id', $id)->first();
+
+      //return view('employees.employee', ["employee" => $employee]);
+    } else {
+      return view('employees.create');
+    }
+  })->name("employees.employee");
+
+  Route::get('/reports', function() {
+    return view('index');
+  })->name("reports");
+
+  Route::get('/integrations', function() {
+    return view('index');
+  })->name("integrations");
+
+  Route::get('/settings', function() {
+    return view('index');
+  })->name("settings");
 });

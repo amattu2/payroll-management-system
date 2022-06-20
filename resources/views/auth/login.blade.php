@@ -7,16 +7,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   </head>
   <body>
-    <h1>Sign In</h1>
+    @include("partials.errors")
 
-    <!-- Authentication Errors -->
-    @if ($errors->any())
-    <ul>
-      @foreach ($errors->all() as $error)
-        <li>{{$error}}</li>
-      @endforeach
-    </ul>
-    @endif
+    <h1>Sign In</h1>
 
     <!-- Login Form -->
     <form class="p-3" method="POST" action="{{route("auth.check")}}">
