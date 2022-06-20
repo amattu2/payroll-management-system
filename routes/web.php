@@ -20,23 +20,83 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 
-Route::get('login', function() {
-  if (Auth::check())
+/*
+ * Authentication Routes
+ */
+
+Route::any("logout.do", function(Request $r) {
+  // Logout user
+  Auth::logout();
+
+  // Destroy session
+  $r->session()->invalidate();
+  $r->session()->regenerateToken();
+
+  // Redirect to login
+  return redirect('/');
+})->name("logout");
+
+Route::prefix('authenticate')->group(function() {
+  if (Auth::check()) {
+    return redirect()->route('home')->withErrors([
+      "You are already logged in"
+    ]);
+  }
+
+  Route::get('login', function() {
+    return view('auth.login');
+  })->name("auth.login");
+
+  Route::post('login.do', function() {
+    // Validate request
+    $request = request()->validate([
+      'email' => 'required|string|email|max:255',
+      'password' => 'required|string|min:8',
+    ]);
+
+    if (Auth::attempt($request, request('remember'))) {
+      return redirect()->route('home');
+    }
+
+    return redirect()->back()->withErrors([
+      "Bad authentication"
+    ]);
+  })->name("auth.check");
+
+  Route::get('register', function() {
+    return view('auth.register');
+  })->name("register")->name("auth.register");
+
+  Route::post('register.do', function() {
+    $validated = request()->validate([
+      'name' => 'required|string|max:255',
+      'email' => 'required|string|email|max:255|unique:users',
+      'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = User::create([
+      'name' => $validated['name'],
+      'email' => $validated['email'],
+      'password' => Hash::make($validated['password']),
+    ]);
+    Auth::login($user);
+
     return redirect()->route('home');
+  })->name("auth.create");
+});
 
-  return view('login');
-})->name("auth.login");
-
-Route::get('register', function() {
-  if (Auth::check())
-    return redirect()->route('home');
-
-  return view('register');
-})->name("register")->name("auth.register");
-
-Route::get('/', function() {
-  return view('home');
-})->middleware('auth')->name("home");
+/*
+ * Normal Routes
+ */
+Route::middleware(['auth', 'auth.session'])->group(function() {
+  // Home
+  Route::get('/', function() {
+    return view('home');
+  })->name("home");
+});
