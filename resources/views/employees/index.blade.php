@@ -9,12 +9,13 @@
 
   <body class="h-100 w-100">
     @include("partials.navbar")
-    @include("partials.errors")
 
     <div class="container-fluid">
       @include("partials.sidebar")
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3 bg-light">
+        @include("partials.errors")
+
         @if (!isset($employees) || count($employees) == 0)
           <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>{{trans('messages.welcome.to.app', ['name' => config('app.name')])}}</h2>

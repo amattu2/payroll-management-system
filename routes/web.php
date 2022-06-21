@@ -26,7 +26,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,14 +66,12 @@ Route::prefix('authenticate')->group(function() {
       return redirect()->route('index');
     }
 
-    return redirect()->back()->withErrors([
-      "Bad authentication"
-    ]);
+    return redirect()->back()->withErrors(["Bad authentication"]);
   })->name("auth.check");
 
   Route::get('register', function() {
     return view('auth.register');
-  })->name("register")->name("auth.register");
+  })->name("auth.register");
 
   Route::post('register.do', function() {
     $validated = request()->validate([
@@ -122,21 +119,25 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
       'state' => 'required|string|max:2',
       'zip' => 'required|string|max:5',
       'birthdate' => 'required|date',
-      'datehired' => 'required|date',
-      'paytype' => 'required|in:hourly,salary',
-      'payperiod' => 'required|in:daily,weekly,biweekly,monthly',
-      'salary' => 'required|numeric',
+      'hired_at' => 'required|date',
+      'pay_type' => 'required|in:hourly,salary',
+      'pay_period' => 'required|in:daily,weekly,biweekly,monthly',
+      'pay_rate' => 'required|numeric',
       'title' => 'required|string|max:255',
     ]);
 
-    Employee::create($validated);
+    $employee = Employee::create($validated);
 
-    return Redirect::back()->withErrors("Not supported yet");
+    return redirect()->route("employees.employee", $employee->id);
   });
 
   Route::get('/employees/{id}', function($id) use ($employees) {
     if (is_numeric($id)) {
       $employee = DB::table('employees')->where('id', $id)->first();
+
+      if (!$employee) {
+        return redirect()->route('employees')->withErrors(["The requested employee was not found"]);
+      }
 
       return view('employees.employee', [
         "employee" => $employee,

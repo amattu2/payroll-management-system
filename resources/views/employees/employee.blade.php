@@ -17,6 +17,9 @@
         @include("partials.errors")
 
         <center>Employee...Details</center>
+        <pre>
+          {{print_r($employee)}}
+        </pre>
       </main>
     </div>
 

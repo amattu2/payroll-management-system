@@ -5,8 +5,8 @@
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Email</th>
-        <th scope="col">Hours</th>
-        <th scope="col">Salary</th>
+        <th scope="col">Hire Date</th>
+        <th scope="col">Pay Rate</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
@@ -16,9 +16,9 @@
           <td>{{str_pad($employee->id, 4, "0", STR_PAD_LEFT)}}</td>
           <td>{{$employee->firstname}} {{$employee->lastname}}</td>
           <td>{{$employee->email}}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>Terminated</td>
+          <td>{{$employee->hired_at}}</td>
+          <td>${{number_format($employee->pay_rate)}}</td>
+          <td>{{ucfirst($employee->employement_status)}}</td>
         </tr>
       @empty
         <tr>

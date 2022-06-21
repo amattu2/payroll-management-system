@@ -73,19 +73,19 @@
                 <input type="date" class="form-control @error('title') is-invalid @enderror" name="birthdate">
               </div>
               <div class="mb-3">
-                <label for="datehired" class="form-label">Date Hired</label>
-                <input type="date" class="form-control @error('title') is-invalid @enderror" name="datehired">
+                <label for="hired_at" class="form-label">Date Hired</label>
+                <input type="date" class="form-control @error('title') is-invalid @enderror" name="hired_at">
               </div>
               <div class="mb-3">
-                <label for="paytype" class="form-label">Pay Type</label>
-                <select class="form-control @error('title') is-invalid @enderror" name="paytype">
+                <label for="pay_type" class="form-label">Pay Type</label>
+                <select class="form-control @error('title') is-invalid @enderror" name="pay_type">
                   <option value="hourly" selected>Hourly</option>
                   <option value="salary">Salary</option>
                 </select>
               </div>
               <div class="mb-3">
-                <label for="payperiod" class="form-label">Pay Period</label>
-                <select class="form-control @error('title') is-invalid @enderror" name="payperiod">
+                <label for="pay_period" class="form-label">Pay Period</label>
+                <select class="form-control @error('title') is-invalid @enderror" name="pay_period">
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="biweekly">Bi-Weekly</option>
@@ -93,8 +93,8 @@
                 </select>
               </div>
               <div class="mb-3">
-                <label for="salary" class="form-label">Salary</label>
-                <input type="number" class="form-control @error('title') is-invalid @enderror" name="salary">
+                <label for="pay_rate" class="form-label">Salary</label>
+                <input type="number" class="form-control @error('title') is-invalid @enderror" name="pay_rate">
               </div>
               <div class="mb-3">
                 <label for="title" class="form-label">Job Title</label>
