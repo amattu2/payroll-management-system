@@ -38,7 +38,7 @@
           <div class="row">
             @for ($i = 0; $i < 4; $i++)
             <div class="col-xl-3 col-lg-6 mb-3">
-              <div class="card p-3">
+              <div class="card p-3 shadow-sm">
                 <div class="card-icon card-icon-large">
                   <i class="fas fa-shopping-cart"></i>
                 </div>
@@ -61,20 +61,42 @@
             @endfor
           </div>
 
-          <div class="card p-3 mb-3">
+          <div class="card p-3 mb-3 shadow-sm">
             <canvas class="w-100" id="overviewChart" width="900" height="380"></canvas>
           </div>
 
-          <div class="card p-3 mb-3">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-              <h2 class="h2">Employees</h2>
-              <div class="btn-toolbar mb-2 mb-md-0">
-                <a class="btn btn-sm btn-outline-secondary me-2" href="{{Route("employees")}}">Manage</a>
-                <a class="btn btn-sm btn-outline-secondary" href="{{Route("employees.employee", "create")}}">Create</a>
+          <div class="row">
+            <div class="col-xl-8">
+              <div class="card p-3 mb-3 shadow-sm">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                  <h2 class="h2">Employees</h2>
+                  <div class="btn-toolbar mb-2 mb-md-0">
+                    <a class="btn btn-sm btn-outline-secondary me-2" href="{{Route("employees")}}">Manage</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{Route("employees.employee", "create")}}">Create</a>
+                  </div>
+                </div>
+
+                @include("partials.employeeTable", ["employees" => $employees])
               </div>
             </div>
+            <div class="col-xl-4">
+              <div class="card p-3 mb-3 shadow-sm">
+                <h6 class="border-bottom pb-2 mb-0">Overdue Timesheets</h6>
+                @for ($i = 0; $i < 4; $i++)
+                <div class="d-flex text-muted pt-3">
+                  <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
 
-            @include("partials.employeeTable", ["employees" => $employees])
+                  <div class="mb-0 small lh-sm w-100 {{$i < 3 ? "pb-3 border-bottom" : ""}}">
+                    <div class="d-flex justify-content-between">
+                      <strong class="text-gray-dark">{employee name}</strong>
+                      <a href="#">Timesheet</a>
+                    </div>
+                    <span class="d-block">Overdue for 2 days</span>
+                  </div>
+                </div>
+                @endfor
+              </div>
+            </div>
           </div>
         @endif
       </main>
@@ -82,8 +104,5 @@
 
     <!-- Scripts -->
     <script src="{{asset('js/app.js')}}" defer></script>
-    <script>
-
-    </script>
   </body>
 </html>

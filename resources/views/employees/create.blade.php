@@ -15,7 +15,7 @@
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-3">
         @include("partials.errors")
 
-        <div class="card">
+        <div class="card shadow-sm">
           <div class="card-body">
             <h5 class="card-title">Create Employee</h5>
             <p class="card-text">Create a new employee below to begin tracking payroll, disembursements, & more!</p>
