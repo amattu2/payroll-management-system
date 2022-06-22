@@ -19,7 +19,6 @@
           Employees
         </a>
       </li>
-      @if (isset($employees) && count($employees) > 0)
       <li class="nav-item">
         <a class="nav-link {{Route::is('reports') ? 'active' : ''}}" href="{{Route("reports")}}">
           <i class="fa fa-chart-bar me-1"></i>
@@ -32,7 +31,6 @@
           Integrations
         </a>
       </li>
-      @endif
       <li class="nav-item">
         <a class="nav-link {{Route::is('settings') ? 'active' : ''}}" href="{{Route("settings")}}">
           <i class="fa fa-cogs me-1"></i>
@@ -41,7 +39,6 @@
       </li>
     </ul>
 
-    @if (isset($employees) && count($employees) > 0)
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
       <span>Recent Reports</span>
       <a class="link-secondary" href="#" aria-label="Add a new report">
@@ -68,6 +65,5 @@
         </a>
       </li>
     </ul>
-    @endif
   </div>
 </nav>

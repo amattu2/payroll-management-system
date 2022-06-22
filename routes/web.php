@@ -63,4 +63,8 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
   Route::get('/settings', function() {
     return "Not supported yet";
   })->name("settings");
+
+  Route::fallback(function($slug) {
+    return view("404", ["slug" => $slug]);
+  });
 });
