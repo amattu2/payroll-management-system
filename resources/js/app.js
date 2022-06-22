@@ -1,8 +1,5 @@
 import './bootstrap';
 import { Chart, registerables } from 'chart.js';
-const feather = require('feather-icons');
-
-feather.replace({'aria-hidden': 'true'});
 
 Chart.register(...registerables);
 
