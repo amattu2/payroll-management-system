@@ -13,7 +13,7 @@
     <div class="container-fluid">
       @include("partials.sidebar")
 
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3 bg-light">
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3">
         @include("partials.errors")
 
         @if (!isset($employees) || count($employees) == 0)
@@ -32,9 +32,9 @@
               <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
             </div>
           </div>
-          <div class="row text-center">
+          <div class="row text-center mb-3">
             @for ($i = 0; $i < 4; $i++)
-            <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="col-3">
               <div class="bg-white rounded shadow-sm p-3" role="button" onclick="window.location.href = '{{route("employees.employee", $i)}}';">
                 <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                 <h5 class="mb-0">{First Last}</h5>
@@ -44,8 +44,9 @@
             @endfor
           </div>
 
-          <h2>Employees</h2>
-          @include("partials.employeeTable", ["employees" => $employees])
+          <div class="card p-3 mb-3">
+            @include("partials.employeeTable", ["employees" => $employees])
+          </div>
         @endif
       </main>
     </div>
