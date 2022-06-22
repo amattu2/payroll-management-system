@@ -19,7 +19,7 @@
           <div class="card-body">
             <h5 class="card-title">Create Employee</h5>
             <p class="card-text">Create a new employee below to begin tracking payroll, disembursements, & more!</p>
-            <form method="POST" action="{{route("employees")}}">
+            <form method="POST" action="{{route("employees.create")}}">
               @csrf
               <div class="mb-3">
                 <label for="firstname" class="form-label">First Name</label>
