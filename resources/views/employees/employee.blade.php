@@ -17,15 +17,37 @@
         @include("partials.errors")
 
         <div class="row">
-          <div class="col-xl-3 text-center mb-3">
-            <div class="card p-3 shadow-sm">
+          <div class="col-xl-3 mb-3">
+            <!-- Employee Details -->
+            <div class="card p-3 shadow-sm mb-3 text-center">
               <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm mx-auto">
               <h5 class="mb-0">{{$employee->firstname}} {{$employee->middlename}} {{$employee->lastname}}</h5>
               <span class="badge bg-primary mt-1">{{$employee->title}}</span>
               <span class="text-muted mt-1" title="{{$employee->hired_at}}">{{(new DateTime($employee->hired_at))->format("F jS, Y")}}</span>
             </div>
+
+            <!-- Employement Controls -->
+            <div class="card shadow-sm mb-3">
+              <div class="card-header">
+                Employement Controls
+              </div>
+              <div class="card-body">
+                @if (in_array($employee->employement_status, ["active", "suspended"]))
+                  <p class="card-text">Is this employee no longer employed? Mark them as terminated below.</p>
+                  <a href="#" class="btn btn-danger me-2">Terminate</a>
+                  @if ($employee->employement_status === "suspended")
+                    <a href="#" class="btn btn-primary">Unsuspend</a>
+                  @else
+                    <a href="#" class="btn btn-warning">Suspend</a>
+                  @endif
+                @else
+                  <p class="card-text">Reactivate this employee below.</p>
+                  <a href="#" class="btn btn-primary">Activate</a>
+                @endif
+              </div>
+            </div>
           </div>
-          <div class="col-xl-9 mb-3">
+          <div class="col-xl-9 mb-3" id="card-panels">
             <div class="card shadow-sm">
               <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
@@ -100,7 +122,7 @@
       if (document.querySelector("[href='"+window.location.hash+"']")) {
         // Remove active styling
         document.querySelectorAll(".card-header a").forEach(e => e.classList.remove("active"));
-        document.querySelectorAll(".card-body").forEach(e => e.classList.add("d-none"));
+        document.querySelectorAll("#card-panels .card-body").forEach(e => e.classList.add("d-none"));
 
         // Add active styling to hash target
         document.querySelector("[href='"+window.location.hash+"']").classList.add("active");
@@ -109,7 +131,7 @@
 
       document.querySelectorAll(".card-header a").forEach((e) => {
         e.onclick = (evt) => {
-          document.querySelectorAll(".card-body").forEach(element => element.classList.add("d-none"));
+          document.querySelectorAll("#card-panels .card-body").forEach(element => element.classList.add("d-none"));
           document.querySelectorAll(".card-header a").forEach(element => element.classList.remove("active"));
           document.querySelector(evt.target.hash).classList.remove("d-none");
           evt.target.classList.add("active");
