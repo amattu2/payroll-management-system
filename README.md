@@ -13,6 +13,8 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] Employee Communication (e.g. Timesheets?)
 - [ ] Integrations (TBD)
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
+- [ ] PTO Tracking / Requests
+- [ ] Company wide closures (via Settings) (With time-ahead scheduled, e.g. Christmas and New Years can be registered far in advance)
 
 # Usage
 
