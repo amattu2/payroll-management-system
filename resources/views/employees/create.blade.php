@@ -19,10 +19,10 @@
           <div class="card-body">
             <h5 class="card-title">Create Employee</h5>
             <p class="card-text">Create a new employee below to begin tracking payroll, disembursements, & more!</p>
-            <form method="POST" action="{{route("employees.create")}}">
+            <form method="POST" action="{{Route("employees.create")}}">
               @include("partials.employeeForm")
               <button type="submit" class="btn btn-primary">Create</button>
-              <a class="btn text-danger" href="{{route("employees")}}">Cancel</a>
+              <a class="btn text-danger" href="{{Route("employees")}}">Cancel</a>
             </form>
           </div>
         </div>

@@ -20,7 +20,7 @@
           <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>{{trans('messages.welcome.to.app', ['name' => config('app.name')])}}</h2>
             <p>{{__("messages.no.employees")}}</p>
-            <a href="{{route("employees.employee", "create")}}">
+            <a href="{{Route("employees.employee", "create")}}">
               <button class="btn btn-outline-light" type="button">Create Employee</button>
             </a>
           </div>
@@ -35,7 +35,7 @@
           <div class="row text-center mb-3">
             @for ($i = 0; $i < 4; $i++)
             <div class="col-3">
-              <div class="bg-white rounded shadow-sm p-3" role="button" onclick="window.location.href = '{{route("employees.employee", $i)}}';">
+              <div class="bg-white rounded shadow-sm p-3" role="button" onclick="window.location.href = '{{Route("employees.employee", $i)}}';">
                 <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                 <h5 class="mb-0">{First Last}</h5>
                 <span class="small text-uppercase text-muted">{Employee Role}</span>

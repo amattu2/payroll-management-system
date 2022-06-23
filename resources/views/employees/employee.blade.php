@@ -179,7 +179,7 @@
                 <form method="POST" action="">
                   @include("partials.employeeForm")
                   <button type="submit" class="btn btn-primary">Save</button>
-                  <a class="btn text-danger" href="{{route("employees")}}">Cancel</a>
+                  <a class="btn text-danger" href="{{Route("employees")}}">Cancel</a>
                 </form>
               </div>
             </div>

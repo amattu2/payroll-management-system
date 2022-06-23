@@ -56,10 +56,6 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     return $report . " is not supported yet";
   })->name("reports.report");
 
-  Route::get('/integrations', function() {
-    return "Not supported yet";
-  })->name("integrations");
-
   Route::get('/settings', function() {
     return "Not supported yet";
   })->name("settings");

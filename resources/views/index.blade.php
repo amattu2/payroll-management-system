@@ -19,7 +19,7 @@
           <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>{{trans('messages.welcome.to.app', ['name' => config('app.name')])}}</h2>
             <p>{{__("messages.no.employees")}}</p>
-            <a href="{{route("employees.employee", "create")}}">
+            <a href="{{Route("employees.employee", "create")}}">
               <button class="btn btn-outline-light" type="button">Create Employee</button>
             </a>
           </div>
@@ -36,8 +36,8 @@
           </div>
 
           @if (1==1)
-          <div class="h-100 p-5 text-white bg-danger rounded-3 mb-3 shadow-sm">
-            <h2>Upcoming Closure</h2>
+          <div class="h-100 p-4 text-white bg-danger rounded-3 mb-3 shadow-sm">
+            <h3>Upcoming Closure</h3>
             <p>Effective starting <b>{{(new DateTime("tomorrow"))->format("M jS")}}</b> thru <b>{{((new DateTime("tomorrow"))->add(new DateInterval("P14D"))->format("M jS"))}}</b>, a company-wide closure is in effect.</p>
           </div>
           @endif

@@ -12,7 +12,7 @@
     <h1>Sign In</h1>
 
     <!-- Login Form -->
-    <form class="p-3" method="POST" action="{{route("auth.check")}}">
+    <form class="p-3" method="POST" action="{{Route("auth.check")}}">
       @csrf
       <div class="mb-3">
         <label for="email" class="form-label">Email address</label>

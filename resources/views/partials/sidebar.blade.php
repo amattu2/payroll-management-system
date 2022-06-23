@@ -26,12 +26,6 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{Route::is('integrations') ? 'active' : ''}}" href="{{Route("integrations")}}">
-          <i class="fa fa-layer-group me-1"></i>
-          Integrations
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link {{Route::is('settings') ? 'active' : ''}}" href="{{Route("settings")}}">
           <i class="fa fa-cogs me-1"></i>
           Settings

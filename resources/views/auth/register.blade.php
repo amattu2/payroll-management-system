@@ -12,7 +12,7 @@
     <h1>Register</h1>
 
     <!-- Login Form -->
-    <form class="p-3" method="POST" action="{{route("auth.create")}}">
+    <form class="p-3" method="POST" action="{{Route("auth.create")}}">
       @csrf
       <div class="mb-3">
         <label for="name" class="form-label">Full Name</label>
