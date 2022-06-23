@@ -17,13 +17,42 @@
         @include("partials.errors")
 
         <div class="row">
+          <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-3">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="{{Route("index")}}">Overview</a></li>
+              <li class="breadcrumb-item"><a href="{{Route("employees")}}">Employees</a></li>
+              <li class="breadcrumb-item active" aria-current="page">#{{str_pad($employee->id, 4, "0", STR_PAD_LEFT)}}</li>
+            </ol>
+          </nav>
+
           <div class="col-xl-3 mb-3">
             <!-- Employee Details -->
-            <div class="card p-3 shadow-sm mb-3 text-center">
-              <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm mx-auto">
-              <h5 class="mb-0">{{$employee->firstname}} {{$employee->middlename}} {{$employee->lastname}}</h5>
-              <span class="badge bg-primary mt-1">{{$employee->title}}</span>
-              <span class="text-muted mt-1" title="{{$employee->hired_at}}">{{(new DateTime($employee->hired_at))->format("F jS, Y")}}</span>
+            <div class="card shadow-sm mb-3">
+              <div class="card-body p-4">
+                <div class="d-flex text-black">
+                  <div class="flex-shrink-0">
+                    <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="Profile Picture" class="img-fluid" style="width: 62px; border-radius: 10px;">
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <h5 class="mb-1">{{$employee->firstname}} {{$employee->lastname}}</h5>
+                    <p class="mb-2 pb-1">{{$employee->title}}</p>
+                    <div class="d-flex justify-content-center text-center bg-body rounded-3 p-2">
+                      <div>
+                        <p class="small text-muted mb-1">Hired</p>
+                        <p class="mb-0" title="{{$employee->hired_at}}">{{(new DateTime($employee->hired_at))->format("m/Y")}}</p>
+                      </div>
+                      <div class="px-3">
+                        <p class="small text-muted mb-1">Seniority</p>
+                        <p class="mb-0">#2</p>
+                      </div>
+                      <div>
+                        <p class="small text-muted mb-1">Department</p>
+                        <p class="mb-0">Management</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Employement Controls -->
@@ -63,7 +92,7 @@
                 </ul>
               </div>
               <div class="card-body" id="card-overview">
-                <div class="row">
+                <div class="row mb-3">
                   <div class="col-4">
                     <div class="card p-3 shadow-sm">
                       <div class="d-flex align-items-center justify-content-center text-muted mb-3">
@@ -92,6 +121,43 @@
                         0
                         {{$employee->pay_type === "hourly" ? "hours" : "days"}}
                       </h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="row p-3">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Full Name</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{$employee->firstname}} {{$employee->middlename}} {{$employee->lastname}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{$employee->email}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Phone</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{$employee->telephone}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Address</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{$employee->street1}}, {{$employee->city}} {{$employee->state}}, {{$employee->zip}}</p>
                     </div>
                   </div>
                 </div>
