@@ -3,6 +3,7 @@
     "ryannaddy.laravel-artisan",
     "onecentlin.laravel-blade",
     "onecentlin.laravel5-snippets",
-    "EditorConfig.EditorConfig"
+    "editorconfig.editorconfig",
+    "shufo.vscode-blade-formatter"
   ]
 }
