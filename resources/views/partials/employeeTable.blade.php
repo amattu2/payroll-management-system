@@ -22,7 +22,7 @@
         </tr>
       @empty
         <tr>
-          <td class="text-center" colspan="6"></td>
+          <td class="text-center" colspan="6">No employees</td>
         </tr>
       @endforelse
     </tbody>

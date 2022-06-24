@@ -44,9 +44,11 @@ Route::prefix('authenticate')->group(function() {
 Route::middleware(['auth', 'auth.session'])->group(function() {
   Route::get('/', [Controller::class, 'index'])->name("index");
 
-  Route::get('/employees', [EmployeeController::class, 'index'])->name("employees");
-  Route::post('/employees', [EmployeeController::class, 'create'])->name("employees.create");
-  Route::get('/employees/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
+  Route::middleware(["can:employees.view.all"])->group(function() {
+    Route::get('/employees', [EmployeeController::class, 'index'])->name("employees");
+    Route::post('/employees', [EmployeeController::class, 'create'])->name("employees.create");
+    Route::get('/employees/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
+  });
 
   Route::get('/reports', function() {
     return "Not supported yet";
@@ -56,9 +58,11 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     return $report . " is not supported yet";
   })->name("reports.report");
 
-  Route::get('/settings', function() {
-    return "Not supported yet";
-  })->name("settings");
+  Route::middleware(["can:edit-settings"])->group(function() {
+    Route::get('/settings', function() {
+      return view("settings");
+    })->name("settings");
+  });
 
   Route::fallback(function($slug) {
     return view("404", ["slug" => $slug]);

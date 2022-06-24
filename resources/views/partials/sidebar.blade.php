@@ -13,24 +13,28 @@
           Payroll
         </a>
       </li>
+      @can("employees.view.all")
       <li class="nav-item">
         <a class="nav-link {{Route::is('employees', 'employees.employee') ? 'active' : ''}}" href="{{Route("employees")}}">
           <i class="fa fa-users me-1"></i>
           Employees
         </a>
       </li>
+      @endcan
       <li class="nav-item">
         <a class="nav-link {{Route::is('reports') ? 'active' : ''}}" href="{{Route("reports")}}">
           <i class="fa fa-chart-bar me-1"></i>
           Reports
         </a>
       </li>
+      @can('settings.view')
       <li class="nav-item">
         <a class="nav-link {{Route::is('settings') ? 'active' : ''}}" href="{{Route("settings")}}">
           <i class="fa fa-cogs me-1"></i>
           Settings
         </a>
       </li>
+      @endcan
     </ul>
 
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
