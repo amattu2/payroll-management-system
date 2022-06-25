@@ -54,7 +54,6 @@ class Employee extends Model
         'pay_period',
         'pay_rate',
         'title',
-        'employment_status',
-        'created_at',
+        'employment_status'
     ];
 }
