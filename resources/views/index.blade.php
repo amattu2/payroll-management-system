@@ -105,8 +105,8 @@
               <!-- Pending Requests -->
               @if (1==1)
                 <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
-                  You have a pending PTO request from <b>{{$employees[0]->firstname}} {{$employees[0]->lastname}}</b>.
-                  <a href="#">View</a>
+                  <b>{{$employees[0]->firstname}} {{$employees[0]->lastname}}</b> has a pending time-off request from {{((new DateTime())->sub(new DateInterval("P6D")))->format("n/j")}}
+                  <a href="#" class="ms-1">View</a>
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               @endif

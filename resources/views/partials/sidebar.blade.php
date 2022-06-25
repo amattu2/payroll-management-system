@@ -7,12 +7,6 @@
           Overview
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link {{Route::is('payroll') ? 'active' : ''}}" aria-current="page" href="{{Route("payroll", 1)}}">
-          <i class="fa fa-money-check me-1"></i>
-          Payroll
-        </a>
-      </li>
       @can("employees.view.all")
       <li class="nav-item">
         <a class="nav-link {{Route::is('employees', 'employees.employee') ? 'active' : ''}}" href="{{Route("employees")}}">

@@ -51,19 +51,13 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
   Route::get('/', [Controller::class, 'index'])->name("index");
 
   /*
-   * Payroll Routes
-   */
-  Route::middleware(["can:employees.view.all"])->group(function() {
-    Route::get('/payroll/{id}/{year?}/{month?}', [PayrollController::class, 'index'])->name("payroll");
-  });
-
-  /*
    * Employee Management Routes
    */
-  Route::middleware(["can:employees.view.all"])->group(function() {
-    Route::get('/employees', [EmployeeController::class, 'index'])->name("employees");
-    Route::post('/employees', [EmployeeController::class, 'create'])->name("employees.create");
-    Route::get('/employees/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
+  Route::group(["middleware" => ["can:employees.view.all"], "prefix" => "employees"], function() {
+    Route::get('/', [EmployeeController::class, 'index'])->name("employees");
+    Route::post('/', [EmployeeController::class, 'create'])->name("employees.create");
+    Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
+    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.timesheet");
   });
 
   /*

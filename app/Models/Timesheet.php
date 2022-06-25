@@ -23,13 +23,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Employee extends Model
+class Timesheet extends Model
 {
-    use SoftDeletes, HasFactory, Notifiable;
+    use SoftDeletes, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -37,39 +36,18 @@ class Employee extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'firstname',
-        'middlename',
-        'lastname',
-        'email',
-        'telephone',
-        'street1',
-        'street2',
-        'city',
-        'state',
-        'zip',
-        'birthdate',
-        'hired_at',
-        'terminated_at',
-        'pay_type',
-        'pay_period',
-        'pay_rate',
-        'title',
-        'employment_status'
+      "period",
+      "pay_type",
+      "employee_id",
     ];
 
-    /**
-     * Get all of the employees timesheets
-     */
-    public function timesheets()
+    public function employee()
     {
-        return $this->hasMany(Timesheet::class)->orderByDesc("period");
+      return $this->belongsTo(Employee::class);
     }
 
-    /**
-     * Get the user associated with this employee
-     */
-    public function user()
+    public function days()
     {
-        return $this->belongsTo(User::class);
+      return $this->hasMany(TimesheetDay::class)->orderBy("date");
     }
 }
