@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum("pay_type", ["hourly", "salary"])->default("hourly");
             $table->foreignId('edit_user_id')->references('id')->on('users');
             $table->foreignId('employee_id')->references('id')->on('employees');
+            $table->dateTime("completed_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unique(["period", "employee_id"]);

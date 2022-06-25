@@ -25,7 +25,7 @@
             <li class="breadcrumb-item"><a
                 href="{{ Route('employees.employee', $employee->id) }}">{{ $employee->firstname }}
                 {{ $employee->lastname }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Timesheet</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $date->format('F Y') }} Timesheet</li>
           </ol>
         </nav>
         <div class="btn-toolbar">
@@ -40,30 +40,28 @@
       </div>
       <div class="row">
         <nav class="col-md-3 col-lg-2 d-md-block bg-body">
-          <h6
-            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-uppercase">
             <span>Timesheet History</span>
           </h6>
           <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-              @php
-                $nextMonth = (clone $date)->add(new DateInterval('P1M'));
-              @endphp
-              <a class="nav-link text-muted"
-                href="{{ Route('employees.timesheet', $employee->id) }}/{{ $nextMonth->format('Y') }}/{{ $nextMonth->format('m') }}">
-                {{ $nextMonth->format('F, Y') }}
-              </a>
-            </li>
             @foreach ($employee->timesheets as $timesheet)
               @php
                 $tsDate = new DateTime($timesheet->period);
-                $isCurrent = $date == $tsDate;
+                $icon = $timesheet->completed_at ? 'fa-calendar-check' : 'fa-calendar';
               @endphp
               <li class="nav-item">
-                <a class="nav-link {{ $isCurrent ? 'active' : '' }}"
-                  href="{{ Route('employees.timesheet', $employee->id) }}/{{ $tsDate->format('Y') }}/{{ $tsDate->format('m') }}">
-                  {{ $tsDate->format('F, Y') }}
-                </a>
+                @if ($date != $tsDate)
+                  <a class="nav-link"
+                    href="{{ Route('employees.timesheet', $employee->id) }}/{{ $tsDate->format('Y') }}/{{ $tsDate->format('m') }}">
+                    <i class="far {{ $icon }} me-1"></i>
+                    {{ $tsDate->format('F, Y') }}
+                  </a>
+                @else
+                  <a class="nav-link active">
+                    <i class="far {{ $icon }} me-1"></i>
+                    {{ $tsDate->format('F, Y') }}
+                  </a>
+                @endif
               </li>
             @endforeach
           </ul>
@@ -82,14 +80,32 @@
                   aria-expanded="false">
                   {{ $date->format('F, Y') }}
                 </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Dropdown link</a></li>
-                  <li><a class="dropdown-item" href="#">Dropdown link</a></li>
-                </ul>
+                @if (count($employee->timesheets) > 0)
+                  <ul class="dropdown-menu">
+                    @foreach ($employee->timesheets as $timesheet)
+                      @php
+                        $tsDate = new DateTime($timesheet->period);
+                      @endphp
+                      @if ($tsDate == $date)
+                        @continue
+                      @endif
+                      <li>
+                        <a class="dropdown-item"
+                          href="{{ Route('employees.timesheet', $employee->id) }}/{{ $tsDate->format('Y') }}/{{ $tsDate->format('m') }}">
+                          {{ $tsDate->format('F, Y') }}
+                        </a>
+                      </li>
+                    @endforeach
+                  </ul>
+                @endif
               </div>
               <a role="button" class="btn btn-outline-secondary"
                 href="{{ Route('employees.timesheet', $employee->id) }}/{{ $nextMonth->format('Y') }}/{{ $nextMonth->format('m') }}">Next</a>
             </div>
+            @if ($date->format('mY') !== date('mY'))
+              <a role="button" class="btn btn-outline-primary ms-2"
+                href="{{ Route('employees.timesheet', $employee->id) }}/{{ date('Y') }}/{{ date('m') }}">Current</a>
+            @endif
             <div class="d-flex ms-auto">
               <button class="btn btn-primary me-2" type="button">Export</button>
               <button class="btn btn-primary" type="button">Period Settings</button>
@@ -105,11 +121,10 @@
               <div class="card-body">
                 <div class="row text-center fw-bold">
                   <div class="col-1">Day</div>
-                  <div class="col-3">Work Description</div>
+                  <div class="col-4">Work Description</div>
                   <div class="col-2">Time In</div>
                   <div class="col-2">Time Out</div>
-                  <div class="col-1">Adjustment</div>
-                  <div class="col-2"></div>
+                  <div class="col-2">Adjustment</div>
                   <div class="col-1">Total</div>
                 </div>
                 @foreach ($week['days'] as $i => $day)
@@ -117,8 +132,19 @@
                     <div class="col-1">
                       {{ $day->format('jS (D)') }}
                     </div>
-                    <div class="col-3">
-                      <textarea class="form-control" rows="1"></textarea>
+                    <div class="col-4">
+                      <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+                          data-bs-toggle="dropdown">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" role="button">Sick</a></li>
+                          <li><a class="dropdown-item" role="button">Called Out</a></li>
+                          <li><a class="dropdown-item" role="button">Approved Time-Off</a></li>
+                        </ul>
+                        <textarea class="form-control" rows="1"></textarea>
+                      </div>
                     </div>
                     <div class="col-2">
                       <input type="time" class="form-control" value="" />
@@ -126,10 +152,15 @@
                     <div class="col-2">
                       <input type="time" class="form-control" value="" />
                     </div>
-                    <div class="col-1">
-                      <input type="number" class="form-control" value="0" min="-24" max="24" />
+                    <div class="col-2">
+                      <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="fas fa-clock"></i>
+                        </span>
+                        <input type="number" class="form-control" value="0" min="-24" max="24"
+                          {{ $employee->pay_type !== 'hourly' ? 'disabled' : '' }} />
+                      </div>
                     </div>
-                    <div class="col-2"></div>
                     <div class="col-1">
                       {{ $employee->pay_type === 'hourly' ? '4 hours' : '1 day' }}
                     </div>
