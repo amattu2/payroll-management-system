@@ -34,7 +34,7 @@ return new class extends Migration
             $table->enum('pay_period', ['daily', 'weekly', 'biweekly', 'monthly'])->default('monthly');
             $table->decimal('pay_rate', 15, 2)->default(0);
             $table->string('title');
-            $table->enum('employement_status', ['active', 'terminated', 'suspended'])->default('active');
+            $table->enum('employment_status', ['active', 'terminated', 'suspended'])->default('active');
             $table->softDeletes();
             $table->timestamps();
         });

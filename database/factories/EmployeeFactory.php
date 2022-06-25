@@ -35,7 +35,7 @@ class EmployeeFactory extends Factory
             'pay_period' => $this->faker->randomElement(['daily', 'weekly', 'biweekly', 'monthly']),
             'pay_rate' => $this->faker->randomFloat(2, 35000, 220000),
             'title' => $this->faker->jobTitle(),
-            'employement_status' => $this->faker->randomElement(['active', 'terminated', 'suspended']),
+            'employment_status' => $this->faker->randomElement(['active', 'terminated', 'suspended']),
         ];
     }
 }

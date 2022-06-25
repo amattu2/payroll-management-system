@@ -61,10 +61,10 @@
                 Employement Controls
               </div>
               <div class="card-body">
-                @if (in_array($employee->employement_status, ["active", "suspended"]))
+                @if (in_array($employee->employment_status, ["active", "suspended"]))
                   <p class="card-text">Is this employee no longer employed? Mark them as terminated below.</p>
                   <a href="#" class="btn btn-danger me-2">Terminate</a>
-                  @if ($employee->employement_status === "suspended")
+                  @if ($employee->employment_status === "suspended")
                     <a href="#" class="btn btn-primary">Unsuspend</a>
                   @else
                     <a href="#" class="btn btn-warning">Suspend</a>

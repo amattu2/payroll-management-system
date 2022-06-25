@@ -18,7 +18,7 @@
           <td>{{$employee->email}}</td>
           <td>{{$employee->hired_at}}</td>
           <td>${{number_format($employee->pay_rate)}}</td>
-          <td>{{ucfirst($employee->employement_status)}}</td>
+          <td>{{ucfirst($employee->employment_status)}}</td>
         </tr>
       @empty
         <tr>
