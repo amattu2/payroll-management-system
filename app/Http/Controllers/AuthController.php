@@ -23,10 +23,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -67,6 +69,14 @@ class AuthController extends Controller
     ]);
 
     if (Auth::attempt($request, request('remember'))) {
+      // Check linked employee status
+      $employeeId = Auth::user()->employee_id;
+      if ($employeeId !== null && DB::table('employees')->where("id", $employeeId)->where("employment_status", "active")->get() === null) {
+        Auth::logout();
+
+        return redirect()->back()->withErrors(["You are not allowed to login"]);
+      }
+
       return redirect()->route('index');
     }
 
