@@ -20,9 +20,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -42,28 +44,38 @@ Route::prefix('authenticate')->group(function() {
  * Normal Routes
  */
 Route::middleware(['auth', 'auth.session'])->group(function() {
+  /*
+   * Top Level Routes
+   */
   Route::get('/', [Controller::class, 'index'])->name("index");
 
+  /*
+   * Employee Management Routes
+   */
   Route::middleware(["can:employees.view.all"])->group(function() {
     Route::get('/employees', [EmployeeController::class, 'index'])->name("employees");
     Route::post('/employees', [EmployeeController::class, 'create'])->name("employees.create");
     Route::get('/employees/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
   });
 
-  Route::get('/reports', function() {
-    return "Not supported yet";
-  })->name("reports");
-
-  Route::get('/reports/{report}', function($report) {
-    return $report . " is not supported yet";
-  })->name("reports.report");
-
+  /*
+   * Settings Routes
+   */
   Route::middleware(["can:edit-settings"])->group(function() {
-    Route::get('/settings', function() {
-      return view("settings");
-    })->name("settings");
+    Route::get('/settings', [SettingsController::class, 'index'])->name("settings");
   });
 
+  /*
+   * Report Routes
+   */
+  Route::middleware(["can:edit-settings"])->group(function() {
+    Route::get('/reports', [ReportController::class, 'index'])->name("reports");
+    Route::get('/reports/{report}', [ReportController::class, 'index'])->name("reports.report");
+  });
+
+  /*
+   * 404 Fallback
+   */
   Route::fallback(function($slug) {
     return view("404", ["slug" => $slug]);
   });
