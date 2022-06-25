@@ -93,7 +93,7 @@
         </div>
         <div class="col-xl-9 mb-3" id="card-panels">
           <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
-            <b>{{ $employees[0]->firstname }} {{ $employees[0]->lastname }}</b> has a pending time-off request from
+            <b>{{ $employee->firstname }} {{ $employee->lastname }}</b> has a pending time-off request from
             {{ (new DateTime())->sub(new DateInterval('P6D'))->format('n/j/Y') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
@@ -126,7 +126,7 @@
                       <i class="fas fa-xl fa-user-clock me-auto"></i>
                       <h4 class="card-title me-auto">Tenure</h4>
                     </div>
-                    <h2 class="text-center">{{ (new DateTime($employee->hired_at))->diff(new DateTime())->d }} days
+                    <h2 class="text-center">{{ (new DateTime($employee->hired_at))->diff(new DateTime())->format("%a") }} days
                     </h2>
                   </div>
                 </div>
