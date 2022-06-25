@@ -65,6 +65,20 @@
               </li>
             @endforeach
           </ul>
+
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-uppercase">
+            <span>This Pay Period</span>
+          </h6>
+          <ul class="nav flex-column mb-2">
+            @foreach ($weeks as $week)
+              <li class="nav-item">
+                <a class="nav-link text-muted" href="#week{{$week['index']}}">
+                  <i class="far fa-dot-circle"></i>
+                  {{ $week['start']->format('M jS') }} &ndash; {{ $week['end']->format('M jS') }}
+                </a>
+              </li>
+            @endforeach
+          </ul>
         </nav>
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="btn-toolbar justify-content-between">
@@ -113,7 +127,7 @@
           </div>
 
           @foreach ($weeks as $week)
-            <div class="card shadow-sm mt-3">
+            <div class="card shadow-sm mt-3" id="week{{$week['index']}}">
               <div class="card-header">
                 Week #{{ $week['index'] + 1 }}
                 ({{ $week['start']->format('M jS') }} &ndash; {{ $week['end']->format('M jS') }})
