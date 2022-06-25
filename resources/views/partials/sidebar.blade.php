@@ -8,7 +8,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{Route::is('payroll') ? 'active' : ''}}" aria-current="page" href="{{Route("index")}}">
+        <a class="nav-link {{Route::is('payroll') ? 'active' : ''}}" aria-current="page" href="{{Route("payroll", 1)}}">
           <i class="fa fa-money-check me-1"></i>
           Payroll
         </a>

@@ -23,8 +23,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -48,6 +49,13 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
    * Top Level Routes
    */
   Route::get('/', [Controller::class, 'index'])->name("index");
+
+  /*
+   * Payroll Routes
+   */
+  Route::middleware(["can:employees.view.all"])->group(function() {
+    Route::get('/payroll/{id}/{year?}/{month?}', [PayrollController::class, 'index'])->name("payroll");
+  });
 
   /*
    * Employee Management Routes

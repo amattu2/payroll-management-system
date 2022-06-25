@@ -42,16 +42,16 @@
   overflow-y: auto;
 }
 
-.sidebar .nav-link {
+.nav.flex-column .nav-link {
   font-weight: 500;
   color: #333;
 }
 
-.sidebar .nav-link i {
+.nav.flex-column .nav-link i {
   width: 20px;
 }
 
-.sidebar .nav-link.active {
+.nav.flex-column .nav-link.active {
   color: #2470dc;
 }
 
