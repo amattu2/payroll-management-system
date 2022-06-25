@@ -105,7 +105,7 @@
                   <a class="nav-link active" href="#card-overview">Overview</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Payroll</a>
+                  <a class="nav-link" href="#card-payroll">Payroll</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Time-Off</a>
@@ -191,6 +191,43 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="card-body d-none" id="card-payroll">
+              @if (count($employee->timesheets) > 0)
+                <div class="accordion" id="payrollYearAccordion">
+                  @for ($i = 0; $i < 4; $i++)
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#payrollYearCollapse{{$i}}">
+                          Year {{$i+1}}
+                        </button>
+                      </h2>
+                      <div id="payrollYearCollapse{{$i}}" class="accordion-collapse collapse" data-bs-parent="#payrollYearAccordion">
+                        <div class="accordion-body">
+                          <div class="accordion" id="payrollMonthAccordion{{$i}}">
+                            @for ($x = 0; $x < 4; $x++)
+                              <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#payrollMonthCollapse{{$i}}{{$x}}">
+                                    Year {{$i+1}}, Month {{$x+1}}
+                                  </button>
+                                </h2>
+                                <div id="payrollMonthCollapse{{$i}}{{$x}}" class="accordion-collapse collapse" data-bs-parent="#payrollMonthAccordion{{$i}}">
+                                  <div class="accordion-body">
+                                    {grid containing hours worked, pto, etc}
+                                  </div>
+                                </div>
+                              </div>
+                            @endfor
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @endfor
+                </div>
+              @else
+                <div class="alert alert-warning" role="alert">No payroll data found.</div>
+              @endif
             </div>
             <div class="card-body d-none" id="card-statistics">
               <canvas id="bar-chart" width="800" height="450"></canvas>

@@ -54,16 +54,13 @@ class EmployeeController extends Controller
     $employees = DB::table('employees')->get();
 
     if (is_numeric($id)) {
-      $employee = DB::table('employees')->where('id', $id)->first();
+      $employee = Employee::find($id);
 
       if (!$employee) {
         return redirect()->route('employees')->withErrors(["The requested employee was not found"]);
       }
 
-      return view('employees.employee', [
-        "employee" => $employee,
-        "employees" => $employees
-      ]);
+      return view('employees.employee', compact("employee", "employees"));
     } else {
       return view('employees.create', ["employees" => $employees]);
     }
