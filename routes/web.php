@@ -37,6 +37,9 @@ Route::prefix('authenticate')->group(function() {
   Route::get('login', [AuthController::class, 'loginForm'])->name("auth.login");
   Route::post('login.do', [AuthController::class, 'login'])->name("auth.check");
 
+  Route::get('password-confirm', [AuthController::class, 'passwordForm'])->name("password.confirm");
+  Route::post('password-confirm.do', [AuthController::class, 'passwordConfirm'])->name("password.confirm.check");
+
   Route::get('register', [AuthController::class, 'registerForm'])->name("auth.register");
   Route::post('register.do', [AuthController::class, 'register'])->name("auth.create");
 });
@@ -63,7 +66,7 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
   /*
    * Settings Routes
    */
-  Route::middleware(["can:edit-settings"])->group(function() {
+  Route::middleware(["can:edit-settings", "password.confirm"])->group(function() {
     Route::get('/settings', [SettingsController::class, 'index'])->name("settings");
   });
 

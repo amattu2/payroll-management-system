@@ -101,6 +101,41 @@ class AuthController extends Controller
   }
 
   /**
+   * Validate the user password
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
+  public function passwordConfirm(Request $request)
+  {
+    if (!Auth::check()) {
+      return redirect()->route('auth.login')->withErrors(["You are not logged in"]);
+    }
+    if (!Hash::check($request->password, $request->user()->password)) {
+      return back()->withErrors(["Invalid password provided"]);
+    }
+
+    $request->session()->passwordConfirmed();
+
+    return redirect()->intended();
+  }
+
+  /**
+   * Display the password verification form
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Contracts\View\View
+   */
+  public function passwordForm(Request $request)
+  {
+    if (!Auth::check()) {
+      return redirect()->route('auth.login')->withErrors(["You are not logged in"]);
+    }
+
+    return view('auth.password-confirm');
+  }
+
+  /**
    * Register the new user
    *
    * @param \Illuminate\Http\Request $request
