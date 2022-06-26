@@ -134,4 +134,21 @@ class EmployeeController extends Controller
       "employees",
     ));
   }
+
+  /**
+   * Update an employee's employment status
+   *
+   * @param  int $employeeId
+   * @param  string $status active|terminated|suspended
+   * @return bool
+   */
+  public function updateEmploymentStatus($employeeId, $status)
+  {
+    $employee = Employee::findOrFail($employeeId);
+
+    $employee->employment_status = $status;
+    $employee->save();
+
+    return true;
+  }
 }

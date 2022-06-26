@@ -5,6 +5,7 @@
   <title>{{ config('app.name') }}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
@@ -78,15 +79,15 @@
             <div class="card-body">
               @if (in_array($employee->employment_status, ['active', 'suspended']))
                 <p class="card-text">Is this employee no longer employed? Mark them as terminated below.</p>
-                <a href="#" class="btn btn-danger me-2">Terminate</a>
+                <a href="#" class="btn btn-danger me-2" onclick="updateStatus(this, 'terminated');">Terminate</a>
                 @if ($employee->employment_status === 'suspended')
-                  <a href="#" class="btn btn-primary">Unsuspend</a>
+                  <a href="#" class="btn btn-primary" onclick="updateStatus(this, 'active');">Unsuspend</a>
                 @else
-                  <a href="#" class="btn btn-warning">Suspend</a>
+                  <a href="#" class="btn btn-warning" onclick="updateStatus(this, 'suspended');">Suspend</a>
                 @endif
               @else
                 <p class="card-text">Reactivate this employee below.</p>
-                <a href="#" class="btn btn-primary">Activate</a>
+                <a href="#" class="btn btn-primary" onclick="updateStatus(this, 'active');">Activate</a>
               @endif
             </div>
           </div>
