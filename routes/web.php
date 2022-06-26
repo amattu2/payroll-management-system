@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Authentication Routes
  */
-Route::prefix('authenticate')->group(function() {
+Route::group(["prefix" => "auth"], function() {
   Route::any('logout.do', [AuthController::class, 'logout'])->name("auth.logout");
 
   Route::get('login', [AuthController::class, 'loginForm'])->name("auth.login");
