@@ -45,7 +45,10 @@ class TimesheetDay extends Model
       "timesheet_id",
     ];
 
-    public function timesheet()
+    /**
+     * Get the timesheet that this day belongs to
+     */
+    public function Timesheet()
     {
       return $this->belongsTo(Timesheet::class);
     }

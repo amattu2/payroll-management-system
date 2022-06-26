@@ -60,7 +60,7 @@ class Employee extends Model
     /**
      * Get all of the employees timesheets
      */
-    public function timesheets()
+    public function Timesheets()
     {
         return $this->hasMany(Timesheet::class)->orderByDesc("period");
     }
@@ -68,7 +68,7 @@ class Employee extends Model
     /**
      * Get the user associated with this employee
      */
-    public function user()
+    public function User()
     {
         return $this->belongsTo(User::class);
     }

@@ -42,21 +42,36 @@ class Timesheet extends Model
       "employee_id",
     ];
 
-    public function employee()
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'period' => 'datetime',
+    ];
+
+    /**
+     * Get the employee that this timesheet belongs to
+     */
+    public function Employee()
     {
       return $this->belongsTo(Employee::class);
     }
 
-    public function days()
+    /**
+     * Get the timesheet days that belong to this timesheet
+     */
+    public function TimesheetDay()
     {
       return $this->hasMany(TimesheetDay::class)->orderBy("date");
     }
 
-    public function getPeriodAttribute()
-    {
-      return new DateTime($this->attributes["period"]);
-    }
-
+    /**
+     * Define custom weeks attribute
+     *
+     * @return array<int, array>
+     */
     public function getWeeksAttribute() {
       if (isset($this->attributes["weeks"])) {
         return $this->attributes["weeks"];
