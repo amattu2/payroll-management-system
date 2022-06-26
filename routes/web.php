@@ -23,7 +23,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
@@ -60,7 +59,8 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     Route::get('/', [EmployeeController::class, 'index'])->name("employees");
     Route::post('/', [EmployeeController::class, 'create'])->name("employees.create");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
-    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.timesheet");
+    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.employee.timesheet");
+    Route::get('/{id}/leave/{leaveId?}', [EmployeeController::class, 'leave'])->name("employees.employee.leave");
 
     /**
      * Update Routes

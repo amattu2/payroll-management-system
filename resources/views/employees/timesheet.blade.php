@@ -32,7 +32,7 @@
         <div class="btn-toolbar">
           <select class="form-control" id="employee-selector">
             @foreach ($employees as $e)
-              <option data-href="{{ Route('employees.timesheet', $e->id) }}"
+              <option data-href="{{ Route('employees.employee.timesheet', $e->id) }}"
                 {{ $e->id === $employee->id ? 'selected' : '' }}>
                 {{ $e->firstname }} {{ $e->lastname }}</option>
             @endforeach
@@ -49,7 +49,7 @@
               <li class="nav-item">
                 @if ($ts->period != $timesheet->period)
                   <a class="nav-link"
-                    href="{{ Route('employees.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
+                    href="{{ Route('employees.employee.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
                     <i class="far {{ $ts->completed_at ? 'fa-calendar-check' : 'fa-calendar' }} me-1"></i>
                     {{ $ts->period->format('F, Y') }}
                   </a>
@@ -94,7 +94,7 @@
                 $nextMonth = (clone $timesheet->period)->add(new DateInterval('P1M'));
               @endphp
               <a role="button" class="btn btn-outline-secondary"
-                href="{{ Route('employees.timesheet', $employee->id) }}/{{ $prevMonth->format('Y') }}/{{ $prevMonth->format('m') }}">Back</a>
+                href="{{ Route('employees.employee.timesheet', $employee->id) }}/{{ $prevMonth->format('Y') }}/{{ $prevMonth->format('m') }}">Back</a>
               <div class="btn-group" role="group">
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -108,7 +108,7 @@
                       @endif
                       <li>
                         <a class="dropdown-item"
-                          href="{{ Route('employees.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
+                          href="{{ Route('employees.employee.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
                           {{ $ts->period->format('F, Y') }}
                         </a>
                       </li>
@@ -117,11 +117,11 @@
                 @endif
               </div>
               <a role="button" class="btn btn-outline-secondary"
-                href="{{ Route('employees.timesheet', $employee->id) }}/{{ $nextMonth->format('Y') }}/{{ $nextMonth->format('m') }}">Next</a>
+                href="{{ Route('employees.employee.timesheet', $employee->id) }}/{{ $nextMonth->format('Y') }}/{{ $nextMonth->format('m') }}">Next</a>
             </div>
             @if ($timesheet->period->format('mY') !== date('mY'))
               <a role="button" class="btn btn-outline-primary ms-2"
-                href="{{ Route('employees.timesheet', $employee->id) }}/{{ date('Y') }}/{{ date('m') }}">Current</a>
+                href="{{ Route('employees.employee.timesheet', $employee->id) }}/{{ date('Y') }}/{{ date('m') }}">Current</a>
             @endif
             <div class="d-flex ms-auto">
               @if ($timesheet->id)

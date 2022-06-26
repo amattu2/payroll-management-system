@@ -22,9 +22,15 @@ class LeaveFactory extends Factory
           'start_date' => $this->faker->dateTimeBetween('-3 years', 'now'),
           'end_date' => $this->faker->dateTimeBetween('-3 years', 'now'),
           'comments' => $this->faker->sentence(),
-          'approved' => $this->faker->dateTimeBetween('-3 years', 'now'),
+          'approved' => $this->faker->randomElement([
+            null,
+            $this->faker->dateTimeBetween('-3 years', 'now')
+          ]),
           'approved_user_id' => null,
-          'declined' => null,
+          'declined' => $this->faker->randomElement([
+            null,
+            $this->faker->dateTimeBetween('-3 years', 'now')
+          ]),
           'declined_user_id' => null,
           'timesheet_id' => null,
           'type' => $this->faker->randomElement(['paid', 'sick', 'vacation', 'parental', 'unpaid', 'other']),

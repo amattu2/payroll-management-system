@@ -93,10 +93,48 @@
           </div>
         </div>
         <div class="col-xl-9 mb-3" id="card-panels">
-          <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
-            <b>{{ $employee->firstname }} {{ $employee->lastname }}</b> has a pending time-off request from
-            {{ (new DateTime())->sub(new DateInterval('P6D'))->format('n/j/Y') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          @php
+            $activeLeaves = $employee->leaves()->whereNull(["deleted_at", "approved", "declined"]);
+          @endphp
+          @if ($activeLeaves->count() > 0)
+            @foreach ($activeLeaves->get() as $leave)
+              <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+                <b>{{ $employee->firstname }} {{ $employee->lastname }}</b> has a pending time-off request from
+                {{ $leave->created_at->format('n/j/Y') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @endforeach
+          @endif
+
+          <!-- Quick Access -->
+          <div class="row mb-3">
+            <div class="col">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button" href="{{Route("employees.employee.timesheet", $employee->id)}}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+                <div class="lh-1">
+                  <h1 class="h6 mb-0 text-white lh-1">Timesheets</h1>
+                  <small>Manage monthly timesheets</small>
+                </div>
+              </a>
+            </div>
+            <div class="col">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button" href="{{Route("employees.employee.leave", $employee->id)}}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+                <div class="lh-1">
+                  <h1 class="h6 mb-0 text-white lh-1">Time Off</h1>
+                  <small>Approve, create, view time off</small>
+                </div>
+              </a>
+            </div>
+            <div class="col">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button" href="{{Route("employees.employee.timesheet", $employee->id)}}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+                <div class="lh-1">
+                  <h1 class="h6 mb-0 text-white lh-1">Disbursements</h1>
+                  <small>Track and approve expenses</small>
+                </div>
+              </a>
+            </div>
           </div>
 
           <div class="card shadow-sm">
@@ -109,7 +147,7 @@
                   <a class="nav-link" href="#card-payroll">Payroll</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Time-Off</a>
+                  <a class="nav-link" href="#card-leaves">Time-Off</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#card-statistics">Statistics</a>
@@ -122,7 +160,7 @@
             <div class="card-body" id="card-overview">
               <div class="row mb-3">
                 <div class="col-4">
-                  <div class="card p-3 shadow-sm">
+                  <div class="card p-3">
                     <div class="d-flex align-items-center justify-content-center text-muted mb-3">
                       <i class="fas fa-xl fa-user-clock me-auto"></i>
                       <h4 class="card-title me-auto">Tenure</h4>
@@ -132,7 +170,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="card p-3 shadow-sm">
+                  <div class="card p-3">
                     <div class="d-flex align-items-center justify-content-center text-muted mb-3">
                       <i class="fas fa-xl fa-money-bill me-auto"></i>
                       <h4 class="card-title me-auto">Salary</h4>
@@ -141,7 +179,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="card p-3 shadow-sm">
+                  <div class="card p-3">
                     <div class="d-flex align-items-center justify-content-center text-muted mb-3">
                       <i class="fas fa-xl fa-calendar-check me-auto"></i>
                       <h4 class="card-title me-auto">Pay Units</h4>
@@ -227,7 +265,7 @@
                   @endfor
                 </div>
               @else
-                <div class="alert alert-warning" role="alert">No payroll data found.</div>
+                <div class="alert alert-warning mb-0" role="alert">No payroll data found.</div>
               @endif
             </div>
             <div class="card-body d-none" id="card-statistics">
@@ -236,6 +274,44 @@
               <canvas id="line-chart" width="800" height="450"></canvas>
               <hr class="my-3" />
               <canvas id="pie-chart" width="800" height="450"></canvas>
+            </div>
+            <div class="card-body d-none" id="card-leaves">
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Type</th>
+                    <th>Comments</th>
+                    <th class="text-center">Manage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @forelse ($employee->leaves as $leave)
+                    <tr>
+                      <td>
+                        @if ($leave->approved)
+                          Approved at {{$leave->approved->format("n/j/Y g:ia")}}
+                        @elseif ($leave->declined)
+                          Declined at {{$leave->declined->format("n/j/Y g:ia")}}
+                        @else
+                          Pending
+                        @endif
+                      </td>
+                      <td>{{ $leave->start_date->format("n/j/Y g:ia") }}</td>
+                      <td>{{ $leave->end_date->format("n/j/Y g:ia") }}</td>
+                      <td>{{ ucfirst($leave->type) }}</td>
+                      <td>{{ $leave->comments ?? 'N/A' }}</td>
+                      <td class="text-center">
+                        <a href="{{Route("employees.employee.leave", ["id" => $employee->id, "leaveId" => $leave->id])}}">View</a>
+                      </td>
+                    </tr>
+                  @empty
+                    <tr><td colspan="2">No leaves found.</td></tr>
+                  @endif
+                </tbody>
+              </table>
             </div>
             <div class="card-body d-none" id="card-edit">
               <form method="POST" action="">

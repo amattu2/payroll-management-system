@@ -57,14 +57,14 @@ class EmployeeController extends Controller
     if (is_numeric($id)) {
       $employee = Employee::find($id);
 
-      if (!$employee) {
-        return redirect()->route('employees')->withErrors(["The requested employee was not found"]);
+      if ($employee) {
+        return view('employees.employee', compact("employee", "employees"));
       }
-
-      return view('employees.employee', compact("employee", "employees"));
-    } else {
+    } else if ($id === "create") {
       return view('employees.create', ["employees" => $employees]);
     }
+
+    return redirect()->route('employees')->withErrors(["The requested employee was not found"]);
   }
 
   /**
@@ -114,7 +114,7 @@ class EmployeeController extends Controller
       return redirect()->back()->withErrors(["The requested employee was not found"]);
     }
     if (!checkdate($month, 1, $year)) {
-      return redirect()->route("employees.timesheet", ["id" => $employeeId, "year" => date("Y"), "month" => date("m")]);
+      return redirect()->route("employees.employee.timesheet", ["id" => $employeeId, "year" => date("Y"), "month" => date("m")]);
     }
 
     // Validate Employee
@@ -133,6 +133,26 @@ class EmployeeController extends Controller
       "employee",
       "employees",
     ));
+  }
+
+  /**
+   * Get employee page
+   *
+   * @param int $employeeId
+   * @param mixed $leaveId
+   * @return \Illuminate\Contracts\View\View
+   */
+  public function leave($employeeId, $leaveId = null)
+  {
+    if (is_numeric($employeeId)) {
+      $employee = Employee::find($employeeId);
+
+      if ($employee) {
+        return "Employee Leave";
+      }
+    }
+
+    return redirect()->back()->withErrors(["Unable to find that leave request or employee"]);
   }
 
   /**

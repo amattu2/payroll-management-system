@@ -79,15 +79,14 @@ class Timesheet extends Model
 
       $start = clone $this->period;
       $end = (clone $start)->modify("last day of this month");
-      $weeks = [];
       $index = 0;
 
       for ($i = $start; $i <= $end; $i->modify('+1 day')){
         $week = $i->format("W");
         $cloned = clone $i;
 
-        if (!isset($weeks[$week])) {
-          $weeks[$week] = [
+        if (!isset($this->attributes["weeks"][$week])) {
+          $this->attributes["weeks"][$week] = [
             "index" => $index++,
             "start" => $cloned,
             "days" => [],
@@ -95,11 +94,10 @@ class Timesheet extends Model
           ];
         }
 
-        $weeks[$week]["days"][] = $cloned;
-        $weeks[$week]["end"] = $cloned;
+        $this->attributes["weeks"][$week]["days"][] = $cloned;
+        $this->attributes["weeks"][$week]["end"] = $cloned;
       }
 
-      $this->attributes["weeks"] = $weeks;
-      return $weeks;
+      return $this->attributes["weeks"];
     }
 }

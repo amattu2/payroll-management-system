@@ -66,6 +66,14 @@ class Employee extends Model
     }
 
     /**
+     * Get all leaves associated with employee
+     */
+    public function Leaves()
+    {
+        return $this->hasMany(Leave::class)->orderByDesc("start_date");
+    }
+
+    /**
      * Get the user associated with this employee
      */
     public function User()
