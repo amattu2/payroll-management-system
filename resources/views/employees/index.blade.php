@@ -13,7 +13,7 @@
     <div class="container-fluid">
       @include("partials.sidebar")
 
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3">
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3 pb-3">
         @include("partials.errors")
 
         @if (!isset($employees) || count($employees) == 0)
@@ -46,7 +46,7 @@
             @endfor
           </div>
 
-          <div class="card p-3 mb-3 shadow-sm">
+          <div class="card p-3 shadow-sm">
             @include("partials.employeeTable", ["employees" => $employees])
           </div>
         @endif

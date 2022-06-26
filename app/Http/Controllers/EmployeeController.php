@@ -28,6 +28,7 @@ use App\Models\Timesheet;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class EmployeeController extends Controller
 {
@@ -39,7 +40,9 @@ class EmployeeController extends Controller
    */
   public function index(Request $request)
   {
-    $employees = DB::table('employees')->get();
+    $employees = Cache::remember('employees', 60*5, function() {
+      return DB::table('employees')->get();
+    });
 
     return view('employees.index', ["employees" => $employees]);
   }
@@ -52,7 +55,9 @@ class EmployeeController extends Controller
    */
   public function employee($id)
   {
-    $employees = DB::table('employees')->get();
+    $employees = Cache::remember('employees', 60*5, function() {
+      return DB::table('employees')->get();
+    });
 
     if (is_numeric($id)) {
       $employee = Employee::find($id);
@@ -119,10 +124,13 @@ class EmployeeController extends Controller
 
     // Validate Employee
     $employee = Employee::find($employeeId);
-    $employees = DB::table('employees')->get();
     if (!$employee || $employee->id != $employeeId) {
       return redirect()->back()->withErrors(["The requested employee was not found"]);
     }
+
+    $employees = Cache::remember('employees', 60*5, function() {
+      return DB::table('employees')->get();
+    });
 
     // Get Timesheet
     $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first()

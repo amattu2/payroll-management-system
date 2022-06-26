@@ -93,11 +93,8 @@
           </div>
         </div>
         <div class="col-xl-9 mb-3" id="card-panels">
-          @php
-            $activeLeaves = $employee->leaves()->whereNull(["deleted_at", "approved", "declined"]);
-          @endphp
-          @if ($activeLeaves->count() > 0)
-            @foreach ($activeLeaves->get() as $leave)
+          @if ($employee->pendingLeaves->count() > 0)
+            @foreach ($employee->pendingLeaves as $leave)
               <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
                 <b>{{ $employee->firstname }} {{ $employee->lastname }}</b> has a pending time-off request from
                 {{ $leave->created_at->format('n/j/Y') }}
@@ -109,8 +106,10 @@
           <!-- Quick Access -->
           <div class="row mb-3">
             <div class="col">
-              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button" href="{{Route("employees.employee.timesheet", $employee->id)}}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
+                role="button" href="{{ Route('employees.employee.timesheet', $employee->id) }}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
+                  alt="" width="48" height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Timesheets</h1>
                   <small>Manage monthly timesheets</small>
@@ -118,8 +117,10 @@
               </a>
             </div>
             <div class="col">
-              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button" href="{{Route("employees.employee.leave", $employee->id)}}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
+                role="button" href="{{ Route('employees.employee.leave', $employee->id) }}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
+                  alt="" width="48" height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Time Off</h1>
                   <small>Approve, create, view time off</small>
@@ -127,8 +128,10 @@
               </a>
             </div>
             <div class="col">
-              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button" href="{{Route("employees.employee.timesheet", $employee->id)}}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
+                role="button" href="{{ Route('employees.employee.timesheet', $employee->id) }}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
+                  alt="" width="48" height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Disbursements</h1>
                   <small>Track and approve expenses</small>
@@ -165,7 +168,8 @@
                       <i class="fas fa-xl fa-user-clock me-auto"></i>
                       <h4 class="card-title me-auto">Tenure</h4>
                     </div>
-                    <h2 class="text-center">{{ (new DateTime($employee->hired_at))->diff(new DateTime())->format("%a") }} days
+                    <h2 class="text-center">
+                      {{ (new DateTime($employee->hired_at))->diff(new DateTime())->format('%a') }} days
                     </h2>
                   </div>
                 </div>
@@ -237,21 +241,26 @@
                   @for ($i = 0; $i < 4; $i++)
                     <div class="accordion-item">
                       <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#payrollYearCollapse{{$i}}">
-                          Year {{$i+1}}
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#payrollYearCollapse{{ $i }}">
+                          Year {{ $i + 1 }}
                         </button>
                       </h2>
-                      <div id="payrollYearCollapse{{$i}}" class="accordion-collapse collapse" data-bs-parent="#payrollYearAccordion">
+                      <div id="payrollYearCollapse{{ $i }}" class="accordion-collapse collapse"
+                        data-bs-parent="#payrollYearAccordion">
                         <div class="accordion-body">
-                          <div class="accordion" id="payrollMonthAccordion{{$i}}">
+                          <div class="accordion" id="payrollMonthAccordion{{ $i }}">
                             @for ($x = 0; $x < 4; $x++)
                               <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#payrollMonthCollapse{{$i}}{{$x}}">
-                                    Year {{$i+1}}, Month {{$x+1}}
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#payrollMonthCollapse{{ $i }}{{ $x }}">
+                                    Year {{ $i + 1 }}, Month {{ $x + 1 }}
                                   </button>
                                 </h2>
-                                <div id="payrollMonthCollapse{{$i}}{{$x}}" class="accordion-collapse collapse" data-bs-parent="#payrollMonthAccordion{{$i}}">
+                                <div id="payrollMonthCollapse{{ $i }}{{ $x }}"
+                                  class="accordion-collapse collapse"
+                                  data-bs-parent="#payrollMonthAccordion{{ $i }}">
                                   <div class="accordion-body">
                                     {grid containing hours worked, pto, etc}
                                   </div>
@@ -276,7 +285,7 @@
               <canvas id="pie-chart" width="800" height="450"></canvas>
             </div>
             <div class="card-body d-none" id="card-leaves">
-              <table class="table table-striped table-bordered">
+              <table class="table table-striped table-bordered mb-0">
                 <thead>
                   <tr>
                     <th>Status</th>
@@ -292,23 +301,26 @@
                     <tr>
                       <td>
                         @if ($leave->approved)
-                          Approved at {{$leave->approved->format("n/j/Y g:ia")}}
+                          Approved at {{ $leave->approved->format('n/j/Y g:ia') }}
                         @elseif ($leave->declined)
-                          Declined at {{$leave->declined->format("n/j/Y g:ia")}}
+                          Declined at {{ $leave->declined->format('n/j/Y g:ia') }}
                         @else
                           Pending
                         @endif
                       </td>
-                      <td>{{ $leave->start_date->format("n/j/Y g:ia") }}</td>
-                      <td>{{ $leave->end_date->format("n/j/Y g:ia") }}</td>
+                      <td>{{ $leave->start_date->format('n/j/Y g:ia') }}</td>
+                      <td>{{ $leave->end_date->format('n/j/Y g:ia') }}</td>
                       <td>{{ ucfirst($leave->type) }}</td>
                       <td>{{ $leave->comments ?? 'N/A' }}</td>
                       <td class="text-center">
-                        <a href="{{Route("employees.employee.leave", ["id" => $employee->id, "leaveId" => $leave->id])}}">View</a>
+                        <a
+                          href="{{ Route('employees.employee.leave', ['id' => $employee->id, 'leaveId' => $leave->id]) }}">View</a>
                       </td>
                     </tr>
                   @empty
-                    <tr><td colspan="2">No leaves found.</td></tr>
+                    <tr>
+                      <td colspan="2">No leaves found.</td>
+                    </tr>
                   @endif
                 </tbody>
               </table>

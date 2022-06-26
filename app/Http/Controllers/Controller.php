@@ -22,11 +22,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Leave;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
@@ -41,8 +43,25 @@ class Controller extends BaseController
    */
   public function index(Request $request)
   {
-    $employees = DB::table('employees')->get();
+    $employees = Cache::remember('employees', 60*5, function() {
+      return DB::table('employees')->get();
+    });
 
-    return view('index', ["employees" => $employees]);
+    $openLeaves = Cache::remember('openLeaves', 60*5, function () {
+      return Leave::whereNull(["approved", "declined"])
+        ->where("start_date", ">=", date("Y-m-d"))
+        ->orderBy("created_at")
+        ->get();
+    });
+
+    $upcomingLeaves = Cache::remember('upcomingLeaves', 60*60, function () {
+      return Leave::where("approved", "!=", null)
+        ->where("start_date", ">=", date("Y-m-d"))
+        ->where("start_date", "<=", date("Y-m-d", strtotime("+3 weeks")))
+        ->orderBy("start_date")
+        ->get();
+    });
+
+    return view('index', compact("employees", "openLeaves", "upcomingLeaves"));
   }
 }
