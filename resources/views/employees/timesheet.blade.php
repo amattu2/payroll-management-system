@@ -158,9 +158,9 @@
                           <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" role="button">Sick</a></li>
-                          <li><a class="dropdown-item" role="button">Called Out</a></li>
-                          <li><a class="dropdown-item" role="button">Approved Time-Off</a></li>
+                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Sick</a></li>
+                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Called Out</a></li>
+                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Approved Time-Off</a></li>
                         </ul>
                         <textarea class="form-control" rows="1"></textarea>
                       </div>
@@ -209,6 +209,15 @@
   <script>
     document.querySelector("#employee-selector").onchange = (e) => {
       window.location.href = e.target.querySelector("option:checked").dataset.href;
+    };
+
+    /**
+     * Add the templated work description to the payroll day
+     *
+     * @param {HTMLElement} element
+     */
+    const addWorkDescription = (element) => {
+      element.parentElement.parentElement.parentElement.querySelector("textarea").value = element.textContent;
     };
   </script>
 </body>
