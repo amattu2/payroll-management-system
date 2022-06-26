@@ -25,7 +25,8 @@
             <li class="breadcrumb-item"><a
                 href="{{ Route('employees.employee', $employee->id) }}">{{ $employee->firstname }}
                 {{ $employee->lastname }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $date->format('F Y') }} Timesheet</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $timesheet->period->format('F Y') }} Timesheet
+            </li>
           </ol>
         </nav>
         <div class="btn-toolbar">
@@ -44,22 +45,18 @@
             <span>Timesheet History</span>
           </h6>
           <ul class="nav flex-column mb-2">
-            @foreach ($employee->timesheets as $timesheet)
-              @php
-                $tsDate = new DateTime($timesheet->period);
-                $icon = $timesheet->completed_at ? 'fa-calendar-check' : 'fa-calendar';
-              @endphp
+            @foreach ($employee->timesheets as $ts)
               <li class="nav-item">
-                @if ($date != $tsDate)
+                @if ($ts->period != $timesheet->period)
                   <a class="nav-link"
-                    href="{{ Route('employees.timesheet', $employee->id) }}/{{ $tsDate->format('Y') }}/{{ $tsDate->format('m') }}">
-                    <i class="far {{ $icon }} me-1"></i>
-                    {{ $tsDate->format('F, Y') }}
+                    href="{{ Route('employees.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
+                    <i class="far {{ $ts->completed_at ? 'fa-calendar-check' : 'fa-calendar' }} me-1"></i>
+                    {{ $ts->period->format('F, Y') }}
                   </a>
                 @else
                   <a class="nav-link active">
-                    <i class="far {{ $icon }} me-1"></i>
-                    {{ $tsDate->format('F, Y') }}
+                    <i class="far {{ $ts->completed_at ? 'fa-calendar-check' : 'fa-calendar' }} me-1"></i>
+                    {{ $ts->period->format('F, Y') }}
                   </a>
                 @endif
               </li>
@@ -70,9 +67,9 @@
             <span>This Pay Period</span>
           </h6>
           <ul class="nav flex-column mb-2">
-            @foreach ($weeks as $week)
+            @foreach ($timesheet->weeks as $week)
               <li class="nav-item">
-                <a class="nav-link text-muted" href="#week{{$week['index']}}">
+                <a class="nav-link text-muted" href="#week{{ $week['index'] }}">
                   <i class="far fa-dot-circle"></i>
                   {{ $week['start']->format('M jS') }} &ndash; {{ $week['end']->format('M jS') }}
                 </a>
@@ -81,32 +78,38 @@
           </ul>
         </nav>
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          @if (!$timesheet->id)
+            <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+              <h4 class="alert-heading">Timesheet Does Not Exist</h4>
+              <p>The timesheet for the {{ $timesheet->period->format('F, Y') }} pay period does not exist yet. Press
+                create <a href="#timesheetControls">below</a> to create it.</p>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
+
           <div class="btn-toolbar justify-content-between">
             <div class="btn-group" role="group">
               @php
-                $prevMonth = (clone $date)->sub(new DateInterval('P1M'));
-                $nextMonth = (clone $date)->add(new DateInterval('P1M'));
+                $prevMonth = (clone $timesheet->period)->sub(new DateInterval('P1M'));
+                $nextMonth = (clone $timesheet->period)->add(new DateInterval('P1M'));
               @endphp
               <a role="button" class="btn btn-outline-secondary"
                 href="{{ Route('employees.timesheet', $employee->id) }}/{{ $prevMonth->format('Y') }}/{{ $prevMonth->format('m') }}">Back</a>
               <div class="btn-group" role="group">
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  {{ $date->format('F, Y') }}
+                  {{ $timesheet->period->format('F, Y') }}
                 </button>
                 @if (count($employee->timesheets) > 0)
                   <ul class="dropdown-menu">
-                    @foreach ($employee->timesheets as $timesheet)
-                      @php
-                        $tsDate = new DateTime($timesheet->period);
-                      @endphp
-                      @if ($tsDate == $date)
+                    @foreach ($employee->timesheets as $ts)
+                      @if ($ts->id === $timesheet->id)
                         @continue
                       @endif
                       <li>
                         <a class="dropdown-item"
-                          href="{{ Route('employees.timesheet', $employee->id) }}/{{ $tsDate->format('Y') }}/{{ $tsDate->format('m') }}">
-                          {{ $tsDate->format('F, Y') }}
+                          href="{{ Route('employees.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
+                          {{ $ts->period->format('F, Y') }}
                         </a>
                       </li>
                     @endforeach
@@ -116,18 +119,20 @@
               <a role="button" class="btn btn-outline-secondary"
                 href="{{ Route('employees.timesheet', $employee->id) }}/{{ $nextMonth->format('Y') }}/{{ $nextMonth->format('m') }}">Next</a>
             </div>
-            @if ($date->format('mY') !== date('mY'))
+            @if ($timesheet->period->format('mY') !== date('mY'))
               <a role="button" class="btn btn-outline-primary ms-2"
                 href="{{ Route('employees.timesheet', $employee->id) }}/{{ date('Y') }}/{{ date('m') }}">Current</a>
             @endif
             <div class="d-flex ms-auto">
-              <button class="btn btn-primary me-2" type="button">Export</button>
-              <button class="btn btn-primary" type="button">Period Settings</button>
+              @if ($timesheet->id)
+                <button class="btn btn-primary me-2" type="button">Export</button>
+                <button class="btn btn-primary" type="button">Period Settings</button>
+              @endif
             </div>
           </div>
 
-          @foreach ($weeks as $week)
-            <div class="card shadow-sm mt-3" id="week{{$week['index']}}">
+          @foreach ($timesheet->weeks as $week)
+            <div class="card shadow-sm mt-3" id="week{{ $week['index'] }}">
               <div class="card-header">
                 Week #{{ $week['index'] + 1 }}
                 ({{ $week['start']->format('M jS') }} &ndash; {{ $week['end']->format('M jS') }})
@@ -189,9 +194,9 @@
             </div>
           @endforeach
 
-          <div class="button-group my-3 d-flex">
+          <div class="button-group my-3 d-flex" id="timesheetControls">
             <button class="btn btn-primary me-auto" type="button"
-              {{ $employee->employment_status !== 'active' ? 'disabled' : '' }}>Save</button>
+              {{ $employee->employment_status !== 'active' ? 'disabled' : '' }}>{{ !$timesheet->id ? 'Create' : 'Save' }}</button>
             <a class="text-danger" role="button">Cancel</button>
           </div>
         </div>

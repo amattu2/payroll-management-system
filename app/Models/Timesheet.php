@@ -25,6 +25,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTime;
 
 class Timesheet extends Model
 {
@@ -49,5 +50,41 @@ class Timesheet extends Model
     public function days()
     {
       return $this->hasMany(TimesheetDay::class)->orderBy("date");
+    }
+
+    public function getPeriodAttribute()
+    {
+      return new DateTime($this->attributes["period"]);
+    }
+
+    public function getWeeksAttribute() {
+      if (isset($this->attributes["weeks"])) {
+        return $this->attributes["weeks"];
+      }
+
+      $start = clone $this->period;
+      $end = (clone $start)->modify("last day of this month");
+      $weeks = [];
+      $index = 0;
+
+      for ($i = $start; $i <= $end; $i->modify('+1 day')){
+        $week = $i->format("W");
+        $cloned = clone $i;
+
+        if (!isset($weeks[$week])) {
+          $weeks[$week] = [
+            "index" => $index++,
+            "start" => $cloned,
+            "days" => [],
+            "end" => $cloned,
+          ];
+        }
+
+        $weeks[$week]["days"][] = $cloned;
+        $weeks[$week]["end"] = $cloned;
+      }
+
+      $this->attributes["weeks"] = $weeks;
+      return $weeks;
     }
 }

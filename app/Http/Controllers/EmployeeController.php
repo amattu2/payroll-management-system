@@ -24,6 +24,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\Timesheet;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -101,54 +102,36 @@ class EmployeeController extends Controller
   /**
    * Get the employee timesheet page
    *
-   * @param  int $id
+   * @param  int $employeeId
    * @param  int|null $year
    * @param  int|null $month
    * @return \Illuminate\Contracts\View\View
    */
-  public function timesheet($id, $year = null, $month = null)
+  public function timesheet($employeeId, $year = null, $month = null)
   {
-    if (!is_numeric($id)) {
+    // Validate Input
+    if (!is_numeric($employeeId)) {
       return redirect()->back()->withErrors(["The requested employee was not found"]);
     }
     if (!checkdate($month, 1, $year)) {
-      return redirect()->route("employees.timesheet", ["id" => $id, "year" => date("Y"), "month" => date("m")]);
+      return redirect()->route("employees.timesheet", ["id" => $employeeId, "year" => date("Y"), "month" => date("m")]);
     }
 
     // Validate Employee
-    $employee = Employee::find($id);
-    if (!$employee || $employee->id != $id) {
+    $employee = Employee::find($employeeId);
+    $employees = DB::table('employees')->get();
+    if (!$employee || $employee->id != $employeeId) {
       return redirect()->back()->withErrors(["The requested employee was not found"]);
     }
 
-    $date = new DateTime("$year-$month-01");
-    $start = clone $date;
-    $end = (clone $date)->modify("last day of this month");
-    $weeks = [];
-    $index = 0;
-    for ($i = $start; $i <= $end; $i->modify('+1 day')){
-      $week = $i->format("W");
-      $cloned = clone $i;
-
-      if (!isset($weeks[$week])) {
-        $weeks[$week] = [
-          "index" => $index++,
-          "start" => $cloned,
-          "days" => [],
-          "end" => $cloned,
-        ];
-      }
-
-      $weeks[$week]["days"][] = $cloned;
-      $weeks[$week]["end"] = $cloned;
-    }
-    $employees = DB::table('employees')->get();
+    // Get Timesheet
+    $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first()
+      ?? new Timesheet(["period" => "$year-$month-01", "employee_id" => $employee->id]);
 
     return view('employees.timesheet', compact(
-      "date",
-      "weeks",
+      "timesheet",
       "employee",
-      "employees"
+      "employees",
     ));
   }
 }
