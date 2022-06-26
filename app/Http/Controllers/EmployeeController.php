@@ -66,7 +66,7 @@ class EmployeeController extends Controller
         return view('employees.employee', compact("employee", "employees"));
       }
     } else if ($id === "create") {
-      return view('employees.create', ["employees" => $employees]);
+      return view('employees.create', compact("employees"));
     }
 
     return redirect()->route('employees')->withErrors(["The requested employee was not found"]);
@@ -155,8 +155,12 @@ class EmployeeController extends Controller
     if (is_numeric($employeeId)) {
       $employee = Employee::find($employeeId);
 
+      $employees = Cache::remember('employees', 60*5, function() {
+        return DB::table('employees')->get();
+      });
+
       if ($employee) {
-        return "Employee Leave";
+        return view("employees.leave", compact("employee", "employees"));
       }
     }
 
