@@ -35,6 +35,6 @@ class ReportController extends Controller
    */
   public function index(Request $request)
   {
-    return view('index');
+    return view('reports.index');
   }
 }
