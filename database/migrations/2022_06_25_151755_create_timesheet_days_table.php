@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('timesheet_id')->references('id')->on('timesheets');
             $table->timestamps();
             $table->softDeletes();
-            $table->unique(["date", "timesheet_id"]);
+            $table->unique(["date", "timesheet_id", "deleted_at"]);
         });
     }
 

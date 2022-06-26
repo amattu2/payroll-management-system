@@ -30,7 +30,10 @@ class EmployeeFactory extends Factory
             'zip' => $this->faker->postcode(),
             'birthdate' => $this->faker->dateTimeBetween('-60 years', '-18 years'),
             'hired_at' => $this->faker->dateTimeBetween('-3 years', 'now'),
-            'terminated_at' => null,
+            'terminated_at' => $this->faker->randomElement([
+              null,
+              $this->faker->dateTimeBetween('-3 years', 'now')
+            ]),
             'pay_type' => $this->faker->randomElement(['hourly', 'salary']),
             'pay_period' => $this->faker->randomElement(['daily', 'weekly', 'biweekly', 'monthly']),
             'pay_rate' => $this->faker->randomFloat(2, 35000, 220000),
