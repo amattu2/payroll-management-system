@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Employee;
+use DateInterval;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Leave>
@@ -17,23 +18,24 @@ class LeaveFactory extends Factory
      */
     public function definition()
     {
+      $start = $this->faker->dateTimeBetween('-2 years', '+8 months');
+      $approved = $this->faker->boolean;
+
       return [
-          'employee_id' => Employee::factory(),
-          'start_date' => $this->faker->dateTimeBetween('-3 years', 'now'),
-          'end_date' => $this->faker->dateTimeBetween('-3 years', 'now'),
-          'comments' => $this->faker->sentence(),
-          'approved' => $this->faker->randomElement([
-            null,
-            $this->faker->dateTimeBetween('-3 years', 'now')
-          ]),
+          'employee_id' => function (array $attributes) {
+              return $attributes['employee_id'];
+          },
+          'start_date' => $start,
+          'end_date' => (clone $start)->add(new DateInterval("P".rand(1, 45)."D")),
+          'comments' => $this->faker->randomElement(["", $this->faker->sentence()]),
+          'approved' => $this->faker->randomElement([null, $approved ? (clone $start)->sub(new DateInterval("P".rand(1, 90)."D")) : null]),
           'approved_user_id' => null,
-          'declined' => $this->faker->randomElement([
-            null,
-            $this->faker->dateTimeBetween('-3 years', 'now')
-          ]),
+          'declined' => $this->faker->randomElement([null, !$approved ? (clone $start)->sub(new DateInterval("P".rand(1, 90)."D")) : null]),
           'declined_user_id' => null,
           'timesheet_id' => null,
           'type' => $this->faker->randomElement(['paid', 'sick', 'vacation', 'parental', 'unpaid', 'other']),
+          'created_at' => (clone $start)->sub(new DateInterval("P".mt_rand(1, 90)."D")),
+          'updated_at' => null,
       ];
     }
 }

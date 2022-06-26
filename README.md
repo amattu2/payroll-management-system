@@ -15,6 +15,8 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
 - [ ] PTO Tracking / Requests
 - [ ] Company wide closures (via Settings) (With time-ahead scheduled, e.g. Christmas and New Years can be registered far in advance)
+- [ ] Heavy query caching (i.e. employees, timesheets)
+- [ ] Fix factories for tables with unique constraints (Timesheets, Timesheet Days)
 
 # Usage
 

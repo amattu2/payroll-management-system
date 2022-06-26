@@ -37,7 +37,7 @@ class Factories extends Command
 
         // Create new models
         \App\Models\Employee::factory()->count(rand(6, 45))
-          ->has(\App\Models\Timesheet::factory()->count(rand(1, 2))
+          ->has(\App\Models\Timesheet::factory()->count(rand(1, 1))
             ->has(\App\Models\TimesheetDay::factory()->count(1)))
           ->has(\App\Models\Leave::factory()->count(rand(0, 3)))
           ->create();

@@ -17,6 +17,8 @@ class EmployeeFactory extends Factory
      */
     public function definition()
     {
+        $hired_at = $this->faker->dateTimeBetween('-3 years', '-1 day');
+
         return [
             'firstname' => $this->faker->firstName(),
             'middlename' => $this->faker->firstName(),
@@ -29,11 +31,8 @@ class EmployeeFactory extends Factory
             'state' => $this->faker->state(),
             'zip' => $this->faker->postcode(),
             'birthdate' => $this->faker->dateTimeBetween('-60 years', '-18 years'),
-            'hired_at' => $this->faker->dateTimeBetween('-3 years', 'now'),
-            'terminated_at' => $this->faker->randomElement([
-              null,
-              $this->faker->dateTimeBetween('-3 years', 'now')
-            ]),
+            'hired_at' => $hired_at,
+            'terminated_at' => $this->faker->randomElement([null, $this->faker->dateTimeBetween($hired_at, 'now')]),
             'pay_type' => $this->faker->randomElement(['hourly', 'salary']),
             'pay_period' => $this->faker->randomElement(['daily', 'weekly', 'biweekly', 'monthly']),
             'pay_rate' => $this->faker->randomFloat(2, 35000, 220000),

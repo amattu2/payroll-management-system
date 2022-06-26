@@ -58,6 +58,16 @@ class Employee extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+      'hired_at' => 'datetime',
+      'terminated_at' => 'datetime',
+    ];
+
+    /**
      * Get all of the employees timesheets
      */
     public function Timesheets()

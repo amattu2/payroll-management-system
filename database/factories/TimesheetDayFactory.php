@@ -30,24 +30,15 @@ class TimesheetDayFactory extends Factory
                 return Timesheet::where("id", $attributes['timesheet_id'])->first()->period->format("Y-m-d");
               }
           },
-          "description" => $this->faker->randomElement([
-            null,
-            "No show",
-            "Sick",
-            "On the road",
-            "Traveling",
-            $this->faker->sentence(),
-          ]),
+          "description" => $this->faker->randomElement([null, "No show", "Sick", "On the road", "Traveling", $this->faker->sentence()]),
           "start_time" => $this->faker->time("H:i:s"),
           "end_time" => $this->faker->time("H:i:s"),
           "adjustment" => $this->faker->randomFloat(2, -4, 4),
           "total_units" => $this->faker->randomFloat(2, 0, 8),
-          "deleted_at" => $this->faker->randomElement([
-            null,
-            $this->faker->dateTime("now"),
-            null
-          ]),
-          "timesheet_id" => Timesheet::factory(),
+          "deleted_at" => $this->faker->randomElement([null, $this->faker->dateTime("now"), null]),
+          "timesheet_id" => function (array $attributes) {
+              return $attributes['timesheet_id'];
+          },
         ];
     }
 }

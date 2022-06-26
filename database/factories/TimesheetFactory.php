@@ -2,8 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Employee;
+use App\Models\Timesheet;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use DateInterval;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Timesheet>
@@ -18,14 +21,23 @@ class TimesheetFactory extends Factory
     public function definition()
     {
         return [
-            'period' => $this->faker->dateTimeBetween('-3 years', '+3 months')->format("Y-m-") . "01",
-            'pay_type' => $this->faker->randomElement(['hourly', 'salary']),
+            'period' => function (array $attributes) {
+                $period = DB::table('timesheets')->where("employee_id", $attributes['employee_id'])->orderBy('period', 'desc')->first();
+
+                if ($period) {
+                  return ((clone $period->period)->add(new DateInterval("P1M")));
+                } else {
+                  return Employee::where("id", $attributes['employee_id'])->first()->hired_at->format("Y-m-01");
+                }
+            },
+            'pay_type' => function (array $attributes) {
+                return Employee::find($attributes['employee_id'])->pay_type;
+            },
             'edit_user_id' => 1,
-            'employee_id' => Employee::factory(),
-            'completed_at' => $this->faker->randomElement([
-                null,
-                $this->faker->dateTimeBetween('-3 years', '+3 months')
-            ]),
+            'employee_id' => function (array $attributes) {
+                return $attributes['employee_id'];
+            },
+            'completed_at' => $this->faker->randomElement([null, $this->faker->dateTimeBetween('-3 months', '+3 months')]),
         ];
     }
 }
