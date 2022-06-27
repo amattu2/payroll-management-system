@@ -319,7 +319,7 @@
                     </tr>
                   @empty
                     <tr>
-                      <td colspan="2">No leaves found.</td>
+                      <td colspan="6">No leaves found.</td>
                     </tr>
                   @endif
                 </tbody>
