@@ -60,6 +60,7 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     Route::post('/', [EmployeeController::class, 'create'])->name("employees.create");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
     Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.employee.timesheet");
+    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class, 'saveTimesheetSettings'])->name("timesheet.settings");
     Route::get('/{id}/leave/{leaveId?}', [EmployeeController::class, 'leave'])->name("employees.employee.leave");
 
     /**

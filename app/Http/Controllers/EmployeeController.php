@@ -144,6 +144,43 @@ class EmployeeController extends Controller
   }
 
   /**
+   * Save updated timesheet settings
+   *
+   * @param  int $employeeId
+   * @param  int $year
+   * @param  int $month
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function saveTimesheetSettings($employeeId, $year, $month)
+  {
+    // Validate Input
+    if (!is_numeric($employeeId) || !($employee = Employee::find($employeeId))) {
+      return redirect()->back()->withErrors(["The requested employee was not found"]);
+    }
+    if (!checkdate($month, 1, $year)) {
+      return redirect()->back()->withErrors(["The requested timesheet was not found"]);
+    }
+    if (!($timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first())) {
+      return redirect()->back()->withErrors(["The requested timesheet was not found"]);
+    }
+
+    // Validate Input
+    $validated = request()->validate([
+      'period' => 'required|date_format:Y-m',
+      'pay_type' => 'required|in:hourly,salary',
+    ]);
+
+    // Update Timesheet
+    $timesheet->update($validated);
+
+    return redirect()->route("employees.employee.timesheet", [
+      "id" => $employeeId,
+      "year" => $timesheet->period->format("Y"),
+      "month" => $timesheet->period->format("m")
+    ])->with("status", "The timesheet settings were updated");
+  }
+
+  /**
    * Get employee page
    *
    * @param int $employeeId

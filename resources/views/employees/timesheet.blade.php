@@ -16,6 +16,7 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3">
       @include('partials.errors')
+      @include('partials.status')
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <nav aria-label="breadcrumb">
@@ -126,7 +127,8 @@
             <div class="d-flex ms-auto">
               @if ($timesheet->id)
                 <button class="btn btn-primary me-2" type="button">Export</button>
-                <button class="btn btn-primary" type="button">Period Settings</button>
+                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                  data-bs-target="#periodSettingsModal">Period Settings</button>
               @endif
             </div>
           </div>
@@ -159,7 +161,8 @@
                           <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Sick</a></li>
+                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Sick</a>
+                          </li>
                           <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Called
                               Out</a></li>
                           <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Approved
@@ -203,12 +206,14 @@
           <div class="button-group my-3 d-flex" id="timesheetControls">
             <button class="btn btn-primary me-auto" type="button"
               @disabled($employee->employment_status !== 'active')>{{ !$timesheet->id ? 'Create' : 'Save' }}</button>
-            <a class="text-danger" role="button">Cancel</button>
+            <a class="text-danger" role="button">Cancel</a>
           </div>
         </div>
       </div>
     </main>
   </div>
+
+  @include('partials.periodSettingsModal')
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>
