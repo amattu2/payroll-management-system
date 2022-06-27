@@ -210,15 +210,6 @@
     document.querySelector("#employee-selector").onchange = (e) => {
       window.location.href = e.target.querySelector("option:checked").dataset.href;
     };
-
-    /**
-     * Add the templated work description to the payroll day
-     *
-     * @param {HTMLElement} element
-     */
-    const addWorkDescription = (element) => {
-      element.parentElement.parentElement.parentElement.querySelector("textarea").value = element.textContent;
-    };
   </script>
 </body>
 
