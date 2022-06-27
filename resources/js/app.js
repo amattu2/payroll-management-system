@@ -20,16 +20,15 @@
  */
 
 import { Chart, registerables } from 'chart.js';
+import moment from 'moment';
+import lodash from 'lodash';
+import bootstrap from 'bootstrap';
 
 Chart.register(...registerables);
 
 window.Chart = Chart;
-
-window._ = require('lodash');
-
-try {
-    require('bootstrap');
-} catch (e) {}
+window.moment = moment;
+window._ = lodash;
 
 /**
  * Update an employee's employment status
@@ -62,4 +61,42 @@ window.updateStatus = async (element, status) => {
  */
 window.addWorkDescription = (element) => {
   element.parentElement.parentElement.parentElement.querySelector("textarea").value = element.textContent;
+};
+
+/**
+ * Recalculate the payroll day's total units (hours/days)
+ *
+ * @param {HTMLElement} element
+ */
+window.calculateDayUnits = (element) => {
+  const parent = element.parentElement.parentElement;
+  const units = parent.dataset.units;
+
+  const start = parent.querySelector("[name='start_time']");
+  const startTime = moment(start.value, "HH:mm", true);
+  const end = parent.querySelector("[name='end_time']");
+  const endTime = moment(end.value, "HH:mm", true);
+  if (!startTime.isValid() || !endTime.isValid()) {
+    return;
+  }
+
+  if (startTime.isAfter(endTime)) {
+    return;
+  }
+
+  const adjustment = parent.querySelector("[name='adjustment']");
+  if (!adjustment.value || parseInt(adjustment.value) % 15 !== 0) {
+    adjustment.value = 0;
+  } else {
+    endTime.add(parseInt(adjustment.value), "minutes");
+  }
+
+  const duration = moment.duration(endTime.diff(startTime));
+  switch (units) {
+    case "hours":
+      parent.querySelector("[data-day-sum]").textContent = `${duration.asHours()} ${units}`;
+      break;
+    default:
+      break;
+  }
 };

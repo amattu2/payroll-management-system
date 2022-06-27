@@ -143,11 +143,12 @@
                   <div class="col-4">Work Description</div>
                   <div class="col-2">Time In</div>
                   <div class="col-2">Time Out</div>
-                  <div class="col-2">Adjustment</div>
+                  <div class="col-2">Adjustment (minutes)</div>
                   <div class="col-1">Total</div>
                 </div>
                 @foreach ($week['days'] as $i => $day)
-                  <div class="row py-3 text-center {{ $i % 2 !== 0 ? 'bg-body' : '' }}">
+                  <div class="row py-3 text-center {{ $i % 2 !== 0 ? 'bg-body' : '' }}"
+                    data-units="{{ $timesheet->pay_type === 'hourly' ? 'hours' : 'days' }}">
                     <div class="col-1">
                       {{ $day->format('jS (D)') }}
                     </div>
@@ -159,36 +160,41 @@
                         </button>
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Sick</a></li>
-                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Called Out</a></li>
-                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Approved Time-Off</a></li>
+                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Called
+                              Out</a></li>
+                          <li><a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Approved
+                              Time-Off</a></li>
                         </ul>
                         <textarea class="form-control" rows="1"></textarea>
                       </div>
                     </div>
                     <div class="col-2">
-                      <input type="time" class="form-control" value="" />
+                      <input type="time" name="start_time" class="form-control" value="07:00"
+                        onblur="calculateDayUnits(this);" />
                     </div>
                     <div class="col-2">
-                      <input type="time" class="form-control" value="" />
+                      <input type="time" name="end_time" class="form-control" value="17:00"
+                        onblur="calculateDayUnits(this);" />
                     </div>
                     <div class="col-2">
                       <div class="input-group">
                         <span class="input-group-text">
                           <i class="fas fa-clock"></i>
                         </span>
-                        <input type="number" class="form-control" value="0" min="-24" max="24"
-                          {{ $employee->pay_type !== 'hourly' ? 'disabled' : '' }} />
+                        <input type="number" name="adjustment" class="form-control" value="0" step="15"
+                          min="-1440" max="1440" onblur="calculateDayUnits(this.parentElement);"
+                          @disabled($timesheet->pay_type !== 'hourly') />
                       </div>
                     </div>
                     <div class="col-1">
-                      {{ $employee->pay_type === 'hourly' ? '4 hours' : '1 day' }}
+                      <span data-day-sum>N/A</span>
                     </div>
                   </div>
                 @endforeach
                 <div class="row text-center border-top fw-bold pt-3">
                   <div class="col-1">Totals</div>
                   <div class="col-10"></div>
-                  <div class="col-1">6 days</div>
+                  <div class="col-1" data-period-sum>N/A</div>
                 </div>
               </div>
             </div>
@@ -196,7 +202,7 @@
 
           <div class="button-group my-3 d-flex" id="timesheetControls">
             <button class="btn btn-primary me-auto" type="button"
-              {{ $employee->employment_status !== 'active' ? 'disabled' : '' }}>{{ !$timesheet->id ? 'Create' : 'Save' }}</button>
+              @disabled($employee->employment_status !== 'active')>{{ !$timesheet->id ? 'Create' : 'Save' }}</button>
             <a class="text-danger" role="button">Cancel</button>
           </div>
         </div>
