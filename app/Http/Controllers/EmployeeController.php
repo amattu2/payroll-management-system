@@ -213,10 +213,17 @@ class EmployeeController extends Controller
    */
   public function updateEmploymentStatus($employeeId, $status)
   {
+    // Update employment status
     $employee = Employee::findOrFail($employeeId);
-
     $employee->employment_status = $status;
     $employee->save();
+
+    // Update pending leave requests
+    if (in_array($status, ["terminated", "suspended"])) {
+      $employee->leaves()
+        ->whereNull(["approved", "declined"])
+        ->update(["declined" => date("Y-m-d H:i:s"), "declined_user_id" => auth()->user()->id]);
+    }
 
     return true;
   }
