@@ -4,9 +4,10 @@ namespace Database\Factories;
 
 use App\Models\Timesheet;
 use App\Models\TimesheetDay;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use DateInterval;
 use DateTime;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TimesheetDay>
@@ -21,15 +22,7 @@ class TimesheetDayFactory extends Factory
     public function definition()
     {
         return [
-          "date" => function (array $attributes) {
-              $tsDay = TimesheetDay::orderBy("date", "desc")->where("timesheet_id", $attributes['timesheet_id'])->first();
-
-              if ($tsDay) {
-                return (((new DateTime($tsDay['date']))->add(new DateInterval("P1D")))->format("Y-m-d"));
-              } else {
-                return Timesheet::where("id", $attributes['timesheet_id'])->first()->period->format("Y-m-d");
-              }
-          },
+          "date" => $this->faker->dateTimeBetween('-90 years', '+90 years'),
           "description" => $this->faker->randomElement([null, "No show", "Sick", "On the road", "Traveling", $this->faker->sentence()]),
           "start_time" => $this->faker->time("H:i:s"),
           "end_time" => $this->faker->time("H:i:s"),
@@ -39,6 +32,7 @@ class TimesheetDayFactory extends Factory
           "timesheet_id" => function (array $attributes) {
               return $attributes['timesheet_id'];
           },
+          "updated_at" => null,
         ];
     }
 }
