@@ -220,4 +220,36 @@ class EmployeeController extends Controller
 
     return true;
   }
+
+  /**
+   * Update an employee's profile
+   *
+   * @param  int $employeeId
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function updateProfile($employeeId)
+  {
+    $employee = Employee::findOrFail($employeeId);
+
+    $employee->update(request()->validate([
+      'firstname' => 'required|string|max:255',
+      'middlename' => 'nullable|string|max:255',
+      'lastname' => 'required|string|max:255',
+      'email' => 'required|string|email|max:255',
+      'telephone' => 'required|string|max:255',
+      'street1' => 'required|string|max:255',
+      'street2' => 'nullable|string|max:255',
+      'city' => 'required|string|max:255',
+      'state' => 'required|string|max:2',
+      'zip' => 'required|string|max:5',
+      'birthdate' => 'required|date',
+      'hired_at' => 'required|date',
+      'pay_type' => 'required|in:hourly,salary',
+      'pay_period' => 'required|in:daily,weekly,biweekly,monthly',
+      'pay_rate' => 'required|numeric',
+      'title' => 'required|string|max:255',
+    ]));
+
+    return redirect()->route("employees.employee", $employeeId)->with("status", "The employee profile was updated");
+  }
 }

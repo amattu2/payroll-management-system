@@ -17,6 +17,7 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3">
       @include('partials.errors')
+      @include('partials.status')
 
       <div class="row">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
@@ -326,7 +327,7 @@
               </table>
             </div>
             <div class="card-body d-none" id="card-edit">
-              <form method="POST" action="">
+              <form method="POST" action="{{ Route('employees.update.profile', $employee->id) }}">
                 @include('partials.employeeForm')
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a class="btn text-danger" href="{{ Route('employees') }}">Cancel</a>

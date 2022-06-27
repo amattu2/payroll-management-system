@@ -4,19 +4,41 @@ This is a comprehensive employee management & payroll application built with Lar
 
 # To-Do
 
-- [ ] Payroll / Time card tracking
-- [ ] Timesheet exporting (PDF/Email)
-- [ ] Employee Direct reports (e.g. Joan reports to Barry)
-- [ ] Employee notes
-- [ ] Report Center
+# App
+
 - [ ] App Settings and Controls
-- [ ] Employee Communication (e.g. Timesheets?)
+  - [ ] Departments
+  - [ ] Closure tracking
 - [ ] Integrations (TBD)
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
-- [ ] PTO Tracking / Requests
 - [ ] Company wide closures (via Settings) (With time-ahead scheduled, e.g. Christmas and New Years can be registered far in advance)
+
+## Employees
+
+- [ ] Supervisor tracking (e.g. Joan reports to Barry)
+- [ ] Employee comments
+- [X] General profile editing
+- [ ] Employee Communication (e.g. Timesheets, Free form emails)
+- [ ] Time-Off Tracking / Requests
+- [ ] Disbursements
+
+## Payroll / Timesheets
+
+- [X] Editing timesheet options (e.g. Period/Pay type)
+- [ ] Time card tracking
+- [ ] Exporting (PDF/Email)
+
+## Reports
+
+- [ ] Report Center
+- [ ] Statistics/Graphs on pages
+
+## Other
+
+- [ ] Block a user from logging in if their associated employee is not active
 - [X] Heavy query caching (i.e. employees, timesheets)
 - [X] Fix factories for tables with unique constraints (Timesheets, Timesheet Days)
+- [ ] Implement lang file for long/duplicated messages
 
 # Usage
 

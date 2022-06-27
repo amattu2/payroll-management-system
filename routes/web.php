@@ -56,12 +56,19 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
    * Employee Management Routes
    */
   Route::group(["middleware" => ["can:employees.view.all"], "prefix" => "employees"], function() {
+    /**
+     * Get Routes
+     */
     Route::get('/', [EmployeeController::class, 'index'])->name("employees");
-    Route::post('/', [EmployeeController::class, 'create'])->name("employees.create");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
-    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.employee.timesheet");
-    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class, 'saveTimesheetSettings'])->name("timesheet.settings");
+    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class , 'timesheet'])->name("employees.employee.timesheet");
     Route::get('/{id}/leave/{leaveId?}', [EmployeeController::class, 'leave'])->name("employees.employee.leave");
+
+    /**
+     * Create Routes
+     */
+    Route::post('/', [EmployeeController::class , 'create'])
+      ->name("employees.create");
 
     /**
      * Update Routes
@@ -69,6 +76,10 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     Route::post('/{id}/update/employment_status/{status}', [EmployeeController::class, 'updateEmploymentStatus'])
       ->name("employees.update.employment_status")
       ->where(["status" => "active|terminated|suspended"]);
+    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class , 'saveTimesheetSettings'])
+      ->name("timesheet.settings");
+    Route::post('/{id}/profile', [EmployeeController::class, 'updateProfile'])
+      ->name("employees.update.profile");
   });
 
   /*
