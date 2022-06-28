@@ -49,6 +49,7 @@ class Timesheet extends Model
      */
     protected $casts = [
         'period' => 'datetime',
+        'completed_at' => 'datetime',
     ];
 
     /**

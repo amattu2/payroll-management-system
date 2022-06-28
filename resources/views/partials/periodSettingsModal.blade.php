@@ -11,7 +11,7 @@
           method="POST" id="periodSettingsForm">
           @csrf
           <div class="col-md-12">
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mb-0">
               <strong>Warning!</strong> Changing these settings during an active pay period is not recommended.
             </div>
           </div>
@@ -26,6 +26,18 @@
               <option value="hourly" @selected($timesheet->pay_type)>Hourly</option>
               <option value="salary" @selected($timesheet->pay_type)>Salary</option>
             </select>
+          </div>
+          <div class="col-md-12">
+            <label for="completed_at" class="form-label">Finalized</label>
+            <input type="datetime-local" name="completed_at" class="form-control" id="completed_at"
+              value="{{ $timesheet->completed_at }}">
+            <div class="form-text">
+              @if ($timesheet->completed_at)
+                Clear this value to re-enable editing of this period.
+              @else
+                You may leave this value blank.
+              @endif
+            </div>
           </div>
         </form>
       </div>

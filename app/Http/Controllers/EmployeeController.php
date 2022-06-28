@@ -168,6 +168,7 @@ class EmployeeController extends Controller
     $validated = request()->validate([
       'period' => 'required|date_format:Y-m',
       'pay_type' => 'required|in:hourly,salary',
+      'completed_at' => 'nullable|date',
     ]);
 
     // Update Timesheet

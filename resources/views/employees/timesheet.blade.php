@@ -205,9 +205,21 @@
           @endforeach
 
           <div class="button-group my-3 d-flex" id="timesheetControls">
-            <button class="btn btn-primary me-auto" type="button"
-              @disabled($employee->employment_status !== 'active')>{{ !$timesheet->id ? 'Create' : 'Save' }}</button>
-            <a class="text-danger" role="button">Cancel</a>
+            @if (!$timesheet->completed_at)
+              <button class="btn btn-primary me-3" type="button" @disabled($employee->employment_status !== 'active')>
+                {{ !$timesheet->id ? 'Create & Finalize' : 'Save & Finalize' }}
+              </button>
+              <button class="btn btn-outline-primary me-3" type="button" @disabled($timesheet->completed_at || $employee->employment_status !== 'active')>
+                {{ !$timesheet->id ? 'Create' : 'Save' }}
+              </button>
+            @else
+              <span class="fw-bold">
+                <i class="fas fa-check-circle me-1"></i>
+                Finalized {{ $timesheet->completed_at->format('m/d/Y g:i A') }}
+              </span>
+            @endif
+            <a class="text-danger ms-auto" role="button"
+              href="{{ Route('employees.employee', $employee->id) }}">Cancel</a>
           </div>
         </div>
       </div>
