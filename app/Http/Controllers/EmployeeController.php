@@ -168,8 +168,12 @@ class EmployeeController extends Controller
     $validated = request()->validate([
       'period' => 'required|date_format:Y-m',
       'pay_type' => 'required|in:hourly,salary',
-      'completed_at' => 'nullable|date',
     ]);
+    if (request()->has("completed_at")) {
+      $validated["completed_at"] = Carbon::now();
+    } else {
+      $validated["completed_at"] = null;
+    }
 
     // Update Timesheet
     $timesheet->update($validated);

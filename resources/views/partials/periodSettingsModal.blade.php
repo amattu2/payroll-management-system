@@ -28,16 +28,17 @@
             </select>
           </div>
           <div class="col-md-12">
-            <label for="completed_at" class="form-label">Finalized</label>
-            <input type="datetime-local" name="completed_at" class="form-control" id="completed_at"
-              value="{{ $timesheet->completed_at }}">
-            <div class="form-text">
-              @if ($timesheet->completed_at)
-                Clear this value to re-enable editing of this period.
-              @else
-                You may leave this value blank.
-              @endif
+            <div class="form-check">
+              <input id="completed_at" name="completed_at" type="checkbox" class="form-check-input" value="1" @checked($timesheet->completed_at)>
+              <label class="form-check-label" for="completed_at">
+                Finalized {{ $timesheet->completed_at ? "on " . $timesheet->completed_at->format('m/d/Y g:i A') : "" }}
+              </label>
             </div>
+            @if ($timesheet->completed_at)
+              <div class="form-text">
+                Uncheck to re-enable editing of this period.
+              </div>
+            @endif
           </div>
         </form>
       </div>

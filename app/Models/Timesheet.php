@@ -40,6 +40,7 @@ class Timesheet extends Model
       "period",
       "pay_type",
       "employee_id",
+      "completed_at",
     ];
 
     /**
