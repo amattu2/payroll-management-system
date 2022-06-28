@@ -72,6 +72,16 @@
             </div>
           </div>
 
+          <!-- Linked Employee -->
+          @if ($employee->user)
+            <div class="card shadow-sm mb-3">
+              <div class="card-body">
+                This employee is linked to the user account
+                <span class="badge rounded-pill bg-dark"><a class="text-light" href="#" role="button">#{{$employee->user->id}}</a></span>
+              </div>
+            </div>
+          @endif
+
           <!-- Employement Controls -->
           <div class="card shadow-sm mb-3">
             <div class="card-header">
