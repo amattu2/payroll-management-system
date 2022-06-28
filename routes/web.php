@@ -62,7 +62,8 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     Route::get('/', [EmployeeController::class, 'index'])->name("employees");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
     Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class , 'timesheet'])->name("employees.employee.timesheet");
-    Route::get('/{id}/leave/{leaveId?}', [EmployeeController::class, 'leave'])->name("employees.employee.leave");
+    Route::get('/{id}/leaves', [EmployeeController::class, 'leaves'])->name("employees.employee.leaves");
+    Route::get('/{id}/leaves/{leaveId}', [EmployeeController::class, 'leave'])->name("leaves.leave");
 
     /**
      * Create Routes
@@ -79,6 +80,8 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
       ->name("timesheet.settings");
     Route::post('/{id}/update/profile', [EmployeeController::class, 'updateProfile'])
       ->name("employees.update.profile");
+    Route::post('/{id}/leaves/{leaveId}/update', [EmployeeController::class, 'updateLeave'])
+      ->name("leaves.leave.update");
   });
 
   /*

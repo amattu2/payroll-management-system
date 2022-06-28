@@ -137,7 +137,7 @@
             </div>
             <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
-                role="button" href="{{ Route('employees.employee.leave', $employee->id) }}">
+                role="button" href="{{ Route('employees.employee.leaves', $employee->id) }}">
                 <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
                   alt="" width="48" height="38">
                 <div class="lh-1">
@@ -333,7 +333,7 @@
                       <td>{{ $leave->comments ?? 'N/A' }}</td>
                       <td class="text-center">
                         <a
-                          href="{{ Route('employees.employee.leave', ['id' => $employee->id, 'leaveId' => $leave->id]) }}">View</a>
+                          href="{{ Route('leaves.leave', ['id' => $employee->id, 'leaveId' => $leave->id]) }}">View</a>
                       </td>
                     </tr>
                   @empty

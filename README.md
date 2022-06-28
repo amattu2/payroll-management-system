@@ -9,7 +9,8 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] App Settings and Controls
   - [ ] Departments
   - [ ] Closure tracking
-- [ ] Integrations (TBD)
+  - [ ] Integrations
+    - [ ] Send CRUD events to external application via Observers
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
 - [ ] Company wide closures (via Settings) (With time-ahead scheduled, e.g. Christmas and New Years can be registered far in advance)
 
@@ -20,6 +21,8 @@ This is a comprehensive employee management & payroll application built with Lar
 - [X] General profile editing
 - [ ] Employee Communication (e.g. Timesheets, Free form emails, PTO Rejections)
 - [ ] Time-Off Tracking / Requests
+  - [ ] Internal creation
+  - [ ] External creation
 - [ ] Disbursements
 - [X] When employees are terminated, reject all open PTO requests
 

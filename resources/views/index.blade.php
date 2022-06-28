@@ -115,7 +115,7 @@
                 <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
                   <b>{{ $leave->employee->firstname }} {{ $leave->employee->lastname }}</b> has a pending time-off
                   request from {{ $leave->created_at->format('m/d') }}
-                  <a href="{{ Route('employees.employee.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}"
+                  <a href="{{ Route('leaves.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}"
                     class="ms-1">View</a>
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -136,7 +136,7 @@
                         <strong class="text-gray-dark">{{ $leave->employee->firstname }}
                           {{ $leave->employee->lastname }} </strong>
                         <a
-                          href="{{ Route('employees.employee.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}">View</a>
+                          href="{{ Route('leaves.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}">View</a>
                       </div>
                       <span class="d-flex align-items-center">
                         {{ $leave->start_date->format('M jS') }} &ndash; {{ $leave->end_date->format('M jS') }}

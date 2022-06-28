@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -54,5 +55,15 @@ class Leave extends Model
     public function Timesheet()
     {
         return $this->belongsTo(Timesheet::class);
+    }
+
+    /**
+     * Get the duration of this leave
+     *
+     * @return \DateInterval duration
+     */
+    public function getDurationAttribute()
+    {
+        return $this->start_date->diff($this->end_date);
     }
 }

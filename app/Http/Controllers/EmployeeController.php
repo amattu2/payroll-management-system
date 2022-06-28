@@ -186,27 +186,100 @@ class EmployeeController extends Controller
   }
 
   /**
-   * Get employee page
+   * Get employee leaves page
    *
    * @param int $employeeId
-   * @param mixed $leaveId
    * @return \Illuminate\Contracts\View\View
    */
-  public function leave($employeeId, $leaveId = null)
+  public function leaves($employeeId)
   {
-    if (is_numeric($employeeId)) {
-      $employee = Employee::find($employeeId);
-
-      $employees = Cache::remember('employees', 60*5, function() {
-        return DB::table('employees')->get();
-      });
-
-      if ($employee) {
-        return view("employees.leave", compact("employee", "employees"));
-      }
+    $employee = Employee::find($employeeId);
+    if (!$employee || $employee->id != $employeeId) {
+      return redirect()->back()->withErrors(["The requested employee was not found"]);
     }
 
-    return redirect()->back()->withErrors(["Unable to find that leave request or employee"]);
+    $employees = Cache::remember('employees', 60*5, function() {
+      return DB::table('employees')->get();
+    });
+
+    return view("employees.leaves", compact("employee", "employees"));
+  }
+
+  /**
+   * Get employee leave request page
+   *
+   * @param int $employeeId
+   * @param int $leaveId
+   * @return \Illuminate\Contracts\View\View
+   */
+  public function leave($employeeId, $leaveId)
+  {
+    $employee = Employee::find($employeeId);
+    if (!$employee || $employee->id != $employeeId) {
+      return redirect()->back()->withErrors(["The requested employee was not found"]);
+    }
+
+    $leave = $employee->leaves()->find($leaveId);
+    if (!$leave || $leave->id != $leaveId) {
+      return redirect()->back()->withErrors(["The requested leave was not found"]);
+    }
+
+    $employees = Cache::remember('employees', 60*5, function() {
+      return DB::table('employees')->get();
+    });
+
+    return view("employees.leave", compact("employee", "leave", "employees"));
+  }
+
+  /**
+   * Save a employee leave request
+   *
+   * @param  int $employeeId
+   * @param  int $leaveId
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function updateLeave($employeeId, $leaveId)
+  {
+    $employee = Employee::find($employeeId);
+    if (!$employee || $employee->id != $employeeId) {
+      return redirect()->back()->withErrors(["The requested employee was not found"]);
+    }
+
+    $leave = $employee->leaves()->find($leaveId);
+    if (!$leave || $leave->id != $leaveId) {
+      return redirect()->back()->withErrors(["The requested leave was not found"]);
+    }
+
+    $validated = request()->validate([
+      'comments' => 'nullable|string',
+      'start_date' => 'required|date|before:end_date',
+      'end_date' => 'required|date|after:start_date',
+      'type' => 'required|in:paid,sick,vacation,parental,unpaid,other',
+      'timesheet_id' => 'nullable|exists:timesheets,id',
+    ]);
+
+    $validated["comments"] = $validated["comments"] ?? "";
+    $validated["approved_user_id"] = null;
+    $validated["declined_user_id"] = null;
+    $validated["approved"] = null;
+    $validated["declined"] = null;
+
+    if (request()->get("status") === "approved") {
+      $validated["approved_user_id"] = Auth()->user()->id;
+      $validated["approved"] = Carbon::now();
+    } else if (request()->get("status") === "declined") {
+      $validated["declined_user_id"] = Auth()->user()->id;
+      $validated["declined"] = Carbon::now();
+    }
+
+    if ($validated["timesheet_id"] && !$employee->timesheets()->find($validated["timesheet_id"])) {
+      return redirect()->back()->withErrors(["The requested timesheet does not belong to this employee"]);
+    }
+
+    $leave->update($validated);
+
+    return redirect()->route("leaves.leave", ["id" => $employeeId, "leaveId" => $leaveId])
+      ->with("status", "The leave request was updated");
   }
 
   /**

@@ -226,7 +226,7 @@
     </main>
   </div>
 
-  @include('partials.periodSettingsModal')
+  @includeUnless(!$timesheet->id, 'partials.periodSettingsModal')
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>
