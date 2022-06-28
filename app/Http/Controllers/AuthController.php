@@ -70,8 +70,7 @@ class AuthController extends Controller
 
     if (Auth::attempt($request, request('remember'))) {
       // Check linked employee status
-      $employeeId = Auth::user()->employee_id;
-      if ($employeeId !== null && DB::table('employees')->where("id", $employeeId)->where("employment_status", "active")->get() === null) {
+      if (Auth()->user()->employee && Auth()->user()->employee->employment_status !== "active") {
         Auth::logout();
 
         return redirect()->back()->withErrors(["You are not allowed to login"]);

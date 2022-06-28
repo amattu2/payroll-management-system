@@ -36,7 +36,7 @@ This is a comprehensive employee management & payroll application built with Lar
 
 ## Other
 
-- [ ] Block a user from logging in if their associated employee is not active
+- [X] Block a user from logging in if their associated employee is not active
 - [X] Heavy query caching (i.e. employees, timesheets)
 - [X] Fix factories for tables with unique constraints (Timesheets, Timesheet Days)
 - [ ] Implement lang file for long/duplicated messages
