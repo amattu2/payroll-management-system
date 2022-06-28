@@ -73,12 +73,11 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
     /**
      * Update Routes
      */
-    Route::post('/{id}/update/employment_status/{status}', [EmployeeController::class, 'updateEmploymentStatus'])
-      ->name("employees.update.employment_status")
-      ->where(["status" => "active|terminated|suspended"]);
+    Route::post('/{id}/update/employment_status', [EmployeeController::class, 'updateEmploymentStatus'])
+      ->name("employees.update.employment_status");
     Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class , 'saveTimesheetSettings'])
       ->name("timesheet.settings");
-    Route::post('/{id}/profile', [EmployeeController::class, 'updateProfile'])
+    Route::post('/{id}/update/profile', [EmployeeController::class, 'updateProfile'])
       ->name("employees.update.profile");
   });
 

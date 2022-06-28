@@ -25,10 +25,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Timesheet;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -208,24 +208,27 @@ class EmployeeController extends Controller
    * Update an employee's employment status
    *
    * @param  int $employeeId
-   * @param  string $status active|terminated|suspended
-   * @return bool
+   * @return \Illuminate\Support\Facades\Redirect
    */
-  public function updateEmploymentStatus($employeeId, $status)
+  public function updateEmploymentStatus($employeeId)
   {
-    // Update employment status
     $employee = Employee::findOrFail($employeeId);
-    $employee->employment_status = $status;
-    $employee->save();
+
+    request()->merge(['terminated_at' => request()->input('employment_status') === "terminated" ? Carbon::now() : null]);
+    $employee->update(request()->validate([
+      'employment_status' => 'required|in:active,terminated,suspended',
+      'terminated_at' => 'nullable|date',
+    ]));
 
     // Update pending leave requests
-    if (in_array($status, ["terminated", "suspended"])) {
+    if (in_array(request()->input('employment_status'), ["terminated", "suspended"])) {
       $employee->leaves()
         ->whereNull(["approved", "declined"])
-        ->update(["declined" => date("Y-m-d H:i:s"), "declined_user_id" => auth()->user()->id]);
+        ->update(["declined" => Carbon::now(), "declined_user_id" => auth()->user()->id]);
     }
 
-    return true;
+    return redirect()->route("employees.employee", $employeeId)
+      ->with("status", "The employee was marked as ". request()->input('employment_status'));
   }
 
   /**

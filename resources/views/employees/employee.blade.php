@@ -77,7 +77,8 @@
             <div class="card shadow-sm mb-3">
               <div class="card-body">
                 This employee is linked to the user account
-                <span class="badge rounded-pill bg-dark"><a class="text-light" href="#" role="button">#{{$employee->user->id}}</a></span>
+                <span class="badge rounded-pill bg-dark"><a class="text-light" href="#"
+                    role="button">#{{ $employee->user->id }}</a></span>
               </div>
             </div>
           @endif
@@ -88,18 +89,25 @@
               Employement Controls
             </div>
             <div class="card-body">
-              @if (in_array($employee->employment_status, ['active', 'suspended']))
-                <p class="card-text">Is this employee no longer employed? Mark them as terminated below.</p>
-                <a href="#" class="btn btn-danger me-2" onclick="updateStatus(this, 'terminated');">Terminate</a>
-                @if ($employee->employment_status === 'suspended')
-                  <a href="#" class="btn btn-primary" onclick="updateStatus(this, 'active');">Unsuspend</a>
+              <form method="POST" action="{{ Route('employees.update.employment_status', $employee->id) }}">
+                @csrf
+                @if (in_array($employee->employment_status, ['active', 'suspended']))
+                  <p class="card-text">Is this employee no longer employed? Mark them as terminated below.</p>
+                  <button class="btn btn-danger me-2" type="submit" name="employment_status"
+                    value="terminated">Terminate</button>
+                  @if ($employee->employment_status === 'suspended')
+                    <button class="btn btn-primary" type="submit" name="employment_status"
+                      value="active">Reactivate</button>
+                  @else
+                    <button class="btn btn-warning" type="submit" name="employment_status"
+                      value="suspended">Suspend</button>
+                  @endif
                 @else
-                  <a href="#" class="btn btn-warning" onclick="updateStatus(this, 'suspended');">Suspend</a>
+                  <p class="card-text">Reactivate this employee below.</p>
+                  <button class="btn btn-primary" type="submit" name="employment_status"
+                    value="active">Reactivate</button>
                 @endif
-              @else
-                <p class="card-text">Reactivate this employee below.</p>
-                <a href="#" class="btn btn-primary" onclick="updateStatus(this, 'active');">Activate</a>
-              @endif
+              </form>
             </div>
           </div>
         </div>
