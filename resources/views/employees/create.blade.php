@@ -27,7 +27,7 @@
         <div class="btn-toolbar">
           <select class="form-control" id="employee-selector">
             @foreach ($employees as $e)
-              <option data-href="{{ Route('employees.employee.leave', $e->id) }}">{{ $e->firstname }}
+              <option data-href="{{ Route('employees.employee', $e->id) }}">{{ $e->firstname }}
                 {{ $e->lastname }}</option>
             @endforeach
           </select>
@@ -49,6 +49,11 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
+  <script>
+    document.querySelector("#employee-selector").onchange = (e) => {
+      window.location.href = e.target.querySelector("option:checked").dataset.href;
+    };
+  </script>
 </body>
 
 </html>
