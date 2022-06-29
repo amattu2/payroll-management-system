@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Authentication Routes
  */
-Route::group(["prefix" => "auth"], function() {
+Route::middleware(['throttle:web'])->prefix("auth")->group(function() {
   Route::any('logout.do', [AuthController::class, 'logout'])->name("auth.logout");
 
   Route::get('login', [AuthController::class, 'loginForm'])->name("auth.login");
@@ -46,7 +46,7 @@ Route::group(["prefix" => "auth"], function() {
 /*
  * Normal Routes
  */
-Route::middleware(['auth', 'auth.session'])->group(function() {
+Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function() {
   /*
    * Top Level Routes
    */
