@@ -92,7 +92,7 @@
               <form method="POST" action="{{ Route('employees.update.employment_status', $employee->id) }}">
                 @csrf
                 @if (in_array($employee->employment_status, ['active', 'suspended']))
-                  <p class="card-text">Is this employee no longer employed? Mark them as terminated below.</p>
+                  <p class="card-text">{{ __('messages.employment.terminate') }}</p>
                   <button class="btn btn-danger me-2" type="submit" name="employment_status"
                     value="terminated">Terminate</button>
                   @if ($employee->employment_status === 'suspended')
@@ -103,7 +103,7 @@
                       value="suspended">Suspend</button>
                   @endif
                 @else
-                  <p class="card-text">Reactivate this employee below.</p>
+                  <p class="card-text">{{ __('messages.employment.activate') }}</p>
                   <button class="btn btn-primary" type="submit" name="employment_status"
                     value="active">Reactivate</button>
                 @endif

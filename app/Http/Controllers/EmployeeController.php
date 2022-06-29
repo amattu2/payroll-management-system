@@ -69,7 +69,7 @@ class EmployeeController extends Controller
       return view('employees.create', compact("employees"));
     }
 
-    return redirect()->route('employees')->withErrors(["The requested employee was not found"]);
+    return redirect()->route('employees')->withErrors([__("messages.404.employee")]);
   }
 
   /**
@@ -116,7 +116,7 @@ class EmployeeController extends Controller
   {
     // Validate Input
     if (!is_numeric($employeeId)) {
-      return redirect()->back()->withErrors(["The requested employee was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
     if (!checkdate($month, 1, $year)) {
       return redirect()->route("employees.employee.timesheet", ["id" => $employeeId, "year" => date("Y"), "month" => date("m")]);
@@ -125,7 +125,7 @@ class EmployeeController extends Controller
     // Validate Employee
     $employee = Employee::find($employeeId);
     if (!$employee || $employee->id != $employeeId) {
-      return redirect()->back()->withErrors(["The requested employee was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
 
     $employees = Cache::remember('employees', 60*5, function() {
@@ -155,13 +155,13 @@ class EmployeeController extends Controller
   {
     // Validate Input
     if (!is_numeric($employeeId) || !($employee = Employee::find($employeeId))) {
-      return redirect()->back()->withErrors(["The requested employee was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
     if (!checkdate($month, 1, $year)) {
-      return redirect()->back()->withErrors(["The requested timesheet was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
     }
     if (!($timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first())) {
-      return redirect()->back()->withErrors(["The requested timesheet was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
     }
 
     // Validate Input
@@ -195,7 +195,7 @@ class EmployeeController extends Controller
   {
     $employee = Employee::find($employeeId);
     if (!$employee || $employee->id != $employeeId) {
-      return redirect()->back()->withErrors(["The requested employee was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
 
     $employees = Cache::remember('employees', 60*5, function() {
@@ -216,12 +216,12 @@ class EmployeeController extends Controller
   {
     $employee = Employee::find($employeeId);
     if (!$employee || $employee->id != $employeeId) {
-      return redirect()->back()->withErrors(["The requested employee was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
 
     $leave = $employee->leaves()->find($leaveId);
     if (!$leave || $leave->id != $leaveId) {
-      return redirect()->back()->withErrors(["The requested leave was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.leave")]);
     }
 
     $employees = Cache::remember('employees', 60*5, function() {
@@ -242,12 +242,12 @@ class EmployeeController extends Controller
   {
     $employee = Employee::find($employeeId);
     if (!$employee || $employee->id != $employeeId) {
-      return redirect()->back()->withErrors(["The requested employee was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
 
     $leave = $employee->leaves()->find($leaveId);
     if (!$leave || $leave->id != $leaveId) {
-      return redirect()->back()->withErrors(["The requested leave was not found"]);
+      return redirect()->back()->withErrors([__("messages.404.leave")]);
     }
 
     $validated = request()->validate([
@@ -273,7 +273,7 @@ class EmployeeController extends Controller
     }
 
     if ($validated["timesheet_id"] && !$employee->timesheets()->find($validated["timesheet_id"])) {
-      return redirect()->back()->withErrors(["The requested timesheet does not belong to this employee"]);
+      return redirect()->back()->withErrors([__("messages.timesheet.bad_owner")]);
     }
 
     $leave->update($validated);
@@ -306,7 +306,7 @@ class EmployeeController extends Controller
     }
 
     return redirect()->route("employees.employee", $employeeId)
-      ->with("status", "The employee was marked as ". request()->input('employment_status'));
+      ->with("status", __("messages.employee.status", ["status" => request()->input('employment_status')]));
   }
 
   /**

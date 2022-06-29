@@ -82,9 +82,9 @@
           @if (!$timesheet->id)
             <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
               <h4 class="alert-heading">Unsaved Timesheet</h4>
-              <p>You're viewing a new timesheet because the timesheet for the
-                {{ $timesheet->period->format('F, Y') }} pay period does not exist yet. Press
-                create <a href="#timesheetControls">below</a> to create it.</p>
+              <p>
+                {{ __("messages.timesheet.unsaved", ["period" => $timesheet->period->format('F, Y')]) }}
+                Press create <a href="#timesheetControls">below</a> to create it.</p>
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
           @endif

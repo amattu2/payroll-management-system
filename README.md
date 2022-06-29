@@ -9,8 +9,7 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] App Settings and Controls
   - [ ] Departments
   - [ ] Closure tracking
-  - [ ] Integrations
-    - [ ] Send CRUD events to external application via Observers
+  - [ ] Integrations (i.e. Send CRUD events to external application via Observers)
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
 - [ ] Company wide closures (via Settings) (With time-ahead scheduled, e.g. Christmas and New Years can be registered far in advance)
 
@@ -24,7 +23,6 @@ This is a comprehensive employee management & payroll application built with Lar
   - [ ] Internal creation
   - [ ] External creation
 - [ ] Disbursements
-- [X] When employees are terminated, reject all open PTO requests
 
 ## Payroll / Timesheets
 
@@ -42,7 +40,8 @@ This is a comprehensive employee management & payroll application built with Lar
 - [X] Block a user from logging in if their associated employee is not active
 - [X] Heavy query caching (i.e. employees, timesheets)
 - [X] Fix factories for tables with unique constraints (Timesheets, Timesheet Days)
-- [ ] Implement lang file for long/duplicated messages
+- [X] Implement lang file for long/duplicated messages
+- [X] When employees are terminated, reject all open PTO requests
 
 # Usage
 

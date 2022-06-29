@@ -23,4 +23,13 @@
 return [
   'welcome.to.app' => 'Welcome to :name!',
   'no.employees' => 'It looks like you haven\'t added any employees yet. Click the button below to begin.',
+  '404' => 'Unfortunately, the page at /:slug could not be found.',
+  '404.employee' => 'The employee you were looking for could not be found.',
+  '404.timesheet' => 'The timesheet you were looking for could not be found.',
+  '404.leave' => 'The leave request you were looking for could not be found.',
+  'timesheet.bad_owner' => 'The requested timesheet does not belong to this employee',
+  'employee.status' => 'The employee status has been updated to :status',
+  'employment.terminate' => 'Is this employee no longer employed? Mark them as terminated below.',
+  'employment.activate' => 'Reactivate this employee below.',
+  'timesheet.unsaved' => "You're viewing a new timesheet because the timesheet for the :period pay period does not exist yet."
 ];

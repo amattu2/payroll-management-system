@@ -56,9 +56,7 @@ class AuthController extends Controller
   public function login(Request $request)
   {
     if (Auth::check()) {
-      return redirect()->route('index')->withErrors([
-        "You are already logged in"
-      ]);
+      return redirect()->route('index')->withErrors([__("auth.already_authenticated")]);
     }
 
     $request = request()->validate([
@@ -71,13 +69,13 @@ class AuthController extends Controller
       if (Auth()->user()->employee && Auth()->user()->employee->employment_status !== "active") {
         Auth::logout();
 
-        return redirect()->back()->withErrors(["You are not allowed to login"]);
+        return redirect()->back()->withErrors([__("auth.suspended")]);
       }
 
       return redirect()->route('index');
     }
 
-    return redirect()->back()->withErrors(["Incorrect username or password"]);
+    return redirect()->back()->withErrors([__("auth.failed")]);
   }
 
   /**
@@ -89,9 +87,7 @@ class AuthController extends Controller
   public function loginForm(Request $request)
   {
     if (Auth::check()) {
-      return redirect()->route('index')->withErrors([
-        "You are already logged in"
-      ]);
+      return redirect()->route('index')->withErrors([__("auth.already_authenticated")]);
     }
 
     return view('auth.login');
@@ -106,10 +102,10 @@ class AuthController extends Controller
   public function passwordConfirm(Request $request)
   {
     if (!Auth::check()) {
-      return redirect()->route('auth.login')->withErrors(["You are not logged in"]);
+      return redirect()->route('auth.login')->withErrors([__("auth.not_authenticated")]);
     }
     if (!Hash::check($request->password, $request->user()->password)) {
-      return back()->withErrors(["Invalid password provided"]);
+      return back()->withErrors([__("auth.password")]);
     }
 
     $request->session()->passwordConfirmed();
@@ -126,7 +122,7 @@ class AuthController extends Controller
   public function passwordForm(Request $request)
   {
     if (!Auth::check()) {
-      return redirect()->route('auth.login')->withErrors(["You are not logged in"]);
+      return redirect()->route('auth.login')->withErrors([__("auth.not_authenticated")]);
     }
 
     return view('auth.password-confirm');
@@ -166,9 +162,7 @@ class AuthController extends Controller
   public function registerForm(Request $request)
   {
     if (Auth::check()) {
-      return redirect()->route('index')->withErrors([
-        "You are already logged in"
-      ]);
+      return redirect()->route('index')->withErrors([__("auth.already_authenticated")]);
     }
 
     return view('auth.register');
