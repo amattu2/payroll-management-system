@@ -76,7 +76,7 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
      */
     Route::post('/{id}/update/employment_status', [EmployeeController::class, 'updateEmploymentStatus'])
       ->name("employees.update.employment_status");
-    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class , 'saveTimesheetSettings'])
+    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class , 'updateTimesheetSettings'])
       ->name("timesheet.settings");
     Route::post('/{id}/update/profile', [EmployeeController::class, 'updateProfile'])
       ->name("employees.update.profile");

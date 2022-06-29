@@ -151,7 +151,7 @@ class EmployeeController extends Controller
    * @param  int $month
    * @return \Illuminate\Support\Facades\Redirect
    */
-  public function saveTimesheetSettings($employeeId, $year, $month)
+  public function updateTimesheetSettings($employeeId, $year, $month)
   {
     // Validate Input
     if (!is_numeric($employeeId) || !($employee = Employee::find($employeeId))) {
@@ -170,7 +170,7 @@ class EmployeeController extends Controller
       'pay_type' => 'required|in:hourly,salary',
     ]);
     if (request()->has("completed_at")) {
-      $validated["completed_at"] = Carbon::now();
+      $validated["completed_at"] = $timesheet->completed_at ?? Carbon::now();
     } else {
       $validated["completed_at"] = null;
     }
@@ -265,11 +265,11 @@ class EmployeeController extends Controller
     $validated["declined"] = null;
 
     if (request()->get("status") === "approved") {
-      $validated["approved_user_id"] = Auth()->user()->id;
-      $validated["approved"] = Carbon::now();
+      $validated["approved_user_id"] = $leave->approved ? $leave->approved_user_id : Auth()->user()->id;
+      $validated["approved"] = $leave->approved ?? Carbon::now();
     } else if (request()->get("status") === "declined") {
-      $validated["declined_user_id"] = Auth()->user()->id;
-      $validated["declined"] = Carbon::now();
+      $validated["declined_user_id"] = $leave->declined ? $leave->declined_user_id : Auth()->user()->id;
+      $validated["declined"] = $leave->declined ?? Carbon::now();
     }
 
     if ($validated["timesheet_id"] && !$employee->timesheets()->find($validated["timesheet_id"])) {
