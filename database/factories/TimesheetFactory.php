@@ -8,7 +8,6 @@ use DateInterval;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
-use App\Models\TimesheetDay;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Timesheet>
