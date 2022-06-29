@@ -153,7 +153,14 @@
                   <div class="row py-3 text-center {{ $i % 2 !== 0 ? 'bg-body' : '' }}"
                     data-units="{{ $timesheet->pay_type === 'hourly' ? 'hours' : 'days' }}">
                     <div class="col-1">
-                      {{ $day->format('jS (D)') }}
+                      {{ $day["date"]->format('jS (D)') }}
+                      @if ($day["leave"])
+                        <a role="button" href="{{Route('leaves.leave', ["id" => $employee->id, "leaveId" => $day['leave']->id])}}">
+                          <span class="badge bg-info">{{ ucfirst($day["leave"]->type) }}</span>
+                        </a>
+                      @elseif ($day["date"]->format('Y-m-d') === date('Y-m-d'))
+                        <span class="badge bg-primary">Today</span>
+                      @endif
                     </div>
                     <div class="col-4">
                       <div class="input-group">

@@ -70,6 +70,14 @@ class Timesheet extends Model
     }
 
     /**
+     * Get the leave requests assigned to this timesheet
+     */
+    public function Leaves()
+    {
+      return $this->hasMany(Leave::class);
+    }
+
+    /**
      * Define custom weeks attribute
      *
      * @return array<int, array>
@@ -79,6 +87,7 @@ class Timesheet extends Model
         return $this->attributes["weeks"];
       }
 
+      $leaves = $this->leaves->where("declined", null);
       $start = clone $this->period;
       $end = (clone $start)->modify("last day of this month");
       $index = 0;
@@ -96,7 +105,10 @@ class Timesheet extends Model
           ];
         }
 
-        $this->attributes["weeks"][$week]["days"][] = $cloned;
+        $this->attributes["weeks"][$week]["days"][] = [
+          "date" => $cloned,
+          "leave" => $leaves->where("start_date", "<=", $cloned)->where("end_date", ">=", $cloned)->first(),
+        ];
         $this->attributes["weeks"][$week]["end"] = $cloned;
       }
 

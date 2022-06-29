@@ -121,7 +121,15 @@
                         </div>
                         <div class="col-sm-9">
                           <p class="text-muted mb-0">
-                            {{ $leave->timesheet ? $leave->timesheet->period->format('F, Y') : 'N/A' }}</p>
+                            @if ($leave->timesheet)
+                              <a role="button" href="{{ Route('employees.employee.timesheet', ["id" => $employee->id, "year" => $leave->timesheet->period->format("Y"), "month" => $leave->timesheet->period->format("m")]) }}">
+                                {{ $leave->timesheet->period->format('F, Y') }}
+                                <i class="fas fa-external-link-alt"></i>
+                              </a>
+                            @else
+                              N/A
+                            @endif
+                          </p>
                         </div>
                       </div>
                       <hr>
