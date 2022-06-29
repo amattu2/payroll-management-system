@@ -70,6 +70,8 @@ Route::middleware(['auth', 'auth.session'])->group(function() {
      */
     Route::post('/', [EmployeeController::class , 'create'])
       ->name("employees.create");
+    Route::post('/{id}/leaves', [EmployeeController::class , 'createLeave'])
+    ->name("leaves.create");
 
     /**
      * Update Routes

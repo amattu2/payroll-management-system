@@ -44,18 +44,18 @@
             <span>Request History</span>
           </h6>
           <ul class="nav flex-column mb-2">
-            @forelse ($employee->leaves as $leave)
+            @forelse ($employee->leaves as $l)
               <li class="nav-item">
-                <a class="nav-link text-muted" href="#leave{{ $leave['id'] }}">
-                  @if ($leave->approved)
+                <a class="nav-link text-muted" href="#leave{{ $l['id'] }}">
+                  @if ($l->approved)
                     <i class="fas fa-check me-1"></i>
-                  @elseif ($leave->declined)
+                  @elseif ($l->declined)
                     <i class="fas fa-times me-1"></i>
                   @else
                     <i class="fas fa-user-clock me-1"></i>
                   @endif
-                  {{ $leave->start_date->format('m/Y') }}
-                  ({{ $leave->duration->format('%ad') }})
+                  {{ $l->start_date->format('m/Y') }}
+                  ({{ $l->duration->format('%ad') }})
                 </a>
               </li>
             @empty
@@ -70,16 +70,17 @@
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="btn-toolbar justify-content-between">
             <div class="d-flex me-auto">
-              <button class="btn btn-primary" type="button">Create</button>
+              <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                data-bs-target="#createLeaveModal">Create</button>
             </div>
           </div>
 
           <div class="row">
-            @forelse ($employee->leaves as $leave)
+            @forelse ($employee->leaves as $l)
               <div class="col-xl-6">
-                <div class="card shadow-sm mt-3" id="leave{{ $leave->id }}">
+                <div class="card shadow-sm mt-3" id="leave{{ $l->id }}">
                   <div class="card-header">
-                    Request #{{ $leave->id }}
+                    Request #{{ $l->id }}
                   </div>
                   <div class="card-body">
                     <div class="row p-3">
@@ -89,8 +90,9 @@
                         </div>
                         <div class="col-sm-9">
                           <p class="text-muted mb-0">
-                            {{ $leave->start_date->format('m/d/Y') }} &ndash; {{ $leave->end_date->format('m/d/Y') }}
-                            ({{ $leave->duration->format('%a') }} days)
+                            {{ $l->start_date->format('m/d/Y') }} &ndash;
+                            {{ $l->end_date->format('m/d/Y') }}
+                            ({{ $l->duration->format('%a') }} days)
                           </p>
                         </div>
                       </div>
@@ -101,12 +103,12 @@
                         </div>
                         <div class="col-sm-9">
                           <p class="text-muted mb-0">
-                            @if ($leave->approved)
+                            @if ($l->approved)
                               <i class="fas fa-check me-1"></i>
-                              Approved on {{ $leave->approved->format('m/d/Y g:i A') }}
-                            @elseif ($leave->declined)
+                              Approved on {{ $l->approved->format('m/d/Y g:i A') }}
+                            @elseif ($l->declined)
                               <i class="fas fa-times me-1"></i>
-                              Declined on {{ $leave->declined->format('m/d/Y g:i A') }}
+                              Declined on {{ $l->declined->format('m/d/Y g:i A') }}
                             @else
                               <i class="fas fa-user-clock me-1"></i>
                               Pending
@@ -121,9 +123,10 @@
                         </div>
                         <div class="col-sm-9">
                           <p class="text-muted mb-0">
-                            @if ($leave->timesheet)
-                              <a role="button" href="{{ Route('employees.employee.timesheet', ["id" => $employee->id, "year" => $leave->timesheet->period->format("Y"), "month" => $leave->timesheet->period->format("m")]) }}">
-                                {{ $leave->timesheet->period->format('F, Y') }}
+                            @if ($l->timesheet)
+                              <a role="button"
+                                href="{{ Route('employees.employee.timesheet', ['id' => $employee->id, 'year' => $l->timesheet->period->format('Y'), 'month' => $l->timesheet->period->format('m')]) }}">
+                                {{ $l->timesheet->period->format('F, Y') }}
                                 <i class="fas fa-external-link-alt"></i>
                               </a>
                             @else
@@ -138,11 +141,11 @@
                           <p class="mb-0">Comments</p>
                         </div>
                         <div class="col-sm-9">
-                          <p class="text-muted mb-0">{{ $leave->comments ?? 'N/A' }}</p>
+                          <p class="text-muted mb-0">{{ $l->comments ?? 'N/A' }}</p>
                         </div>
                       </div>
                     </div>
-                    <a class="btn btn-primary" href="{{ Route('leaves.leave', [$employee->id, $leave->id]) }}">
+                    <a class="btn btn-primary" href="{{ Route('leaves.leave', [$employee->id, $l->id]) }}">
                       Edit
                     </a>
                   </div>
@@ -156,6 +159,8 @@
       </div>
     </main>
   </div>
+
+  @include('partials.leaveCreateModal')
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>

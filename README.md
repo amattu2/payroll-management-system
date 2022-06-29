@@ -19,9 +19,7 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] Employee comments
 - [X] General profile editing
 - [ ] Employee Communication (e.g. Timesheets, Free form emails, PTO Rejections)
-- [ ] Time-Off Tracking / Requests
-  - [ ] Internal creation
-  - [ ] External creation
+- [X] Time-Off Tracking / Requests
 - [ ] Disbursements
 
 ## Payroll / Timesheets

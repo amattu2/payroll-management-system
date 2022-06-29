@@ -283,6 +283,50 @@ class EmployeeController extends Controller
   }
 
   /**
+   * Create a new employee leave request
+   *
+   * @param  int $employeeId
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function createLeave($employeeId)
+  {
+    $employee = Employee::find($employeeId);
+    if (!$employee || $employee->id != $employeeId) {
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
+    }
+
+    $validated = request()->validate([
+      'comments' => 'nullable|string',
+      'start_date' => 'required|date|before:end_date',
+      'end_date' => 'required|date|after:start_date',
+      'type' => 'required|in:paid,sick,vacation,parental,unpaid,other',
+      'timesheet_id' => 'nullable|exists:timesheets,id',
+    ]);
+
+    $validated["comments"] = $validated["comments"] ?? "";
+    $validated["approved_user_id"] = null;
+    $validated["declined_user_id"] = null;
+    $validated["approved"] = null;
+    $validated["declined"] = null;
+
+    if (request()->get("status") === "approved") {
+      $validated["approved_user_id"] = Auth()->user()->id;
+      $validated["approved"] = Carbon::now();
+    } else if (request()->get("status") === "declined") {
+      $validated["declined_user_id"] = Auth()->user()->id;
+      $validated["declined"] = Carbon::now();
+    }
+
+    if ($validated["timesheet_id"] && !$employee->timesheets()->find($validated["timesheet_id"])) {
+      return redirect()->back()->withErrors([__("messages.timesheet.bad_owner")]);
+    }
+
+    $employee->leaves()->create($validated);
+
+    return redirect()->route("employees.employee.leaves", $employeeId);
+  }
+
+  /**
    * Update an employee's employment status
    *
    * @param  int $employeeId
