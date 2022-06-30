@@ -101,7 +101,7 @@
                     @endcanany
                   </div>
 
-                  @include('partials.employeeTable', ['employees' => $employees])
+                  @include('partials.employeeTable', ['employment_status' => 'active'])
                 </div>
               </div>
             @endcan

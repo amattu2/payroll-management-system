@@ -13,6 +13,9 @@
     </thead>
     <tbody>
       @forelse ($employees as $employee)
+        @if (isset($employment_status) && $employee->employment_status !== $employment_status)
+          @continue
+        @endif
         <tr>
           <td>{{ str_pad($employee->id, 4, '0', STR_PAD_LEFT) }}</td>
           <td>{{ $employee->firstname }} {{ $employee->lastname }}</td>
