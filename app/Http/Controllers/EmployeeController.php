@@ -40,11 +40,7 @@ class EmployeeController extends Controller
    */
   public function index(Request $request)
   {
-    $employees = Cache::remember('employees', 60*5, function() {
-      return DB::table('employees')->get();
-    });
-
-    return view('employees.index', ["employees" => $employees]);
+    return view('employees.index');
   }
 
   /**
@@ -55,18 +51,14 @@ class EmployeeController extends Controller
    */
   public function employee($id)
   {
-    $employees = Cache::remember('employees', 60*5, function() {
-      return DB::table('employees')->get();
-    });
-
     if (is_numeric($id)) {
       $employee = Employee::find($id);
 
       if ($employee) {
-        return view('employees.employee', compact("employee", "employees"));
+        return view('employees.employee', compact("employee"));
       }
     } else if ($id === "create") {
-      return view('employees.create', compact("employees"));
+      return view('employees.create');
     }
 
     return redirect()->route('employees')->withErrors([__("messages.404.employee")]);
@@ -128,19 +120,11 @@ class EmployeeController extends Controller
       return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
 
-    $employees = Cache::remember('employees', 60*5, function() {
-      return DB::table('employees')->get();
-    });
-
     // Get Timesheet
     $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first()
       ?? new Timesheet(["period" => "$year-$month-01", "employee_id" => $employee->id]);
 
-    return view('employees.timesheet', compact(
-      "timesheet",
-      "employee",
-      "employees",
-    ));
+    return view('employees.timesheet', compact("timesheet", "employee"));
   }
 
   /**
@@ -198,11 +182,7 @@ class EmployeeController extends Controller
       return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
 
-    $employees = Cache::remember('employees', 60*5, function() {
-      return DB::table('employees')->get();
-    });
-
-    return view("employees.leaves", compact("employee", "employees"));
+    return view("employees.leaves", compact("employee"));
   }
 
   /**
@@ -224,11 +204,7 @@ class EmployeeController extends Controller
       return redirect()->back()->withErrors([__("messages.404.leave")]);
     }
 
-    $employees = Cache::remember('employees', 60*5, function() {
-      return DB::table('employees')->get();
-    });
-
-    return view("employees.leave", compact("employee", "leave", "employees"));
+    return view("employees.leave", compact("employee", "leave"));
   }
 
   /**

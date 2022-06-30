@@ -47,7 +47,7 @@
           </div>
 
           <div class="card p-3 shadow-sm">
-            @include("partials.employeeTable", ["employees" => $employees])
+            @include("partials.employeeTable")
           </div>
         @endif
       </main>

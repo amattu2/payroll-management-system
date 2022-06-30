@@ -43,10 +43,6 @@ class Controller extends BaseController
    */
   public function index(Request $request)
   {
-    $employees = Cache::remember('employees', 60*5, function() {
-      return DB::table('employees')->get();
-    });
-
     $openLeaves = Cache::remember('openLeaves', 60*5, function () {
       return Leave::whereNull(["approved", "declined"])
         ->where("start_date", ">=", date("Y-m-d"))
@@ -62,6 +58,6 @@ class Controller extends BaseController
         ->get();
     });
 
-    return view('index', compact("employees", "openLeaves", "upcomingLeaves"));
+    return view('index', compact("openLeaves", "upcomingLeaves"));
   }
 }
