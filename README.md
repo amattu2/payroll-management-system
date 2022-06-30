@@ -18,7 +18,7 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] Supervisor tracking (e.g. Joan reports to Barry)
 - [ ] Employee comments
 - [X] General profile editing
-- [ ] Employee Communication (e.g. Timesheets, Free form emails, PTO Rejections)
+- [X] Employee Communication (e.g. Timesheets, Free form emails, PTO Rejections)
 - [X] Time-Off Tracking / Requests
 - [ ] Disbursements
 
@@ -26,7 +26,7 @@ This is a comprehensive employee management & payroll application built with Lar
 
 - [X] Editing timesheet options (e.g. Period/Pay type)
 - [ ] Time card tracking
-- [ ] Exporting (PDF/Email)
+- [ ] Exporting (PDF / Email)
 
 ## Reports
 

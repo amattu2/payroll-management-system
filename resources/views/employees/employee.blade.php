@@ -44,30 +44,34 @@
           <!-- Employee Details -->
           <div class="card shadow-sm mb-3">
             <div class="card-body p-4">
-              <div class="d-flex text-black">
-                <div class="flex-shrink-0">
+              <div class="text-black">
+                <div class="d-flex mb-3">
                   <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="Profile Picture"
                     class="img-fluid" style="width: 62px; border-radius: 10px;">
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h5 class="mb-1">{{ $employee->firstname }} {{ $employee->lastname }}</h5>
-                  <p class="mb-2 pb-1">{{ $employee->title }}</p>
-                  <div class="d-flex justify-content-center text-center bg-body rounded-3 p-2">
-                    <div>
-                      <p class="small text-muted mb-1">Hired</p>
-                      <p class="mb-0" title="{{ $employee->hired_at }}">
-                        {{ (new DateTime($employee->hired_at))->format('m/Y') }}</p>
-                    </div>
-                    <div class="px-3">
-                      <p class="small text-muted mb-1">Seniority</p>
-                      <p class="mb-0">#2</p>
-                    </div>
-                    <div>
-                      <p class="small text-muted mb-1">Department</p>
-                      <p class="mb-0">Management</p>
-                    </div>
+                  <div class="ms-2 flex-shrink-0">
+                    <h5 class="mb-1">{{ $employee->firstname }} {{ $employee->lastname }}</h5>
+                    <p class="mb-0">{{ $employee->title }}</p>
                   </div>
                 </div>
+                <div class="d-flex justify-content-center text-center bg-body rounded-3 p-2">
+                  <div>
+                    <p class="small text-muted mb-1">Hired</p>
+                    <p class="mb-0" title="{{ $employee->hired_at }}">
+                      {{ (new DateTime($employee->hired_at))->format('m/Y') }}</p>
+                  </div>
+                  <div class="px-3">
+                    <p class="small text-muted mb-1">Seniority</p>
+                    <p class="mb-0">#2</p>
+                  </div>
+                  <div>
+                    <p class="small text-muted mb-1">Department</p>
+                    <p class="mb-0">Management</p>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-toolbar mt-3 justify-content-end" role="toolbar">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#sendEmailModal">Send Email</button>
               </div>
             </div>
           </div>
@@ -356,6 +360,8 @@
       </div>
     </main>
   </div>
+
+  @include("partials.sendEmailModal")
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>

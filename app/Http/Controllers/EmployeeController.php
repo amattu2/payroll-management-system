@@ -25,10 +25,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Timesheet;
+use App\Mail\CustomMail;
 use App\Notifications\LeaveApproved;
 use App\Notifications\LeaveDeclined;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
@@ -366,5 +368,25 @@ class EmployeeController extends Controller
     ]));
 
     return redirect()->route("employees.employee", $employeeId)->with("status", "The employee profile was updated");
+  }
+
+  /**
+   * Send a free-form email to an employee
+   *
+   * @param  int $employeeId
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function sendEmail($employeeId)
+  {
+    $employee = Employee::findOrFail($employeeId);
+
+    $validated = request()->validate([
+      "subject" => "required|string|max:45",
+      "message" => "required|string|max:10000",
+    ]);
+
+    Mail::to($employee)->send(new CustomMail($validated['subject'], $validated['message']));
+
+    return redirect()->route("employees.employee", $employeeId)->with("status", "Email sent to employee");
   }
 }

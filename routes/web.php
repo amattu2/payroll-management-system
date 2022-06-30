@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Authentication Routes
  */
-Route::middleware(['throttle:web'])->prefix("auth")->group(function() {
+Route::middleware(['throttle:web'])->prefix("auth")->group(function () {
   Route::any('logout.do', [AuthController::class, 'logout'])->name("auth.logout");
 
   Route::get('login', [AuthController::class, 'loginForm'])->name("auth.login");
@@ -46,7 +46,7 @@ Route::middleware(['throttle:web'])->prefix("auth")->group(function() {
 /*
  * Normal Routes
  */
-Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function() {
+Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function () {
   /*
    * Top Level Routes
    */
@@ -55,30 +55,32 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function() {
   /*
    * Employee Management Routes
    */
-  Route::group(["middleware" => ["can:employees.view.all"], "prefix" => "employees"], function() {
+  Route::group(["middleware" => ["can:employees.view.all"], "prefix" => "employees"], function () {
     /**
      * Get Routes
      */
     Route::get('/', [EmployeeController::class, 'index'])->name("employees");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
-    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class , 'timesheet'])->name("employees.employee.timesheet");
+    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.employee.timesheet");
     Route::get('/{id}/leaves', [EmployeeController::class, 'leaves'])->name("employees.employee.leaves");
     Route::get('/{id}/leaves/{leaveId}', [EmployeeController::class, 'leave'])->name("leaves.leave");
 
     /**
      * Create Routes
      */
-    Route::post('/', [EmployeeController::class , 'create'])
+    Route::post('/', [EmployeeController::class, 'create'])
       ->name("employees.create");
-    Route::post('/{id}/leaves', [EmployeeController::class , 'createLeave'])
-    ->name("leaves.create");
+    Route::post('/{id}/leaves', [EmployeeController::class, 'createLeave'])
+      ->name("leaves.create");
+    Route::post('/{id}/email', [EmployeeController::class, 'sendEmail'])
+      ->name("employee.email.create");
 
     /**
      * Update Routes
      */
     Route::post('/{id}/update/employment_status', [EmployeeController::class, 'updateEmploymentStatus'])
       ->name("employees.update.employment_status");
-    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class , 'updateTimesheetSettings'])
+    Route::post('/{id}/timesheet/{year}/{month}/settings', [EmployeeController::class, 'updateTimesheetSettings'])
       ->name("timesheet.settings");
     Route::post('/{id}/update/profile', [EmployeeController::class, 'updateProfile'])
       ->name("employees.update.profile");
@@ -89,14 +91,14 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function() {
   /*
    * Settings Routes
    */
-  Route::middleware(["can:edit-settings", "password.confirm"])->group(function() {
+  Route::middleware(["can:edit-settings", "password.confirm"])->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name("settings");
   });
 
   /*
    * Report Routes
    */
-  Route::middleware(["can:edit-settings"])->group(function() {
+  Route::middleware(["can:edit-settings"])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name("reports");
     Route::get('/reports/{report}', [ReportController::class, 'index'])->name("reports.report");
   });
@@ -104,7 +106,7 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function() {
   /*
    * 404 Fallback
    */
-  Route::fallback(function($slug) {
+  Route::fallback(function ($slug) {
     return view("404", ["slug" => $slug]);
   });
 });
