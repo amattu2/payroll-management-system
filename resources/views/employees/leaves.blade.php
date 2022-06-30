@@ -47,9 +47,9 @@
             @forelse ($employee->leaves as $l)
               <li class="nav-item">
                 <a class="nav-link text-muted" href="#leave{{ $l['id'] }}">
-                  @if ($l->approved)
+                  @if ($l->status === "approved")
                     <i class="fas fa-check me-1"></i>
-                  @elseif ($l->declined)
+                  @elseif ($l->status === "declined")
                     <i class="fas fa-times me-1"></i>
                   @else
                     <i class="fas fa-user-clock me-1"></i>
@@ -103,12 +103,12 @@
                         </div>
                         <div class="col-sm-9">
                           <p class="text-muted mb-0">
-                            @if ($l->approved)
+                            @if ($l->status === "approved")
                               <i class="fas fa-check me-1"></i>
-                              Approved on {{ $l->approved->format('m/d/Y g:i A') }}
-                            @elseif ($l->declined)
+                              Approved on {{ $l->approved_at->format('m/d/Y g:i A') }}
+                            @elseif ($l->status === "declined")
                               <i class="fas fa-times me-1"></i>
-                              Declined on {{ $l->declined->format('m/d/Y g:i A') }}
+                              Declined on {{ $l->declined_at->format('m/d/Y g:i A') }}
                             @else
                               <i class="fas fa-user-clock me-1"></i>
                               Pending

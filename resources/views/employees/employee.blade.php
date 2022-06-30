@@ -319,10 +319,10 @@
                   @forelse ($employee->leaves as $leave)
                     <tr>
                       <td>
-                        @if ($leave->approved)
-                          Approved at {{ $leave->approved->format('n/j/Y g:ia') }}
-                        @elseif ($leave->declined)
-                          Declined at {{ $leave->declined->format('n/j/Y g:ia') }}
+                        @if ($leave->status === "approved")
+                          Approved at {{ $leave->approved_at->format('n/j/Y g:ia') }}
+                        @elseif ($leave->status === "declined")
+                          Declined at {{ $leave->declined_at->format('n/j/Y g:ia') }}
                         @else
                           Pending
                         @endif

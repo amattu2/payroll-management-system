@@ -99,7 +99,7 @@ class Employee extends Model
      */
     public function getPendingLeavesAttribute() {
       return Cache::remember($this->id . 'pendingLeaves', 60*5, function () {
-        return $this->leaves()->whereNull(["approved", "declined"])->get();
+        return $this->leaves()->where("status", "pending")->get();
       });
     }
 }

@@ -44,14 +44,14 @@ class Controller extends BaseController
   public function index(Request $request)
   {
     $openLeaves = Cache::remember('openLeaves', 60*5, function () {
-      return Leave::whereNull(["approved", "declined"])
+      return Leave::where("status", "pending")
         ->where("start_date", ">=", date("Y-m-d"))
         ->orderBy("created_at")
         ->get();
     });
 
     $upcomingLeaves = Cache::remember('upcomingLeaves', 60*60, function () {
-      return Leave::where("approved", "!=", null)
+      return Leave::where("status", "approved")
         ->where("start_date", ">=", date("Y-m-d"))
         ->where("start_date", "<=", date("Y-m-d", strtotime("+3 weeks")))
         ->orderBy("start_date")

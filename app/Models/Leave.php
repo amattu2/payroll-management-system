@@ -39,9 +39,10 @@ class Leave extends Model
         "comments",
         "start_date",
         "end_date",
-        "approved",
+        "status",
+        "approved_at",
         "approved_user_id",
-        "declined",
+        "declined_at",
         "declined_user_id",
         "employee_id",
         "timesheet_id",
@@ -56,8 +57,8 @@ class Leave extends Model
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'approved' => 'datetime',
-        'declined' => 'datetime',
+        'approved_at' => 'datetime',
+        'declined_at' => 'datetime',
     ];
 
     /**

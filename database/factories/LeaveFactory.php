@@ -38,7 +38,8 @@ class LeaveFactory extends Factory
     public function definition()
     {
       $start = $this->faker->dateTimeBetween('-2 years', '+8 months');
-      $approved = $this->faker->boolean;
+      $status = $this->faker->randomElement(['approved', 'pending', 'declined']);
+      $created = (clone $start)->sub(new DateInterval("P".mt_rand(2, 90)."D"));
 
       return [
           'employee_id' => function (array $attributes) {
@@ -47,13 +48,14 @@ class LeaveFactory extends Factory
           'start_date' => $start,
           'end_date' => (clone $start)->add(new DateInterval("P".rand(1, 45)."D")),
           'comments' => $this->faker->randomElement(["", $this->faker->sentence()]),
-          'approved' => $this->faker->randomElement([null, $approved ? (clone $start)->sub(new DateInterval("P".rand(1, 90)."D")) : null]),
+          'status' => $status,
+          'approved_at' => $status === "approved" ? $this->faker->dateTimeBetween($created, $start) : null,
           'approved_user_id' => null,
-          'declined' => $this->faker->randomElement([null, !$approved ? (clone $start)->sub(new DateInterval("P".rand(1, 90)."D")) : null]),
+          'declined_at' => $status === "declined" ? $this->faker->dateTimeBetween($created, $start) : null,
           'declined_user_id' => null,
           'timesheet_id' => null,
           'type' => $this->faker->randomElement(['paid', 'sick', 'vacation', 'parental', 'unpaid', 'other']),
-          'created_at' => (clone $start)->sub(new DateInterval("P".mt_rand(1, 90)."D")),
+          'created_at' => $created,
           'updated_at' => null,
       ];
     }

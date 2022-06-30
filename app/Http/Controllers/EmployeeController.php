@@ -25,10 +25,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Timesheet;
+use App\Notifications\LeaveApproved;
+use App\Notifications\LeaveDeclined;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -231,28 +231,34 @@ class EmployeeController extends Controller
       'start_date' => 'required|date|before:end_date',
       'end_date' => 'required|date|after:start_date',
       'type' => 'required|in:paid,sick,vacation,parental,unpaid,other',
+      'status' => 'required:in:pending,approved,declined',
       'timesheet_id' => 'nullable|exists:timesheets,id',
     ]);
 
     $validated["comments"] = $validated["comments"] ?? "";
     $validated["approved_user_id"] = null;
     $validated["declined_user_id"] = null;
-    $validated["approved"] = null;
-    $validated["declined"] = null;
+    $validated["approved_at"] = null;
+    $validated["declined_at"] = null;
 
-    if (request()->get("status") === "approved") {
+    if ($validated['status'] === "approved") {
       $validated["approved_user_id"] = $leave->approved ? $leave->approved_user_id : Auth()->user()->id;
-      $validated["approved"] = $leave->approved ?? Carbon::now();
-    } else if (request()->get("status") === "declined") {
+      $validated["approved_at"] = $leave->approved ?? Carbon::now();
+    } else if ($validated['status'] === "declined") {
       $validated["declined_user_id"] = $leave->declined ? $leave->declined_user_id : Auth()->user()->id;
-      $validated["declined"] = $leave->declined ?? Carbon::now();
+      $validated["declined_at"] = $leave->declined ?? Carbon::now();
     }
 
     if ($validated["timesheet_id"] && !$employee->timesheets()->find($validated["timesheet_id"])) {
       return redirect()->back()->withErrors([__("messages.timesheet.bad_owner")]);
     }
 
+    $oldStatus = $leave->status;
     $leave->update($validated);
+
+    if (request()->get("notify") && $leave->status !== "pending" && $leave->status !== $oldStatus) {
+      $employee->notify($leave->status === 'approved' ? new LeaveApproved($leave) : new LeaveDeclined($leave));
+    }
 
     return redirect()->route("leaves.leave", ["id" => $employeeId, "leaveId" => $leaveId])
       ->with("status", "The leave request was updated");
@@ -276,28 +282,29 @@ class EmployeeController extends Controller
       'start_date' => 'required|date|before:end_date',
       'end_date' => 'required|date|after:start_date',
       'type' => 'required|in:paid,sick,vacation,parental,unpaid,other',
+      'status' => 'required:in:pending,approved,declined',
       'timesheet_id' => 'nullable|exists:timesheets,id',
     ]);
 
     $validated["comments"] = $validated["comments"] ?? "";
-    $validated["approved_user_id"] = null;
-    $validated["declined_user_id"] = null;
-    $validated["approved"] = null;
-    $validated["declined"] = null;
 
-    if (request()->get("status") === "approved") {
+    if ($validated['status'] === "approved") {
       $validated["approved_user_id"] = Auth()->user()->id;
-      $validated["approved"] = Carbon::now();
-    } else if (request()->get("status") === "declined") {
+      $validated["approved_at"] = Carbon::now();
+    } else if ($validated['status'] === "declined") {
       $validated["declined_user_id"] = Auth()->user()->id;
-      $validated["declined"] = Carbon::now();
+      $validated["declined_at"] = Carbon::now();
     }
 
     if ($validated["timesheet_id"] && !$employee->timesheets()->find($validated["timesheet_id"])) {
       return redirect()->back()->withErrors([__("messages.timesheet.bad_owner")]);
     }
 
-    $employee->leaves()->create($validated);
+    $leave = $employee->leaves()->create($validated);
+
+    if (request()->get("notify") && $leave->status !== "pending") {
+      $employee->notify($leave->status === 'approved' ? new LeaveApproved($leave) : new LeaveDeclined($leave));
+    }
 
     return redirect()->route("employees.employee.leaves", $employeeId);
   }
