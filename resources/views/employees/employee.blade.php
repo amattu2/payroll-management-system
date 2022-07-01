@@ -32,8 +32,7 @@
           <div class="btn-toolbar">
             <select class="form-control" id="employee-selector">
               @foreach ($employees as $e)
-                <option data-href="{{ Route('employees.employee', $e->id) }}"
-                  {{ $e->id === $employee->id ? 'selected' : '' }}>
+                <option data-href="{{ Route('employees.employee', $e->id) }}" {{ $e->id === $employee->id ? 'selected' : '' }}>
                   {{ $e->firstname }} {{ $e->lastname }}</option>
               @endforeach
             </select>
@@ -46,8 +45,8 @@
             <div class="card-body p-4">
               <div class="text-black">
                 <div class="d-flex mb-3">
-                  <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="Profile Picture"
-                    class="img-fluid" style="width: 62px; border-radius: 10px;">
+                  <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="Profile Picture" class="img-fluid"
+                    style="width: 62px; border-radius: 10px;">
                   <div class="ms-2 flex-shrink-0">
                     <h5 class="mb-1">{{ $employee->firstname }} {{ $employee->lastname }}</h5>
                     <p class="mb-0">{{ $employee->title }}</p>
@@ -70,8 +69,7 @@
                 </div>
               </div>
               <div class="btn-toolbar mt-3 justify-content-end" role="toolbar">
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                data-bs-target="#sendEmailModal">Send Email</button>
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#sendEmailModal">Send Email</button>
               </div>
             </div>
           </div>
@@ -81,8 +79,7 @@
             <div class="card shadow-sm mb-3">
               <div class="card-body">
                 This employee is linked to the user account
-                <span class="badge rounded-pill bg-dark"><a class="text-light" href="#"
-                    role="button">#{{ $employee->user->id }}</a></span>
+                <span class="badge rounded-pill bg-dark"><a class="text-light" href="#" role="button">#{{ $employee->user->id }}</a></span>
               </div>
             </div>
           @endif
@@ -97,19 +94,15 @@
                 @csrf
                 @if (in_array($employee->employment_status, ['active', 'suspended']))
                   <p class="card-text">{{ __('messages.employment.terminate') }}</p>
-                  <button class="btn btn-danger me-2" type="submit" name="employment_status"
-                    value="terminated">Terminate</button>
+                  <button class="btn btn-danger me-2" type="submit" name="employment_status" value="terminated">Terminate</button>
                   @if ($employee->employment_status === 'suspended')
-                    <button class="btn btn-primary" type="submit" name="employment_status"
-                      value="active">Reactivate</button>
+                    <button class="btn btn-primary" type="submit" name="employment_status" value="active">Reactivate</button>
                   @else
-                    <button class="btn btn-warning" type="submit" name="employment_status"
-                      value="suspended">Suspend</button>
+                    <button class="btn btn-warning" type="submit" name="employment_status" value="suspended">Suspend</button>
                   @endif
                 @else
                   <p class="card-text">{{ __('messages.employment.activate') }}</p>
-                  <button class="btn btn-primary" type="submit" name="employment_status"
-                    value="active">Reactivate</button>
+                  <button class="btn btn-primary" type="submit" name="employment_status" value="active">Reactivate</button>
                 @endif
               </form>
             </div>
@@ -129,10 +122,9 @@
           <!-- Quick Access -->
           <div class="row mb-3">
             <div class="col">
-              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
-                role="button" href="{{ Route('employee.timesheet', $employee->id) }}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
-                  alt="" width="48" height="38">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button"
+                href="{{ Route('employee.timesheet', $employee->id) }}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Timesheets</h1>
                   <small>Manage monthly timesheets</small>
@@ -140,17 +132,17 @@
               </a>
             </div>
             <div class="col">
-              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
-                role="button" href="{{ Route('employee.leaves', $employee->id) }}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
-                  alt="" width="48" height="38">
+              <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button"
+                href="{{ Route('employee.leaves', $employee->id) }}">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48"
+                  height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Time Off</h1>
                   <small>Approve, create, view time off</small>
                 </div>
               </a>
             </div>
-            <div class="col">
+            {{-- <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
                 role="button" href="{{ Route('employee.timesheet', $employee->id) }}">
                 <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
@@ -160,7 +152,7 @@
                   <small>Track and approve expenses</small>
                 </div>
               </a>
-            </div>
+            </div> --}}
           </div>
 
           <div class="card shadow-sm">
@@ -213,88 +205,110 @@
                     </div>
                     <h2 class="text-center">
                       {{ $employee->currentTimesheet?->days->sum('total_units') ?? 0 }}
-                      {{ ($employee->currentTimesheet->pay_unit ?? $employee->pay_unit) === 'hourly' ? 'hours' : 'days' }}
+                      {{ ($employee->currentTimesheet->pay_type ?? $employee->pay_type) === 'hourly' ? 'hours' : 'days' }}
                     </h2>
                   </div>
                 </div>
               </div>
-              <div class="row p-3">
+              <div class="px-1">
                 <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-0">Full Name</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ $employee->firstname }} {{ $employee->middlename }}
-                      {{ $employee->lastname }}</p>
-                  </div>
+                  <div class="col-sm-3">Full Name</div>
+                  <div class="col-sm-9">{{ $employee->firstname }} {{ $employee->middlename }} {{ $employee->lastname }}</div>
                 </div>
                 <hr>
                 <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-0">Email</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ $employee->email }}</p>
-                  </div>
+                  <div class="col-sm-3">Email</div>
+                  <div class="col-sm-9">{{ $employee->email }}</div>
                 </div>
                 <hr>
                 <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-0">Phone</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ $employee->telephone }}</p>
-                  </div>
+                  <div class="col-sm-3">Phone</div>
+                  <div class="col-sm-9">{{ $employee->telephone }}</div>
                 </div>
                 <hr>
                 <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-0">Address</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ $employee->street1 }}, {{ $employee->city }}
-                      {{ $employee->state }}, {{ $employee->zip }}</p>
-                  </div>
+                  <div class="col-sm-3">Address</div>
+                  <div class="col-sm-9">{{ $employee->street1 }}, {{ $employee->city }} {{ $employee->state }}, {{ $employee->zip }}</div>
                 </div>
               </div>
             </div>
             <div class="card-body d-none" id="card-payroll">
               @if (count($employee->timesheets) > 0)
                 <div class="accordion" id="payrollYearAccordion">
-                  @for ($i = 0; $i < 4; $i++)
-                    <div class="accordion-item">
+                  @foreach ($employee->TimesheetsByYear as $year => $timesheets)
+                    <div class="accordion-item bg-white">
                       <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#payrollYearCollapse{{ $i }}">
-                          Year {{ $i + 1 }}
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#payrollYearCollapse{{ $year }}">
+                          Year {{ $year }} {{ $year == date('Y') ? '*' : '' }}
                         </button>
                       </h2>
-                      <div id="payrollYearCollapse{{ $i }}" class="accordion-collapse collapse"
-                        data-bs-parent="#payrollYearAccordion">
+                      <div id="payrollYearCollapse{{ $year }}" class="accordion-collapse collapse" data-bs-parent="#payrollYearAccordion">
                         <div class="accordion-body">
-                          <div class="accordion" id="payrollMonthAccordion{{ $i }}">
-                            @for ($x = 0; $x < 4; $x++)
-                              <div class="accordion-item">
+                          <div class="accordion" id="payrollMonthAccordion{{ $year }}">
+                            @foreach ($timesheets as $x => $ts)
+                              <div class="accordion-item bg-white">
                                 <h2 class="accordion-header">
-                                  <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#payrollMonthCollapse{{ $i }}{{ $x }}">
-                                    Year {{ $i + 1 }}, Month {{ $x + 1 }}
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#payrollMonthCollapse{{ $year }}{{ $x }}">
+                                    {{ $ts->period->format('F') }}
+                                    {{ $ts->period->format('Y-m') == date('Y-m') ? '*' : '' }}
                                   </button>
                                 </h2>
-                                <div id="payrollMonthCollapse{{ $i }}{{ $x }}"
-                                  class="accordion-collapse collapse"
-                                  data-bs-parent="#payrollMonthAccordion{{ $i }}">
-                                  <div class="accordion-body">
-                                    {grid containing hours worked, pto, etc}
+                                <div id="payrollMonthCollapse{{ $year }}{{ $x }}" class="accordion-collapse collapse"
+                                  data-bs-parent="#payrollMonthAccordion{{ $year }}">
+                                  <div class="accordion-body border m-3">
+                                    <div class="row">
+                                      <div class="col-sm-3">Pay Period</div>
+                                      <div class="col-sm-9">
+                                        <a role="button"
+                                          href="{{ Route('employee.timesheet', ['id' => $employee->id, 'year' => $ts->period->format('Y'), 'month' => $ts->period->format('m')]) }}">
+                                          {{ $ts->period->format('F, Y') }}
+                                          <i class="fas fa-external-link-alt ms-1"></i>
+                                        </a>
+                                      </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                      <div class="col-sm-3">Pay Units</div>
+                                      <div class="col-sm-9">
+                                        {{ number_format($ts->days->sum('total_units') ?? 0, 2) }}
+                                        {{ $ts->pay_type === 'hourly' ? 'Hours' : 'Days' }}
+                                      </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                      <div class="col-sm-3">Leave Requests</div>
+                                      <div class="col-sm-9">
+                                        @forelse($ts->leaves as $i => $leave)
+                                          <a role="button" href="{{ Route('leaves.leave', ['id' => $employee->id, 'leaveId' => $leave->id]) }}">
+                                            #{{ $leave->id }}
+                                          </a>
+                                          {{ $i < $ts->leaves->count() - 1 ? ', ' : '' }}
+                                        @empty
+                                          N/A
+                                        @endforelse
+                                      </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                      <div class="col-sm-3">Finalized</div>
+                                      <div class="col-sm-9">{{ $ts->completed_at?->format('m/d/Y g:ia') ?? 'N/A' }}</div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                      <div class="col-sm-3">Updated</div>
+                                      <div class="col-sm-9">{{ $ts->updated_at?->format('m/d/Y g:ia') ?? 'N/A' }}</div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            @endfor
+                            @endforeach
                           </div>
                         </div>
                       </div>
                     </div>
-                  @endfor
+                  @endforeach
                 </div>
               @else
                 <div class="alert alert-warning mb-0" role="alert">No payroll data found.</div>
@@ -323,9 +337,9 @@
                   @forelse ($employee->leaves as $leave)
                     <tr>
                       <td>
-                        @if ($leave->status === "approved")
+                        @if ($leave->status === 'approved')
                           Approved at {{ $leave->approved_at->format('n/j/Y g:ia') }}
-                        @elseif ($leave->status === "declined")
+                        @elseif ($leave->status === 'declined')
                           Declined at {{ $leave->declined_at->format('n/j/Y g:ia') }}
                         @else
                           Pending
@@ -336,8 +350,7 @@
                       <td>{{ ucfirst($leave->type) }}</td>
                       <td>{{ $leave->comments ?? 'N/A' }}</td>
                       <td class="text-center">
-                        <a
-                          href="{{ Route('leaves.leave', ['id' => $employee->id, 'leaveId' => $leave->id]) }}">View</a>
+                        <a href="{{ Route('leaves.leave', ['id' => $employee->id, 'leaveId' => $leave->id]) }}">View</a>
                       </td>
                     </tr>
                   @empty
@@ -361,7 +374,7 @@
     </main>
   </div>
 
-  @include("partials.sendEmailModal")
+  @include('partials.sendEmailModal')
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>
@@ -372,18 +385,18 @@
 
     if (document.querySelector("[href='" + window.location.hash + "']")) {
       // Remove active styling
-      document.querySelectorAll(".card-header a").forEach(e => e.classList.remove("active"));
-      document.querySelectorAll("#card-panels .card-body").forEach(e => e.classList.add("d-none"));
+      document.querySelectorAll(".card-header a[href]").forEach(e => e.classList.remove("active"));
+      document.querySelectorAll(".card-body[id]").forEach(e => e.classList.add("d-none"));
 
       // Add active styling to hash target
       document.querySelector("[href='" + window.location.hash + "']").classList.add("active");
       document.querySelector(window.location.hash).classList.remove("d-none");
     }
 
-    document.querySelectorAll(".card-header a").forEach((e) => {
+    document.querySelectorAll(".card-header a[href]").forEach((e) => {
       e.onclick = (evt) => {
-        document.querySelectorAll("#card-panels .card-body").forEach(element => element.classList.add("d-none"));
-        document.querySelectorAll(".card-header a").forEach(element => element.classList.remove("active"));
+        document.querySelectorAll(".card-body[id]").forEach(element => element.classList.add("d-none"));
+        document.querySelectorAll(".card-header a[href]").forEach(element => element.classList.remove("active"));
         document.querySelector(evt.target.hash).classList.remove("d-none");
         evt.target.classList.add("active");
       };

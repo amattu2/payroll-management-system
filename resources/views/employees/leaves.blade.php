@@ -22,8 +22,7 @@
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="{{ Route('index') }}">Overview</a></li>
             <li class="breadcrumb-item"><a href="{{ Route('employees') }}">Employees</a></li>
-            <li class="breadcrumb-item"><a
-                href="{{ Route('employees.employee', $employee->id) }}">{{ $employee->firstname }}
+            <li class="breadcrumb-item"><a href="{{ Route('employees.employee', $employee->id) }}">{{ $employee->firstname }}
                 {{ $employee->lastname }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">Leaves</li>
           </ol>
@@ -31,8 +30,7 @@
         <div class="btn-toolbar">
           <select class="form-control" id="employee-selector">
             @foreach ($employees as $e)
-              <option data-href="{{ Route('employee.leaves', $e->id) }}"
-                {{ $e->id === $employee->id ? 'selected' : '' }}>
+              <option data-href="{{ Route('employee.leaves', $e->id) }}" {{ $e->id === $employee->id ? 'selected' : '' }}>
                 {{ $e->firstname }} {{ $e->lastname }}</option>
             @endforeach
           </select>
@@ -47,9 +45,9 @@
             @forelse ($employee->leaves as $l)
               <li class="nav-item">
                 <a class="nav-link text-muted" href="#leave{{ $l['id'] }}">
-                  @if ($l->status === "approved")
+                  @if ($l->status === 'approved')
                     <i class="fas fa-check me-1"></i>
-                  @elseif ($l->status === "declined")
+                  @elseif ($l->status === 'declined')
                     <i class="fas fa-times me-1"></i>
                   @else
                     <i class="fas fa-user-clock me-1"></i>
@@ -70,8 +68,7 @@
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="btn-toolbar justify-content-between">
             <div class="d-flex me-auto">
-              <button class="btn btn-primary" type="button" data-bs-toggle="modal"
-                data-bs-target="#createLeaveModal">Create</button>
+              <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createLeaveModal">Create</button>
             </div>
           </div>
 
@@ -83,66 +80,50 @@
                     Request #{{ $l->id }}
                   </div>
                   <div class="card-body">
-                    <div class="row p-3">
+                    <div class="p-3">
                       <div class="row">
-                        <div class="col-sm-3">
-                          <p class="mb-0">Duration</p>
-                        </div>
+                        <div class="col-sm-3">Duration</div>
                         <div class="col-sm-9">
-                          <p class="text-muted mb-0">
-                            {{ $l->start_date->format('m/d/Y') }} &ndash;
-                            {{ $l->end_date->format('m/d/Y') }}
-                            ({{ $l->duration->format('%a') }} days)
-                          </p>
+                          {{ $l->start_date->format('m/d/Y') }} &ndash;
+                          {{ $l->end_date->format('m/d/Y') }}
+                          ({{ $l->duration->format('%a') }} days)
                         </div>
                       </div>
                       <hr>
                       <div class="row">
-                        <div class="col-sm-3">
-                          <p class="mb-0">Status</p>
-                        </div>
+                        <div class="col-sm-3">Status</div>
                         <div class="col-sm-9">
-                          <p class="text-muted mb-0">
-                            @if ($l->status === "approved")
-                              <i class="fas fa-check me-1"></i>
-                              Approved on {{ $l->approved_at->format('m/d/Y g:i A') }}
-                            @elseif ($l->status === "declined")
-                              <i class="fas fa-times me-1"></i>
-                              Declined on {{ $l->declined_at->format('m/d/Y g:i A') }}
-                            @else
-                              <i class="fas fa-user-clock me-1"></i>
-                              Pending
-                            @endif
-                          </p>
+                          @if ($l->status === 'approved')
+                            <i class="fas fa-check me-1"></i>
+                            Approved on {{ $l->approved_at->format('m/d/Y g:i A') }}
+                          @elseif ($l->status === 'declined')
+                            <i class="fas fa-times me-1"></i>
+                            Declined on {{ $l->declined_at->format('m/d/Y g:i A') }}
+                          @else
+                            <i class="fas fa-user-clock me-1"></i>
+                            Pending
+                          @endif
                         </div>
                       </div>
                       <hr>
                       <div class="row">
-                        <div class="col-sm-3">
-                          <p class="mb-0">Pay Period</p>
-                        </div>
+                        <div class="col-sm-3">Pay Period</div>
                         <div class="col-sm-9">
-                          <p class="text-muted mb-0">
-                            @if ($l->timesheet)
-                              <a role="button"
-                                href="{{ Route('employee.timesheet', ['id' => $employee->id, 'year' => $l->timesheet->period->format('Y'), 'month' => $l->timesheet->period->format('m')]) }}">
-                                {{ $l->timesheet->period->format('F, Y') }}
-                                <i class="fas fa-external-link-alt"></i>
-                              </a>
-                            @else
-                              N/A
-                            @endif
-                          </p>
+                          @if ($l->timesheet)
+                            <a role="button"
+                              href="{{ Route('employee.timesheet', ['id' => $employee->id, 'year' => $l->timesheet->period->format('Y'), 'month' => $l->timesheet->period->format('m')]) }}">
+                              {{ $l->timesheet->period->format('F, Y') }}
+                              <i class="fas fa-external-link-alt ms-1"></i>
+                            </a>
+                          @else
+                            N/A
+                          @endif
                         </div>
                       </div>
                       <hr>
                       <div class="row">
-                        <div class="col-sm-3">
-                          <p class="mb-0">Comments</p>
-                        </div>
-                        <div class="col-sm-9">
-                          <p class="text-muted mb-0">{{ $l->comments ?? 'N/A' }}</p>
-                        </div>
+                        <div class="col-sm-3">Comments</div>
+                        <div class="col-sm-9">{{ $l->comments ?? 'N/A' }}</div>
                       </div>
                     </div>
                     <a class="btn btn-primary" href="{{ Route('leaves.leave', [$employee->id, $l->id]) }}">
