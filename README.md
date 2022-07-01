@@ -8,30 +8,37 @@ This is a comprehensive employee management & payroll application built with Lar
 
 - [ ] App Settings and Controls
   - [ ] Departments
-  - [ ] Closure tracking
   - [ ] Integrations (i.e. Send CRUD events to external application via Observers)
+  - [ ] Closures / Time off (With optional broadcast) (With department only targetting)
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
-- [ ] Company wide closures (via Settings) (With time-ahead scheduled, e.g. Christmas and New Years can be registered far in advance)
 
 ## Employees
 
+- [ ] Department assignments
 - [ ] Supervisor tracking (e.g. Joan reports to Barry)
-- [ ] Employee comments
+- [ ] Internal comments / Notes
+- [ ] Profile picture display
+- [ ] PTO cap and limit tracking
 - [X] General profile editing
 - [X] Employee Communication (e.g. Timesheets, Free form emails, PTO Rejections)
 - [X] Time-Off Tracking / Requests
-- [ ] Disbursements
 
 ## Payroll / Timesheets
 
 - [X] Editing timesheet options (e.g. Period/Pay type)
 - [ ] Time card tracking
-- [ ] Exporting (PDF / Email)
+- [ ] Time calculation by Day (including 1/2 days)
+- [ ] Time calculation by Hour
+- [ ] Exporting
+  - [ ] PDF
+  - [ ] Email (To Employee / Custom)
 
 ## Reports
 
 - [ ] Report Center
 - [ ] Statistics/Graphs on pages
+  - [ ] Employee Statistics
+  - [ ] Overview Statistics
 
 ## Other
 
