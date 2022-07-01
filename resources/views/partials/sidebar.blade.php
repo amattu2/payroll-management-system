@@ -9,7 +9,7 @@
       </li>
       @can("employees.view.all")
       <li class="nav-item">
-        <a class="nav-link {{Route::is('employees', 'employees.employee') ? 'active' : ''}}" href="{{Route("employees")}}">
+        <a class="nav-link {{Route::is('employees') ? 'active' : ''}}" href="{{Route("employees")}}">
           <i class="fa fa-users me-1"></i>
           Employees
         </a>
@@ -56,6 +56,22 @@
           Year-end sale
         </a>
       </li>
+    </ul>
+  </div>
+  <div class="position-absolute dropdown bottom-0 start-0 end-0 p-3 border-top">
+    <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+      <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="32" height="32" class="rounded-circle me-3">
+      <strong>{{auth()->user()->name}}</strong>
+    </a>
+    <ul class="dropdown-menu text-small shadow">
+      @can('settings.view')
+        <li><a class="dropdown-item" href="{{Route("settings")}}">Settings</a></li>
+      @endcan
+      @if (($employee = auth()->user()->employee))
+        <li><a class="dropdown-item" href="{{Route("employees.employee", $employee->id)}}">Profile</a></li>
+      @endif
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="{{Route("auth.logout")}}">Sign out</a></li>
     </ul>
   </div>
 </nav>
