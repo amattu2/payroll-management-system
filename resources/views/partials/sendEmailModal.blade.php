@@ -11,11 +11,12 @@
           @csrf
           <div class="col-md-12">
             <label for="subject" class="form-label">Subject</label>
-            <input type="text" name="subject" class="form-control" id="subject" />
+            <input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror"
+              id="subject" value="{{ old('subject') ?? '' }}" />
           </div>
           <div class="col-md-12">
             <label for="message" class="form-label">Message</label>
-            <textarea name="message" class="form-control" id="message" rows="4"></textarea>
+            <textarea name="message" class="form-control @error('message') is-invalid @enderror" id="message" rows="4">{{ old('message') ?? '' }}</textarea>
           </div>
         </form>
       </div>
