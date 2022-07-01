@@ -26,7 +26,7 @@ This is a comprehensive employee management & payroll application built with Lar
 ## Payroll / Timesheets
 
 - [X] Editing timesheet options (e.g. Period/Pay type)
-- [ ] Time card tracking
+- [X] Time card tracking
 - [ ] Time calculation by Day (including 1/2 days)
 - [ ] Time calculation by Hour
 - [ ] Exporting

@@ -93,13 +93,20 @@ class Employee extends Model
     }
 
     /**
-     * Define custom weeks attribute
-     *
-     * @return
+     * Define custom pending leave request attribute
      */
     public function getPendingLeavesAttribute() {
       return Cache::remember($this->id . 'pendingLeaves', 60*5, function () {
         return $this->leaves()->where("status", "pending")->get();
+      });
+    }
+
+    /**
+     * Define custom active pay period attribute
+     */
+    public function getCurrentTimesheetAttribute() {
+      return Cache::remember($this->id . 'currentTimesheet', 60*5, function () {
+        return $this->Timesheets()->where("period", date("Y-m-01"))->first();
       });
     }
 }

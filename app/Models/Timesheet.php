@@ -22,96 +22,123 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use DateTime;
+use App\Models\Leave;
+use App\Models\Employee;
+use App\Models\TimesheetDay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use DateTime;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Timesheet extends Model
 {
-    use SoftDeletes, HasFactory;
+  use SoftDeletes, HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-      "period",
-      "pay_type",
-      "employee_id",
-      "completed_at",
-    ];
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    "period",
+    "pay_type",
+    "employee_id",
+    "completed_at",
+    "edit_user_id",
+  ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'period' => 'datetime',
-        'completed_at' => 'datetime',
-    ];
+  /**
+   * The attributes that should be cast.
+   *
+   * @var array<string, string>
+   */
+  protected $casts = [
+      'period' => 'datetime',
+      'completed_at' => 'datetime',
+  ];
 
-    /**
-     * Get the employee that this timesheet belongs to
-     */
-    public function Employee()
-    {
-      return $this->belongsTo(Employee::class);
-    }
+  /**
+   * Get the employee that this timesheet belongs to
+   */
+  public function Employee()
+  {
+    return $this->belongsTo(Employee::class);
+  }
 
-    /**
-     * Get the timesheet days that belong to this timesheet
-     */
-    public function TimesheetDay()
-    {
-      return $this->hasMany(TimesheetDay::class)->orderBy("date");
-    }
+  /**
+   * Get the timesheet days that belong to this timesheet
+   */
+  public function Days()
+  {
+    return $this->hasMany(TimesheetDay::class)->orderBy("date");
+  }
 
-    /**
-     * Get the leave requests assigned to this timesheet
-     */
-    public function Leaves()
-    {
-      return $this->hasMany(Leave::class);
-    }
+  /**
+   * Get the leave requests assigned to this timesheet
+   */
+  public function Leaves()
+  {
+    return $this->hasMany(Leave::class);
+  }
 
-    /**
-     * Define custom weeks attribute
-     *
-     * @return array<int, array>
-     */
-    public function getWeeksAttribute() {
-      if (isset($this->attributes["weeks"])) {
-        return $this->attributes["weeks"];
-      }
-
-      $leaves = $this->leaves->where("declined", null);
-      $start = clone $this->period;
-      $end = (clone $start)->modify("last day of this month");
-      $index = 0;
-
-      for ($i = $start; $i <= $end; $i->modify('+1 day')){
-        $week = $i->format("W");
-        $cloned = clone $i;
-
-        if (!isset($this->attributes["weeks"][$week])) {
-          $this->attributes["weeks"][$week] = [
-            "index" => $index++,
-            "start" => $cloned,
-            "days" => [],
-            "end" => $cloned,
-          ];
-        }
-
-        $this->attributes["weeks"][$week]["days"][] = [
-          "date" => $cloned,
-          "leave" => $leaves->where("start_date", "<=", $cloned)->where("end_date", ">=", $cloned)->first(),
-        ];
-        $this->attributes["weeks"][$week]["end"] = $cloned;
-      }
-
+  /**
+   * Define custom weeks attribute
+   *
+   * @return array<int, array>
+   */
+  public function getWeeksAttribute() {
+    if (isset($this->attributes["weeks"])) {
       return $this->attributes["weeks"];
     }
+
+    $leaves = $this->leaves->where("declined", null);
+    $start = clone $this->period;
+    $end = (clone $start)->modify("last day of this month");
+    $index = 0;
+
+    for ($i = $start; $i <= $end; $i->modify('+1 day')){
+      $week = $i->format("W");
+      $cloned = clone $i;
+
+      if (!isset($this->attributes["weeks"][$week])) {
+        $this->attributes["weeks"][$week] = [
+          "index" => $index++,
+          "start" => $cloned,
+          "days" => [],
+          "end" => $cloned,
+        ];
+      }
+
+      $this->attributes["weeks"][$week]["days"][] = [
+        "day" => $this->Days()->where("date", $cloned->format("Y-m-d"))->first() ?? new TimesheetDay([
+          "date" => $cloned->format("Y-m-d"),
+          "timesheet_id" => $this->id,
+        ]),
+        "leave" => $leaves->where("start_date", "<=", $cloned)->where("end_date", ">=", $cloned)->first(),
+      ];
+      $this->attributes["weeks"][$week]["end"] = $cloned;
+    }
+
+    return $this->attributes["weeks"];
+  }
+
+  /**
+   * Define custom year attribute
+   *
+   * @return int
+   */
+  public function getYearAttribute()
+  {
+    return $this->period->format("Y");
+  }
+
+  /**
+   * Define custom month attribute
+   *
+   * @return int
+   */
+  public function getMonthAttribute()
+  {
+    return $this->period->format("m");
+  }
 }

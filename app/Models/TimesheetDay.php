@@ -46,6 +46,17 @@ class TimesheetDay extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+      'date' => 'datetime',
+      'start_time' => 'datetime',
+      'end_time' => 'datetime',
+    ];
+
+    /**
      * Get the timesheet that this day belongs to
      */
     public function Timesheet()

@@ -26,7 +26,7 @@
             <li class="breadcrumb-item"><a
                 href="{{ Route('employees.employee', $employee->id) }}">{{ $employee->firstname }}
                 {{ $employee->lastname }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ Route('employees.employee.leaves', $employee->id) }}">Leaves</a>
+            <li class="breadcrumb-item"><a href="{{ Route('employee.leaves', $employee->id) }}">Leaves</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">#{{ $leave->id }}</li>
           </ol>
@@ -34,7 +34,7 @@
         <div class="btn-toolbar">
           <select class="form-control" id="employee-selector">
             @foreach ($employees as $e)
-              <option data-href="{{ Route('employees.employee.leaves', $e->id) }}"
+              <option data-href="{{ Route('employee.leaves', $e->id) }}"
                 {{ $e->id === $employee->id ? 'selected' : '' }}>
                 {{ $e->firstname }} {{ $e->lastname }}</option>
             @endforeach
@@ -47,7 +47,7 @@
             <h5 class="card-header">Leave Request #{{ $leave->id }}</h5>
             <div class="card-body">
               <form class="row g-3" id="leaveRequestForm"
-                action="{{ Route('leaves.leave.update', ['id' => $employee->id, 'leaveId' => $leave->id]) }}"
+                action="{{ Route('leave.update', ['id' => $employee->id, 'leaveId' => $leave->id]) }}"
                 method="POST">
                 @include('partials.leaveForm')
               </form>
@@ -56,7 +56,7 @@
           <div class="button-group my-3 d-flex">
             <button class="btn btn-primary me-3" type="submit" form="leaveRequestForm">Save</button>
             <a class="text-danger ms-auto" role="button"
-              href="{{ Route('employees.employee.leaves', $employee->id) }}">Cancel</a>
+              href="{{ Route('employee.leaves', $employee->id) }}">Cancel</a>
           </div>
         </div>
       </div>

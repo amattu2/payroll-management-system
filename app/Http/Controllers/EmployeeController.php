@@ -113,7 +113,7 @@ class EmployeeController extends Controller
       return redirect()->back()->withErrors([__("messages.404.employee")]);
     }
     if (!checkdate($month, 1, $year)) {
-      return redirect()->route("employees.employee.timesheet", ["id" => $employeeId, "year" => date("Y"), "month" => date("m")]);
+      return redirect()->route("employee.timesheet", ["id" => $employeeId, "year" => date("Y"), "month" => date("m")]);
     }
 
     // Validate Employee
@@ -164,11 +164,70 @@ class EmployeeController extends Controller
     // Update Timesheet
     $timesheet->update($validated);
 
-    return redirect()->route("employees.employee.timesheet", [
+    return redirect()->route("employee.timesheet", [
       "id" => $employeeId,
       "year" => $timesheet->period->format("Y"),
       "month" => $timesheet->period->format("m")
     ])->with("status", "The timesheet settings were updated");
+  }
+
+
+  /**
+   * Save updated timesheet days
+   *
+   * @param  int $employeeId
+   * @param  int $year
+   * @param  int $month
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function updateTimesheet($employeeId, $year, $month)
+  {
+    // Validate Input
+    if (!is_numeric($employeeId) || !($employee = Employee::find($employeeId))) {
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
+    }
+    if (!checkdate($month, 1, $year)) {
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
+    }
+
+    $validated = request()->validate([
+      'days' => 'required|array',
+      'days.*.id' => 'nullable|exists:timesheet_days,id',
+      'days.*.description' => 'nullable|string',
+      'days.*.start_time' => 'nullable|date_format:H:i|before:days.*.end_time',
+      'days.*.end_time' => 'nullable|date_format:H:i|after:days.*.start_time',
+      'days.*.adjustment' => 'nullable|numeric',
+      'days.*.total_units' => 'numeric',
+    ]);
+
+    $timesheet = $employee->timesheets()->updateOrCreate(["period" => "$year-$month-01", "completed_at" => null], [
+      "period" => "$year-$month-01",
+      "employee_id" => $employee->id,
+      "completed_at" => request()->get("submit") === "complete" ? Carbon::now() : null,
+      "edit_user_id" => auth()->id(),
+    ]);
+
+    if ($timesheet->wasRecentlyCreated) {
+      $timesheet->update(["pay_type" => $employee->pay_type]);
+    }
+
+    $days = $timesheet->days();
+    foreach ($validated["days"] as $date => $day) {
+      $day['description'] = $day['description'] ?? "";
+      $day['adjustment'] = $day['adjustment'] % 15 === 0 ? $day['adjustment'] : 0;
+      $day['total_units'] = $day['total_units'] ?? 0;
+      if ($day['id'] && (!$day['start_time'] && !$day['end_time'] && !$day['description'])) {
+        $days->where("id", $day['id'])->delete();
+      } else if (!$day['id']) {
+        $days->updateOrCreate(["date" => $date], $day);
+      }
+    }
+
+    return redirect()->route("employee.timesheet", [
+      "id" => $employeeId,
+      "year" => $timesheet->period->format("Y"),
+      "month" => $timesheet->period->format("m")
+    ])->with("status", "The timesheet was updated successfully");
   }
 
   /**
@@ -308,7 +367,7 @@ class EmployeeController extends Controller
       $employee->notify($leave->status === 'approved' ? new LeaveApproved($leave) : new LeaveDeclined($leave));
     }
 
-    return redirect()->route("employees.employee.leaves", $employeeId);
+    return redirect()->route("employee.leaves", $employeeId);
   }
 
   /**

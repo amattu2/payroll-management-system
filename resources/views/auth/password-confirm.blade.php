@@ -14,7 +14,7 @@
   <h1>Verify your password</h1>
   <p>Enter your password to continue to this page.</p>
 
-  <form class="p-3" method="POST" action="{{ Route('password.confirm.check') }}">
+  <form class="p-3" method="POST" action="{{ Route('confirm.check') }}">
     @csrf
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>

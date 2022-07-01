@@ -31,7 +31,7 @@
         <div class="btn-toolbar">
           <select class="form-control" id="employee-selector">
             @foreach ($employees as $e)
-              <option data-href="{{ Route('employees.employee.leaves', $e->id) }}"
+              <option data-href="{{ Route('employee.leaves', $e->id) }}"
                 {{ $e->id === $employee->id ? 'selected' : '' }}>
                 {{ $e->firstname }} {{ $e->lastname }}</option>
             @endforeach
@@ -125,7 +125,7 @@
                           <p class="text-muted mb-0">
                             @if ($l->timesheet)
                               <a role="button"
-                                href="{{ Route('employees.employee.timesheet', ['id' => $employee->id, 'year' => $l->timesheet->period->format('Y'), 'month' => $l->timesheet->period->format('m')]) }}">
+                                href="{{ Route('employee.timesheet', ['id' => $employee->id, 'year' => $l->timesheet->period->format('Y'), 'month' => $l->timesheet->period->format('m')]) }}">
                                 {{ $l->timesheet->period->format('F, Y') }}
                                 <i class="fas fa-external-link-alt"></i>
                               </a>

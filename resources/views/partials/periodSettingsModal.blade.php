@@ -23,8 +23,8 @@
           <div class="col-md-12">
             <label for="pay_type" class="form-label">Pay Type</label>
             <select id="pay_type" name="pay_type" class="form-select">
-              <option value="hourly" @selected($timesheet->pay_type)>Hourly</option>
-              <option value="salary" @selected($timesheet->pay_type)>Salary</option>
+              <option value="hourly" @selected($timesheet->pay_type === "hourly")>Hourly</option>
+              <option value="salary" @selected($timesheet->pay_type === "salary")>Salary</option>
             </select>
           </div>
           <div class="col-md-12">

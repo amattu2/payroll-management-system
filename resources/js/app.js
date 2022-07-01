@@ -22,10 +22,11 @@
 import { Chart, registerables } from 'chart.js';
 import moment from 'moment';
 import lodash from 'lodash';
-import bootstrap from 'bootstrap';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min';
 
 Chart.register(...registerables);
 
+window.bootstrap = bootstrap;
 window.Chart = Chart;
 window.moment = moment;
 window._ = lodash;
@@ -36,7 +37,11 @@ window._ = lodash;
  * @param {HTMLElement} element
  */
 window.addWorkDescription = (element) => {
-  element.parentElement.parentElement.parentElement.querySelector("textarea").value = element.textContent;
+  const textarea = element.parentElement.parentElement.parentElement.querySelector("textarea");
+
+  if (textarea.getAttribute('disabled') === null) {
+    textarea.value = element.textContent.replace(/\s\s+/g, ' ');
+  }
 };
 
 /**

@@ -130,7 +130,7 @@
           <div class="row mb-3">
             <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
-                role="button" href="{{ Route('employees.employee.timesheet', $employee->id) }}">
+                role="button" href="{{ Route('employee.timesheet', $employee->id) }}">
                 <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
                   alt="" width="48" height="38">
                 <div class="lh-1">
@@ -141,7 +141,7 @@
             </div>
             <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
-                role="button" href="{{ Route('employees.employee.leaves', $employee->id) }}">
+                role="button" href="{{ Route('employee.leaves', $employee->id) }}">
                 <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
                   alt="" width="48" height="38">
                 <div class="lh-1">
@@ -152,7 +152,7 @@
             </div>
             <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none"
-                role="button" href="{{ Route('employees.employee.timesheet', $employee->id) }}">
+                role="button" href="{{ Route('employee.timesheet', $employee->id) }}">
                 <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg"
                   alt="" width="48" height="38">
                 <div class="lh-1">
@@ -212,8 +212,8 @@
                       <h4 class="card-title me-auto">Pay Units</h4>
                     </div>
                     <h2 class="text-center">
-                      0
-                      {{ $employee->pay_type === 'hourly' ? 'hours' : 'days' }}
+                      {{ $employee->currentTimesheet?->days->sum('total_units') ?? 0 }}
+                      {{ ($employee->currentTimesheet->pay_unit ?? $employee->pay_unit) === 'hourly' ? 'hours' : 'days' }}
                     </h2>
                   </div>
                 </div>

@@ -37,7 +37,7 @@ Route::middleware(['throttle:web'])->prefix("auth")->group(function () {
   Route::post('login.do', [AuthController::class, 'login'])->name("auth.check");
 
   Route::get('password-confirm', [AuthController::class, 'passwordForm'])->name("password.confirm");
-  Route::post('password-confirm.do', [AuthController::class, 'passwordConfirm'])->name("password.confirm.check");
+  Route::post('password-confirm.do', [AuthController::class, 'passwordConfirm'])->name("confirm.check");
 
   Route::get('register', [AuthController::class, 'registerForm'])->name("auth.register");
   Route::post('register.do', [AuthController::class, 'register'])->name("auth.create");
@@ -61,8 +61,8 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function () {
      */
     Route::get('/', [EmployeeController::class, 'index'])->name("employees");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
-    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employees.employee.timesheet");
-    Route::get('/{id}/leaves', [EmployeeController::class, 'leaves'])->name("employees.employee.leaves");
+    Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employee.timesheet");
+    Route::get('/{id}/leaves', [EmployeeController::class, 'leaves'])->name("employee.leaves");
     Route::get('/{id}/leaves/{leaveId}', [EmployeeController::class, 'leave'])->name("leaves.leave");
 
     /**
@@ -85,7 +85,9 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function () {
     Route::post('/{id}/update/profile', [EmployeeController::class, 'updateProfile'])
       ->name("employees.update.profile");
     Route::post('/{id}/leaves/{leaveId}/update', [EmployeeController::class, 'updateLeave'])
-      ->name("leaves.leave.update");
+      ->name("leave.update");
+    Route::post('/{id}/timesheet/update/{year}/{month}', [EmployeeController::class, 'updateTimesheet'])
+      ->name("timesheet.update");
   });
 
   /*
