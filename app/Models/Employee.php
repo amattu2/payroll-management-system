@@ -123,4 +123,12 @@ class Employee extends Model
       });
     });
   }
+
+  /**
+   * Define custom employee Full Name attribute
+   */
+  public function getFullNameAttribute()
+  {
+    return trim($this->firstname . " " . $this->lastname);
+  }
 }

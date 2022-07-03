@@ -96,7 +96,7 @@
               <a role="button" class="btn btn-outline-secondary"
                 href="{{ Route('employee.timesheet', $employee->id) }}/{{ $prevMonth->format('Y') }}/{{ $prevMonth->format('m') }}">Back</a>
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                   {{ $timesheet->period->format('F, Y') }}
                 </button>
                 @if (count($employee->timesheets) > 0)
@@ -124,7 +124,16 @@
             @endif
             <div class="d-flex ms-auto">
               @if ($timesheet->id)
-                <button class="btn btn-primary me-2" type="button">Export</button>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-primary me-2 dropdown-toggle" data-bs-toggle="dropdown">Export</button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" target="_blank"
+                        href="{{ Route('timesheet.export', ['id' => $employee->id, 'year' => $timesheet->year, 'month' => $timesheet->month]) }}">
+                        PDF
+                      </a></li>
+                    <li><a class="dropdown-item" href="#">Email</a></li>
+                  </ul>
+                </div>
                 <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#periodSettingsModal">Period Settings</button>
               @endif
             </div>

@@ -455,4 +455,33 @@ class EmployeeController extends Controller
 
     return redirect()->route("employees.employee", $employeeId)->with("status", "Email sent to employee");
   }
+
+  /**
+   * Generate a PDF of an employee timesheet
+   *
+   * @param int $employeeId
+   * @param int $year
+   * @param int $month
+   * @return \Illuminate\Contracts\View\View
+   */
+  public function timesheetExport($employeeId, $year, $month)
+  {
+    // Validate Employee
+    if (!$employeeId || !($employee = Employee::find($employeeId))) {
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
+    }
+
+    // Get Timesheet
+    if (!checkdate($month, 1, $year)) {
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
+    }
+    if (!($timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first())) {
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
+    }
+
+    return response()->make($timesheet->toPDF()->output("S"), 201, [
+      "Content-Type" => "application/pdf",
+      "Content-Disposition" => "inline; filename=timesheet.pdf",
+    ]);
+  }
 }

@@ -62,6 +62,7 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function () {
     Route::get('/', [EmployeeController::class, 'index'])->name("employees");
     Route::get('/{id}', [EmployeeController::class, 'employee'])->name("employees.employee");
     Route::get('/{id}/timesheet/{year?}/{month?}', [EmployeeController::class, 'timesheet'])->name("employee.timesheet");
+    Route::get('/{id}/timesheet/{year}/{month}/export', [EmployeeController::class, 'timesheetExport'])->name("timesheet.export");
     Route::get('/{id}/leaves', [EmployeeController::class, 'leaves'])->name("employee.leaves");
     Route::get('/{id}/leaves/{leaveId}', [EmployeeController::class, 'leave'])->name("leaves.leave");
 

@@ -30,7 +30,7 @@ This is a comprehensive employee management & payroll application built with Lar
 - [ ] Time calculation by Day (including 1/2 days)
 - [ ] Time calculation by Hour
 - [ ] Exporting
-  - [ ] PDF
+  - [X] PDF
   - [ ] Email (To Employee / Custom)
 
 ## Reports
