@@ -32,5 +32,6 @@ return [
   'employment.terminate' => 'Is this employee no longer employed? Mark them as terminated below.',
   'employment.activate' => 'Reactivate this employee below.',
   'timesheet.unsaved' => "You're viewing a new timesheet because the timesheet for the :period pay period does not exist yet.",
-  'leave.status' => "Your leave request for the dates :start &ndash; :end was <b>:status</b> by :name at :when.",
+  'timesheet.finalized' => "Your timesheet for pay period :period has been finalized and is now available as of :when.",
+  'leave.status' => "Your leave request for the dates :start &ndash; :end was marked as <b>:status</b> by :name at :when.",
 ];

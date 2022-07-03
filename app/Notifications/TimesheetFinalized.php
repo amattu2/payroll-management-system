@@ -2,27 +2,26 @@
 
 namespace App\Notifications;
 
-use App\Models\Leave;
+use App\Models\Timesheet;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\HtmlString;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class LeaveDeclined extends Notification
+class TimesheetFinalized extends Notification
 {
   use Queueable;
 
-  private Leave $leave;
+  private Timesheet $timesheet;
 
   /**
    * Create a new notification instance.
    *
+   * @param Timesheet $timesheet
    * @return void
    */
-  public function __construct(Leave $leave)
+  public function __construct(Timesheet $timesheet)
   {
-    $this->leave = $leave;
+    $this->timesheet = $timesheet;
   }
 
   /**
@@ -45,17 +44,15 @@ class LeaveDeclined extends Notification
   public function toMail($notifiable)
   {
     return (new MailMessage)
-      ->subject("Leave Request Declined")
+      ->subject($this->timesheet->period->format('F, Y') . " Timesheet Finalized")
       ->replyTo(Auth()->user()->email)
       ->error()
       ->greeting("Hello!")
-      ->line(new HtmlString(__("messages.leave.status", [
-        "status" => "declined",
-        "start" => $this->leave->start_date->format('m/d/Y'),
-        "end" => $this->leave->end_date->format('m/d/Y'),
-        "when" => $this->leave->declined_at,
-        "name" => Auth()->user()->name
-      ])));
+      ->line(__("messages.timesheet.finalized", [
+        "period" => $this->timesheet->period->format('F, Y'),
+        "when" => $this->timesheet->updated_at,
+      ]))
+      ->attachData($this->timesheet->toPDF()->output("S"), "timesheet.pdf");
   }
 
   /**

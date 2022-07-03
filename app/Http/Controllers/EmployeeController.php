@@ -26,6 +26,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Timesheet;
 use App\Mail\CustomMail;
+use App\Notifications\TimesheetFinalized;
 use App\Notifications\LeaveApproved;
 use App\Notifications\LeaveDeclined;
 use Illuminate\Http\Request;
@@ -164,13 +165,16 @@ class EmployeeController extends Controller
     // Update Timesheet
     $timesheet->update($validated);
 
+    if ($timesheet->completed_at && $timesheet->wasChanged("completed_at")) {
+      $employee->notify(new TimesheetFinalized($timesheet));
+    }
+
     return redirect()->route("employee.timesheet", [
       "id" => $employeeId,
       "year" => $timesheet->period->format("Y"),
       "month" => $timesheet->period->format("m")
     ])->with("status", "The timesheet settings were updated");
   }
-
 
   /**
    * Save updated timesheet days
@@ -221,6 +225,10 @@ class EmployeeController extends Controller
       } else if (!$day['id']) {
         $days->updateOrCreate(["date" => $date], $day);
       }
+    }
+
+    if ($timesheet->completed_at && $timesheet->wasChanged("completed_at")) {
+      $employee->notify(new TimesheetFinalized($timesheet));
     }
 
     return redirect()->route("employee.timesheet", [
@@ -314,10 +322,9 @@ class EmployeeController extends Controller
       return redirect()->back()->withErrors([__("messages.timesheet.bad_owner")]);
     }
 
-    $oldStatus = $leave->status;
     $leave->update($validated);
 
-    if (request()->get("notify") && $leave->status !== "pending" && $leave->status !== $oldStatus) {
+    if (request()->get("notify") && $leave->status !== "pending" && $leave->wasChanged("status")) {
       $employee->notify($leave->status === 'approved' ? new LeaveApproved($leave) : new LeaveDeclined($leave));
     }
 

@@ -47,7 +47,7 @@ class LeaveApproved extends Notification
     return (new MailMessage)
       ->subject("Leave Request Approved")
       ->replyTo(Auth()->user()->email)
-      ->greeting("Hello! In regards to a leave request created " . $this->leave->created_at)
+      ->greeting("Hello!")
       ->line(new HtmlString(__("messages.leave.status", [
         "status" => "approved",
         "start" => $this->leave->start_date->format('m/d/Y'),
