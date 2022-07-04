@@ -1,15 +1,27 @@
 # Introduction
 
-This is a comprehensive employee management & payroll application built with Laravel 9 and Bootstrap 5.
+A comprehensive HR employee management and timekeeping system. Digitize timesheets, handle time-off requests, and automate standard onboarding procedures.
+
+Abbreviated list of functionality:
+
+- Employee management
+- Linked employee accounts
+- Track clock-in/clock-out times
+- Finalize timesheets with automated notifications
+- Manage leave/time-off requests
+
+Coming Soon:
+
+- Automate onboarding procedures with push notifications of hired/terminated employees
+- Pre-built reports and employee insights
+- Company/department closures and scheduling with notifications
+- Supervisor/Department tracking
 
 # To-Do
 
-# App
+## App
 
 - [ ] App Settings and Controls
-  - [ ] Departments
-  - [ ] Integrations (i.e. Send CRUD events to external application via Observers)
-  - [ ] Closures / Time off (With optional broadcast) (With department only targetting)
 - [ ] Navigation search bar (e.g. Employees, Timesheets, ...)
 
 ## Employees
@@ -27,18 +39,15 @@ This is a comprehensive employee management & payroll application built with Lar
 
 - [X] Editing timesheet options (e.g. Period/Pay type)
 - [X] Time card tracking
-- [ ] Time calculation by Day (including 1/4, 1/2, 3/4 days)
-- [ ] Time calculation by Hour
-- [X] Exporting
-  - [X] PDF
-  - [X] Email (To Employee / Custom)
+- [ ] Time unit calculation by Day/Hours (including 1/4, 1/2, 3/4 days)
+- [X] Exporting (PDF/Email)
 
 ## Reports
 
 - [ ] Report Center
 - [ ] Statistics/Graphs on pages
-  - [ ] Employee Statistics
-  - [ ] Overview Statistics
+- [ ] Employee Statistics
+- [ ] Overview Statistics
 
 ## Other
 
@@ -47,10 +56,6 @@ This is a comprehensive employee management & payroll application built with Lar
 - [X] Fix factories for tables with unique constraints (Timesheets, Timesheet Days)
 - [X] Implement lang file for long/duplicated messages
 - [X] When employees are terminated, reject all open PTO requests
-
-# Usage
-
-N/A
 
 # Requirements & Dependencies
 
@@ -61,4 +66,23 @@ N/A
 
 # Previews
 
-TBD
+## Overview Page
+
+![overview page](./screenshot/overview.png)
+
+## Employees Page
+
+![employee listing](./screenshot/employees.png)
+
+![employee](./screenshot/employee.png)
+
+## Timesheets
+
+![timesheet timecards](./screenshot/timesheet.png)
+
+![timesheet pdf](./screenshot/timesheet-pdf.jpg)
+
+
+## Leave/PTO Page
+
+![leaves time off page](./screenshot/leaves.png)
