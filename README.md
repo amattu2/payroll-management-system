@@ -27,11 +27,11 @@ This is a comprehensive employee management & payroll application built with Lar
 
 - [X] Editing timesheet options (e.g. Period/Pay type)
 - [X] Time card tracking
-- [ ] Time calculation by Day (including 1/2 days)
+- [ ] Time calculation by Day (including 1/4, 1/2, 3/4 days)
 - [ ] Time calculation by Hour
-- [ ] Exporting
+- [X] Exporting
   - [X] PDF
-  - [ ] Email (To Employee / Custom)
+  - [X] Email (To Employee / Custom)
 
 ## Reports
 

@@ -131,7 +131,7 @@
                         href="{{ Route('timesheet.export', ['id' => $employee->id, 'year' => $timesheet->year, 'month' => $timesheet->month]) }}">
                         PDF
                       </a></li>
-                    <li><a class="dropdown-item" href="#">Email</a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#emailTimesheetModal">Email</a></li>
                   </ul>
                 </div>
                 <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#periodSettingsModal">Period Settings</button>
@@ -250,6 +250,7 @@
   </div>
 
   @includeUnless(!$timesheet->id, 'partials.periodSettingsModal')
+  @includeUnless(!$timesheet->id, 'partials.emailTimesheetModal')
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>
@@ -257,6 +258,21 @@
     document.querySelector("#employee-selector").onchange = (e) => {
       window.location.href = e.target.querySelector("option:checked").dataset.href;
     };
+
+    /**
+     * Custom clone function for elements
+     */
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("[data-cs-role='clone']").forEach((e) => {
+        const target = document.querySelector(e.dataset.csTarget);
+
+        e.onclick = (evt) => {
+          const clone = target.cloneNode(true);
+
+          target.parentElement.appendChild(clone);
+        };
+      });
+    });
   </script>
 </body>
 

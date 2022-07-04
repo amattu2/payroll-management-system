@@ -486,4 +486,45 @@ class EmployeeController extends Controller
       "Content-Disposition" => "inline; filename=timesheet.pdf",
     ]);
   }
+
+  /**
+   * Send a custom email with a timesheet attached
+   *
+   * @param  int $employeeId
+   * @param  int $year
+   * @param  int $month
+   * @return \Illuminate\Support\Facades\Redirect
+   */
+  public function sendTimesheetEmail($employeeId, $year, $month)
+  {
+    // Validate Input
+    if (!is_numeric($employeeId) || !($employee = Employee::find($employeeId))) {
+      return redirect()->back()->withErrors([__("messages.404.employee")]);
+    }
+    if (!checkdate($month, 1, $year)) {
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
+    }
+    if (!($timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first())) {
+      return redirect()->back()->withErrors([__("messages.404.timesheet")]);
+    }
+
+    $validated = request()->validate([
+      "subject" => "required|string|max:45",
+      "message" => "required|string|max:10000",
+      "recipient" => "required|array",
+      "recipient.*" => "required|string|email|max:255",
+    ]);
+
+    foreach ($validated['recipient'] as $recipient) {
+      Mail::to($recipient)
+        ->send((new CustomMail($validated['subject'], $validated['message'], $timesheet))
+            ->attachData($timesheet->toPDF()->output("S"), "timesheet.pdf"));
+    }
+
+    return redirect()->route("employee.timesheet", [
+      "id" => $employeeId,
+      "year" => $timesheet->period->format("Y"),
+      "month" => $timesheet->period->format("m"),
+    ])->with("status", "Email sent to the specified recipient(s)");
+  }
 }

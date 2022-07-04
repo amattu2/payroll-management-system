@@ -20,12 +20,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SettingsController;
 
 /**
  * Authentication Routes
@@ -75,6 +75,8 @@ Route::middleware(['auth', 'auth.session', 'throttle:web'])->group(function () {
       ->name("leaves.create");
     Route::post('/{id}/email', [EmployeeController::class, 'sendEmail'])
       ->name("employee.email.create");
+    Route::post('/{id}/timesheet/{year}/{month}/email', [EmployeeController::class, 'sendTimesheetEmail'])
+      ->name("timesheet.email");
 
     /**
      * Update Routes
