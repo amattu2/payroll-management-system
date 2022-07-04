@@ -28,10 +28,12 @@ use App\Models\Timesheet;
 use App\Models\TimesheetDay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Notifications\LeaveApproved;
 use App\Notifications\LeaveDeclined;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 use App\Notifications\TimesheetFinalized;
 
 class EmployeeController extends Controller
@@ -44,7 +46,16 @@ class EmployeeController extends Controller
    */
   public function index(Request $request)
   {
-    return view('employees.index');
+    $top = Cache::remember('topEmployees', 60 * 5, function () {
+      return DB::table('employees')
+        ->select('id', 'firstname', 'lastname', 'title')
+        ->where('employment_status', 'active')
+        ->orderBy('hired_at', 'desc')
+        ->limit(4)
+        ->get();
+    });
+
+    return view('employees.index', compact('top'));
   }
 
   /**
