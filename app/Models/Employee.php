@@ -56,6 +56,7 @@ class Employee extends Model
     'pay_rate',
     'title',
     'employment_status',
+    'comments',
   ];
 
   /**

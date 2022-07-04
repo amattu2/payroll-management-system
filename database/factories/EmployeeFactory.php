@@ -58,6 +58,7 @@ class EmployeeFactory extends Factory
             'pay_rate' => $pay_type === "hourly" ? $this->faker->randomFloat(0, 11, 95) : $this->faker->randomFloat(0, 225, 950),
             'title' => $this->faker->jobTitle(),
             'employment_status' => $this->faker->randomElement(['active', 'terminated', 'suspended']),
+            'comments' => $this->faker->text(),
         ];
     }
 }

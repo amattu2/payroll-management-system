@@ -28,7 +28,7 @@ Coming Soon:
 
 - [ ] Department assignments
 - [ ] Supervisor tracking (e.g. Joan reports to Barry)
-- [ ] Internal comments / Notes
+- [X] Internal comments / Notes
 - [ ] Profile picture display
 - [ ] PTO cap and limit tracking
 - [X] General profile editing

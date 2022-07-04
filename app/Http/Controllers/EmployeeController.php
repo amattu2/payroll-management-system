@@ -93,6 +93,7 @@ class EmployeeController extends Controller
       'pay_period' => 'required|in:daily,weekly,biweekly,monthly',
       'pay_rate' => 'required|numeric',
       'title' => 'required|string|max:255',
+      'comments' => 'nullable|string',
     ]);
 
     $employee = Employee::create($validated);
@@ -433,6 +434,7 @@ class EmployeeController extends Controller
       'pay_period' => 'required|in:daily,weekly,biweekly,monthly',
       'pay_rate' => 'required|numeric',
       'title' => 'required|string|max:255',
+      'comments' => 'nullable|string',
     ]));
 
     return redirect()->route("employees.employee", $employeeId)->with("status", "The employee profile was updated");

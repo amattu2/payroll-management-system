@@ -84,6 +84,16 @@
             </div>
           @endif
 
+          <!-- Employee Notes -->
+          @if ($employee->comments)
+            <div class="card shadow-sm mb-3">
+              <div class="card-header">Comments</div>
+              <div class="card-body">
+                <textarea class="form-control" disabled>{{ $employee->comments }}</textarea>
+              </div>
+            </div>
+          @endif
+
           <!-- Employement Controls -->
           <div class="card shadow-sm mb-3">
             <div class="card-header">
@@ -124,7 +134,8 @@
             <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button"
                 href="{{ Route('employee.timesheet', $employee->id) }}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48"
+                  height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Timesheets</h1>
                   <small>Manage monthly timesheets</small>
@@ -194,7 +205,7 @@
                       <i class="fas fa-xl fa-money-bill me-auto"></i>
                       <h4 class="card-title me-auto">Pay</h4>
                     </div>
-                    <h2 class="text-center">${{ number_format($employee->pay_rate) }} / {{$employee->pay_type === 'hourly' ? ' hour' : ' day'}}</h2>
+                    <h2 class="text-center">${{ number_format($employee->pay_rate) }} / {{ $employee->pay_type === 'hourly' ? ' hour' : ' day' }}</h2>
                   </div>
                 </div>
                 <div class="col-4">
