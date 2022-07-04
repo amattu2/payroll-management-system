@@ -178,7 +178,8 @@ class Timesheet extends Model
     $pdf->SetX(10);
     $pdf->Cell($colWidth * 5, 7, "Employee: " . $this->employee->full_name . " (#" . str_pad($this->employee->id, 4, '0', STR_PAD_LEFT) . ")", 1, 0, 'L');
     $pdf->Cell($colWidth * 2, 7, "Pay Period: " . $this->period->format("F, Y"), 1, 1, 'L');
-    $pdf->SetFillColor(201, 201, 201);
+    $pdf->SetFillColor(210, 210, 210);
+    $pdf->SetFont('Helvetica', 'B', 10);
     $pdf->Cell($colWidth * 0.5, 7, "Date", 1, 0, 'C', 1);
     $pdf->Cell($colWidth * 0.8, 7, "Week Day", 1, 0, 'C', 1);
     $pdf->Cell($colWidth * 2.8, 7, "Description of Work", 1, 0, 'C', 1);
@@ -186,27 +187,31 @@ class Timesheet extends Model
     $pdf->Cell($colWidth * 0.7, 7, "Time Out", 1, 0, 'C', 1);
     $pdf->Cell($colWidth * 0.8, 7, "Adjustment", 1, 0, 'C', 1);
     $pdf->Cell($colWidth * 0.7, 7, "Net " . ($this->pay_type === 'hourly' ? 'Hours' : 'Days'), 1, 2, 'C', 1);
+    $pdf->SetFont('Helvetica', '', 10);
 
     foreach ($weeks as $week) {
       foreach ($week["days"] as $day) {
         $pdf->SetX(10);
         $pdf->Cell($colWidth * 0.5, 6.9, $day["day"]->date->format("d"), 1, 0, 'R');
         $pdf->Cell($colWidth * 0.8, 6.9, $day["day"]->date->format("l"), 1, 0, 'L');
-        $pdf->Cell($colWidth * 2.8, 6.9, $day["day"]->description, 1, 0, 'C');
+        $pdf->SetFont('Helvetica', 'I', 10);
+        $pdf->Cell($colWidth * 2.8, 6.9, $day["day"]->description, 1, 0, 'L');
+        $pdf->SetFont('Helvetica', '', 10);
         $pdf->Cell($colWidth * 0.7, 6.9, $day["day"]->start_time?->format("g:ia") ?? "-", 1, 0, 'C');
         $pdf->Cell($colWidth * 0.7, 6.9, $day["day"]->end_time?->format("g:ia") ?? "-", 1, 0, 'C');
-        $pdf->Cell($colWidth * 0.8, 6.9, $day["day"]->adjustment, 1, 0, 'C');
-        $pdf->Cell($colWidth * 0.7, 6.9, $day["day"]->total_units, 1, 2, 'C');
+        $pdf->Cell($colWidth * 0.8, 6.9, number_format($day["day"]->adjustment ?? 0, 2), 1, 0, 'C');
+        $pdf->Cell($colWidth * 0.7, 6.9, number_format($day["day"]->total_units ?? 0, 2), 1, 2, 'C');
         $total_units += $day["day"]->total_units;
       }
     }
 
     $pdf->SetX(10);
+    $pdf->SetFont('Helvetica', 'B', 10);
     $pdf->Cell($colWidth * 5.5, 7, $this->completed_at ? "Finalized on " . $this->completed_at : "", 0, 0, 'L');
     $pdf->Cell($colWidth * 1.5, 7, sprintf("Total %s: %s",
       $this->pay_type === 'hourly' ? 'Hours' : 'Days',
       number_format($total_units, 2)
-    ), 1, 2, 'L');
+    ), 1, 2, 'L', 1);
 
     return $pdf;
   }
