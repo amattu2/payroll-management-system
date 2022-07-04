@@ -93,7 +93,7 @@
     </select>
   </div>
   <div class="col-md-4">
-    <label for="pay_rate" class="form-label">Salary</label>
+    <label for="pay_rate" class="form-label">Pay Per Unit</label>
     <input type="number" min="0" step="1"
       value="{{ old('pay_rate') ?? (isset($employee) ? $employee->pay_rate : '') }}"
       class="form-control @error('pay_rate') is-invalid @enderror" name="pay_rate">

@@ -192,16 +192,16 @@
                   <div class="card p-3">
                     <div class="d-flex align-items-center justify-content-center text-muted mb-3">
                       <i class="fas fa-xl fa-money-bill me-auto"></i>
-                      <h4 class="card-title me-auto">Salary</h4>
+                      <h4 class="card-title me-auto">Pay</h4>
                     </div>
-                    <h2 class="text-center">${{ number_format($employee->pay_rate) }}</h2>
+                    <h2 class="text-center">${{ number_format($employee->pay_rate) }} / {{$employee->pay_type === 'hourly' ? ' hour' : ' day'}}</h2>
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="card p-3">
                     <div class="d-flex align-items-center justify-content-center text-muted mb-3">
                       <i class="fas fa-xl fa-calendar-check me-auto"></i>
-                      <h4 class="card-title me-auto">Pay Units</h4>
+                      <h4 class="card-title me-auto">Period Pay Units</h4>
                     </div>
                     <h2 class="text-center">
                       {{ $employee->currentTimesheet?->days->sum('total_units') ?? 0 }}
