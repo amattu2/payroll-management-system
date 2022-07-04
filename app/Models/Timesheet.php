@@ -164,17 +164,16 @@ class Timesheet extends Model
     $pdf->SetAuthor(config("app.name"));
     $pdf->SetTitle($this->period->format("F, Y") . " Timesheet");
     $pdf->SetSubject("Timesheet export for pay period " . $this->period->format("F, Y"));
-    $pdf->SetKeyWords("PDF, Confidential, Employee Timesheet");
+    $pdf->SetKeyWords("PDF, Confidential, Employee Timesheet, #{$this->id}");
 
     // Build PDF
-    $pdf->SetLineWidth(0.4);
+    $pdf->SetLineWidth(0.3);
     $pdf->SetFont('Helvetica', 'B', 15);
     $pdf->Cell(0, 10, config("app.name"), 0, 0, 'L');
     $pdf->SetFont('Helvetica', '', 15);
     $pdf->Cell(0, 10, "Timesheet | " . $this->period->format("F, Y"), 0, 2, 'R');
     $pdf->SetFont('Helvetica', '', 10);
     $pdf->Ln(2);
-    $pdf->Line(10, $pdf->getY(), $pdf->getPageWidth() - 10, $pdf->getY());
     $pdf->SetX(10);
     $pdf->Cell($colWidth * 5, 7, "Employee: " . $this->employee->full_name . " (#" . str_pad($this->employee->id, 4, '0', STR_PAD_LEFT) . ")", 1, 0, 'L');
     $pdf->Cell($colWidth * 2, 7, "Pay Period: " . $this->period->format("F, Y"), 1, 1, 'L');

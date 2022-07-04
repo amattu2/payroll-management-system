@@ -22,16 +22,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Mail\CustomMail;
 use App\Models\Employee;
 use App\Models\Timesheet;
-use App\Mail\CustomMail;
-use App\Notifications\TimesheetFinalized;
-use App\Notifications\LeaveApproved;
-use App\Notifications\LeaveDeclined;
+use App\Models\TimesheetDay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
+use App\Notifications\LeaveApproved;
+use App\Notifications\LeaveDeclined;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\TimesheetFinalized;
 
 class EmployeeController extends Controller
 {
@@ -124,8 +125,7 @@ class EmployeeController extends Controller
     }
 
     // Get Timesheet
-    $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first()
-      ?? new Timesheet(["period" => "$year-$month-01", "employee_id" => $employee->id]);
+    $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first() ?? new Timesheet(["period" => "$year-$month-01", "employee_id" => $employee->id]);
 
     return view('employees.timesheet', compact("timesheet", "employee"));
   }
@@ -172,7 +172,7 @@ class EmployeeController extends Controller
     return redirect()->route("employee.timesheet", [
       "id" => $employeeId,
       "year" => $timesheet->period->format("Y"),
-      "month" => $timesheet->period->format("m")
+      "month" => $timesheet->period->format("m"),
     ])->with("status", "The timesheet settings were updated");
   }
 
@@ -217,13 +217,15 @@ class EmployeeController extends Controller
 
     $days = $timesheet->days();
     foreach ($validated["days"] as $date => $day) {
-      $day['description'] = $day['description'] ?? "";
-      $day['adjustment'] = $day['adjustment'] % 15 === 0 ? $day['adjustment'] : 0;
+      $day['date'] = $date;
+      $day['adjustment'] = isset($day['adjustment']) && $day['adjustment'] % 15 === 0 ? $day['adjustment'] : 0;
       $day['total_units'] = $day['total_units'] ?? 0;
-      if ($day['id'] && (!$day['start_time'] && !$day['end_time'] && !$day['description'])) {
-        $days->where("id", $day['id'])->delete();
-      } else if (!$day['id']) {
-        $days->updateOrCreate(["date" => $date], $day);
+      if (!$day['start_time'] && !$day['end_time'] && empty($day['description'])) {
+        TimesheetDay::find($day['id'])?->delete();
+      } else if (is_numeric($day['id'])) {
+        TimesheetDay::find($day['id'])->update($day);
+      } else {
+        $days->create($day);
       }
     }
 
@@ -234,7 +236,7 @@ class EmployeeController extends Controller
     return redirect()->route("employee.timesheet", [
       "id" => $employeeId,
       "year" => $timesheet->period->format("Y"),
-      "month" => $timesheet->period->format("m")
+      "month" => $timesheet->period->format("m"),
     ])->with("status", "The timesheet was updated successfully");
   }
 
