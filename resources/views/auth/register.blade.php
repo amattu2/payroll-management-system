@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="{{str_replace('_', '-', app()->getLocale())}}">
-  <head>
-    <title>{{config('app.name')}} - Register</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{asset('css/app.css')}}" rel="stylesheet">
-  </head>
-  <body>
-    @include("partials.errors")
+<html lang="EN">
 
-    <h1>Register</h1>
+<head>
+  <title>{{ config('app.name') }} - Register</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
 
-    <!-- Login Form -->
-    <form class="p-3" method="POST" action="{{Route("auth.create")}}">
+<body>
+
+  <div class="bg-white container container-fluid mt-lg-5 p-lg-5 rounded shadow-sm">
+    @include('partials.errors')
+
+    <p class="h1">{{ __('messages.welcome.to.app', ['name' => config('app.name')]) }}</p>
+    <p class="lead">To begin your payroll management journey, please create a account below.</p>
+
+    <form method="POST" action="{{ Route('auth.create') }}">
       @csrf
       <div class="mb-3">
         <label for="name" class="form-label">Full Name</label>
@@ -32,8 +36,10 @@
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
 
-    <!-- Scripts -->
-    <script src="{{asset('js/app.js')}}" defer></script>
-  </body>
+  <!-- Scripts -->
+  <script src="{{ asset('js/app.js') }}" defer></script>
+</body>
+
 </html>
