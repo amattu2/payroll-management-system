@@ -17,7 +17,8 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="email">Recipient(s)</label>
-              <input type="email" class="form-control mb-2 @error('recipient.0') is-invalid @enderror" id="email" name="recipient[]" placeholder="Email">
+              <input type="email" class="form-control mb-2 @error('recipient.0') is-invalid @enderror" id="email" name="recipient[]" placeholder="Email"
+                value="{{ $employee->email ?? '' }}">
             </div>
             <a class="btn btn-primary btn-sm" role="button" data-cs-role="clone" data-cs-target="#email">Add Email</a>
           </div>
