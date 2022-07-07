@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div class="bg-white container container-fluid mt-lg-5 p-lg-5 rounded shadow-sm">
+  <div class="bg-white container container-fluid mt-lg-5 p-lg-5 p-3 rounded shadow-sm">
     @include('partials.errors')
 
     <p class="h1">Verify your password</p>
