@@ -60,7 +60,7 @@
   </div>
   <div class="position-absolute dropdown bottom-0 start-0 end-0 p-3 border-top">
     <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-      <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="32" height="32" class="rounded-circle me-3">
+      @include("partials.avatar", ["classes" => "me-3", "name" => auth()->user()->name])
       <strong>{{auth()->user()->name}}</strong>
     </a>
     <ul class="dropdown-menu text-small shadow">

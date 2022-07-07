@@ -69,8 +69,8 @@
                       </div>
                     </div>
                     <div class="progress mt-2" data-height="8" style="height: 8px;">
-                      <div class="progress-bar" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0"
-                        aria-valuemax="100" style="width: 25%;"></div>
+                      <div class="progress-bar" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"
+                        style="width: 25%;"></div>
                     </div>
                   </div>
                 </div>
@@ -89,14 +89,12 @@
             @can('employees.view.all')
               <div class="row">
                 <div class="card p-3 mb-3 shadow-sm">
-                  <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h6>Employees</h6>
                     @canany(['employees.create', 'employees.update', 'employees.delete'])
                       <div class="btn-toolbar mb-2 mb-md-0">
                         <a class="btn btn-sm btn-outline-secondary me-2" href="{{ Route('employees') }}">Manage</a>
-                        <a class="btn btn-sm btn-outline-secondary"
-                          href="{{ Route('employees.employee', 'create') }}">Create</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ Route('employees.employee', 'create') }}">Create</a>
                       </div>
                     @endcanany
                   </div>
@@ -115,8 +113,7 @@
                 <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
                   <b>{{ $leave->employee->firstname }} {{ $leave->employee->lastname }}</b> has a pending time-off
                   request from {{ $leave->created_at->format('m/d') }}
-                  <a href="{{ Route('leaves.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}"
-                    class="ms-1">View</a>
+                  <a href="{{ Route('leaves.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}" class="ms-1">View</a>
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
               @endforeach
@@ -128,15 +125,12 @@
                 <h6 class="border-bottom pb-2 mb-0">Upcoming Time-Off</h6>
                 @foreach ($upcomingLeaves as $leave)
                   <div class="d-flex text-muted pt-3">
-                    <img class="rounded me-2" style="width: 32px"
-                      src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" />
-
+                    @include('partials.avatar')
                     <div class="mb-0 small lh-sm w-100 {{ $i < 0 ? 'pb-3 border-bottom' : '' }}">
                       <div class="d-flex justify-content-between">
                         <strong class="text-gray-dark">{{ $leave->employee->firstname }}
                           {{ $leave->employee->lastname }} </strong>
-                        <a
-                          href="{{ Route('leaves.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}">View</a>
+                        <a href="{{ Route('leaves.leave', ['id' => $leave->employee->id, 'leaveId' => $leave->id]) }}">View</a>
                       </div>
                       <span class="d-flex align-items-center">
                         {{ $leave->start_date->format('M jS') }} &ndash; {{ $leave->end_date->format('M jS') }}
@@ -154,13 +148,7 @@
               <h6 class="border-bottom pb-2 mb-0">Overdue Timesheets</h6>
               @for ($i = 0; $i < 4; $i++)
                 <div class="d-flex text-muted pt-3">
-                  <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%"
-                      fill="#007bff" dy=".3em">32x32</text>
-                  </svg>
+                  @include('partials.avatar', ['classes' => 'me-2', 'e' => $employees[$i]])
                   <div class="mb-0 small lh-sm w-100 {{ $i < 3 ? 'pb-3 border-bottom' : '' }}">
                     <div class="d-flex justify-content-between">
                       <strong class="text-gray-dark">{employee name}</strong>

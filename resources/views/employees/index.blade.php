@@ -39,10 +39,13 @@
           @forelse ($top as $e)
             <div class="col-3">
               <div class="bg-white rounded shadow-sm p-3" role="button" onclick="window.location.href = '{{ Route('employees.employee', $e->id) }}';">
-                <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="" width="100"
-                  class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                <h5 class="mb-0">{{$e->firstname}} {{$e->lastname}}</h5>
-                <span class="small text-uppercase text-muted">{{$e->title}}</span>
+                @include('partials.avatar', [
+                    'size' => 100,
+                    'classes' => 'mb-3 shadow-sm mx-auto fs-2',
+                    'name' => $e->firstname . ' ' . $e->lastname,
+                ])
+                <h5 class="mb-0">{{ $e->firstname }} {{ $e->lastname }}</h5>
+                <span class="small text-uppercase text-muted">{{ $e->title }}</span>
               </div>
             </div>
           @empty

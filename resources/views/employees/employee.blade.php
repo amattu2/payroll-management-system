@@ -45,8 +45,7 @@
             <div class="card-body p-4">
               <div class="text-black">
                 <div class="d-flex mb-3">
-                  <img src="https://bootstrapious.com/i/snippets/sn-team/teacher-4.jpg" alt="Profile Picture" class="img-fluid"
-                    style="width: 62px; border-radius: 10px;">
+                  @include('partials.avatar', ['size' => 62, 'classes' => 'me-2 fs-4', 'e' => $employee])
                   <div class="ms-2 flex-shrink-0">
                     <h5 class="mb-1">{{ $employee->firstname }} {{ $employee->lastname }}</h5>
                     <p class="mb-0">{{ $employee->title }}</p>
@@ -134,8 +133,7 @@
             <div class="col">
               <a class="d-flex align-items-center p-3 bg-dark text-white rounded shadow-sm text-decoration-none" role="button"
                 href="{{ Route('employee.timesheet', $employee->id) }}">
-                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48"
-                  height="38">
+                <img class="me-3" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
                 <div class="lh-1">
                   <h1 class="h6 mb-0 text-white lh-1">Timesheets</h1>
                   <small>Manage monthly timesheets</small>
