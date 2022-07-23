@@ -22,6 +22,6 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
-        "moment": "^2.29.3"
+        "moment": "^2.29.4"
     }
 }
