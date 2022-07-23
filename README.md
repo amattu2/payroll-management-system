@@ -26,6 +26,7 @@ Coming Soon:
 
 ## Employees
 
+- [ ] Create a user account for a employee
 - [ ] Department assignments
 - [ ] Supervisor tracking (e.g. Joan reports to Barry)
 - [X] Internal comments / Notes
