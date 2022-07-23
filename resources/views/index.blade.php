@@ -125,7 +125,7 @@
                 <h6 class="border-bottom pb-2 mb-0">Upcoming Time-Off</h6>
                 @foreach ($upcomingLeaves as $leave)
                   <div class="d-flex text-muted pt-3">
-                    @include('partials.avatar')
+                    @include('partials.avatar', ["classes" => "me-2", "e" => $leave->employee])
                     <div class="mb-0 small lh-sm w-100 {{ $i < 0 ? 'pb-3 border-bottom' : '' }}">
                       <div class="d-flex justify-content-between">
                         <strong class="text-gray-dark">{{ $leave->employee->firstname }}
