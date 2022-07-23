@@ -22,7 +22,7 @@
 import { Chart, registerables } from 'chart.js';
 import moment from 'moment';
 import lodash from 'lodash';
-import bootstrap from 'bootstrap';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min';
 
 Chart.register(...registerables);
 
