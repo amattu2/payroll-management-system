@@ -38,4 +38,5 @@ return [
   'timesheet.finalized' => "Your timesheet for pay period :period has been finalized and is now available as of :when.",
   'timesheet.email.default' => "Hello!\n\nYour timesheet for pay period :period is attached below.\n\nIf you have any questions, please contact your supervisor.",
   'leave.status' => "Your leave request for the dates :start &ndash; :end was marked as <b>:status</b> by :name at :when.",
+  'timesheet.adjustment' => 'Manually adjust the total hours for this day by incrementing or decrementing the minutes.',
 ];

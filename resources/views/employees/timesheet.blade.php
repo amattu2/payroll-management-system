@@ -47,8 +47,7 @@
             @foreach ($employee->timesheets as $ts)
               <li class="nav-item">
                 @if ($ts->period != $timesheet->period)
-                  <a class="nav-link"
-                    href="{{ Route('employee.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
+                  <a class="nav-link" href="{{ Route('employee.timesheet', $employee->id) }}/{{ $ts->period->format('Y') }}/{{ $ts->period->format('m') }}">
                     <i class="far {{ $ts->completed_at ? 'fa-calendar-check' : 'fa-calendar' }} me-1"></i>
                     {{ $ts->period->format('F, Y') }}
                   </a>
@@ -144,7 +143,7 @@
             @csrf
             @foreach ($timesheet->weeks as $wi => $week)
               <div class="card shadow-sm mt-3" id="week{{ $week['index'] }}">
-                <a class="card-header text-decoration-none" data-bs-toggle="collapse" href="#weekBody{{ $wi }}" role="button">
+                <a class="card-header text-decoration-none bg-white" data-bs-toggle="collapse" href="#weekBody{{ $wi }}" role="button">
                   Week #{{ $week['index'] + 1 }}
                   ({{ $week['start']->format('M jS') }} &ndash; {{ $week['end']->format('M jS') }})
                 </a>
@@ -154,12 +153,15 @@
                     <div class="col-4">Work Description</div>
                     <div class="col-2">Time In</div>
                     <div class="col-2">Time Out</div>
-                    <div class="col-2">Adjustment (minutes)</div>
+                    @if ($timesheet->pay_type === 'hourly')
+                      <div class="col-2" data-bs-toggle="tooltip" title="{{ __('messages.timesheet.adjustment') }}">Adjustment (minutes)</div>
+                    @else
+                      <div class="col-2">Units (days)</div>
+                    @endif
                     <div class="col-1">Total</div>
                   </div>
                   @foreach ($week['days'] as $wdi => $day)
-                    <div class="row py-3 text-center {{ $wdi % 2 !== 0 ? 'bg-body' : '' }}"
-                      data-units="{{ $timesheet->pay_type === 'hourly' ? 'hours' : 'days' }}">
+                    <div class="row py-3 text-center {{ $wdi % 2 !== 0 ? 'bg-body' : '' }}" id="week{{ $wi }}day{{ $wdi }}">
                       <div class="col-1">
                         <input type="hidden" name="days[{{ $day['day']->date->format('Y-m-d') }}][id]" value="{{ $day['day']->id }}" />
                         {{ $day['day']->date->format('jS (D)') }}
@@ -181,12 +183,14 @@
                               <a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Sick</a>
                             </li>
                             <li>
-                              <a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Called
-                                Out</a>
+                              <a class="dropdown-item" role="button" onclick="addWorkDescription(this);">
+                                Called Out
+                              </a>
                             </li>
                             <li>
-                              <a class="dropdown-item" role="button" onclick="addWorkDescription(this);">Approved
-                                Time-Off</a>
+                              <a class="dropdown-item" role="button" onclick="addWorkDescription(this);">
+                                Approved Time-Off
+                              </a>
                             </li>
                           </ul>
                           <textarea name="days[{{ $day['day']->date->format('Y-m-d') }}][description]" class="form-control" rows="1" @disabled($timesheet->completed_at !== null)>{{ $day['day']->description }}</textarea>
@@ -194,25 +198,36 @@
                       </div>
                       <div class="col-2">
                         <input type="time" name="days[{{ $day['day']->date->format('Y-m-d') }}][start_time]" class="form-control"
-                          value="{{ $day['day']->id ? $day['day']->start_time?->format('H:i') : '' }}" onblur="calculateDayUnits(this);" step="60"
-                          @disabled($timesheet->completed_at !== null) />
+                          value="{{ $day['day']->id ? $day['day']->start_time?->format('H:i') : '' }}"
+                          onchange="recalculateWeekHours('week{{ $week['index'] }}');" step="60" @disabled($timesheet->completed_at !== null) />
                       </div>
                       <div class="col-2">
                         <input type="time" name="days[{{ $day['day']->date->format('Y-m-d') }}][end_time]" class="form-control"
-                          value="{{ $day['day']->id ? $day['day']->end_time?->format('H:i') : '' }}" onblur="calculateDayUnits(this);" step="60"
-                          @disabled($timesheet->completed_at !== null) />
+                          value="{{ $day['day']->id ? $day['day']->end_time?->format('H:i') : '' }}"
+                          onchange="recalculateWeekHours('week{{ $week['index'] }}');" step="60" @disabled($timesheet->completed_at !== null) />
                       </div>
                       <div class="col-2">
                         <div class="input-group">
-                          <span class="input-group-text">
-                            <i class="fas fa-clock"></i>
-                          </span>
-                          <input type="number" name="days[{{ $day['day']->date->format('Y-m-d') }}][adjustment]" class="form-control" value="0"
-                            step="15" min="-1440" max="1440" onblur="calculateDayUnits(this.parentElement);" @disabled($timesheet->completed_at !== null || $timesheet->pay_type !== 'hourly') />
+                          @if ($timesheet->pay_type === 'hourly')
+                            <span class="input-group-text">
+                              <i class="fas fa-clock"></i>
+                            </span>
+                            <input type="number" name="days[{{ $day['day']->date->format('Y-m-d') }}][adjustment]" class="form-control"
+                              value="{{ $day['day']['adjustment'] }}" step="15" min="-1440" max="1440"
+                              onchange="recalculateWeekHours('week{{ $week['index'] }}');" @disabled($timesheet->completed_at !== null || $timesheet->pay_type !== 'hourly') />
+                            <input type="hidden" name="days[{{ $day['day']->date->format('Y-m-d') }}][total_units]"
+                              value="{{ $day['day']['total_units'] ?: 0 }}" />
+                          @else
+                            <span class="input-group-text">
+                              <i class="fas fa-user-clock"></i>
+                            </span>
+                            <input type="number" name="days[{{ $day['day']->date->format('Y-m-d') }}][total_units]" class="form-control"
+                              value="{{ $day['day']->total_units ?: 0 }}" step="0.25" min="0" max="1"
+                              onchange="recalculateWeekDays(this);" @disabled($timesheet->completed_at !== null) />
+                          @endif
                         </div>
                       </div>
                       <div class="col-1">
-                        <input type="hidden" name="days[{{ $day['day']->date->format('Y-m-d') }}][total_units]" value="0" />
                         <span data-day-sum>N/A</span>
                       </div>
                     </div>
@@ -220,7 +235,7 @@
                   <div class="row text-center border-top fw-bold pt-3">
                     <div class="col-1">Totals</div>
                     <div class="col-10"></div>
-                    <div class="col-1" data-period-sum>N/A</div>
+                    <div class="col-1" data-week-sum>N/A</div>
                   </div>
                 </div>
               </div>
@@ -259,20 +274,11 @@
       window.location.href = e.target.querySelector("option:checked").dataset.href;
     };
 
-    /**
-     * Custom clone function for elements
-     */
-    window.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll("[data-cs-role='clone']").forEach((e) => {
-        const target = document.querySelector(e.dataset.csTarget);
-
-        e.onclick = (evt) => {
-          const clone = target.cloneNode(true);
-
-          target.parentElement.appendChild(clone);
-        };
-      });
-    });
+    @if ($timesheet->pay_type === 'hourly')
+      document.querySelectorAll(".card[id^='week']").forEach(week => recalculateWeekHours(week.id));
+    @else
+      document.querySelectorAll(".card[id^='week']").forEach(week => recalculateWeekDays(week.id));
+    @endif
   </script>
 </body>
 

@@ -32,6 +32,48 @@ window.moment = moment;
 window._ = lodash;
 
 /**
+ * Run events on page load
+ */
+ window.addEventListener("DOMContentLoaded", () => {
+  /**
+   * Activate Tooltips
+   */
+  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(e => {
+    new bootstrap.Tooltip(e)
+  });
+
+  /**
+   * Activate custom element clone role
+   */
+  document.querySelectorAll("[data-cs-role='clone']").forEach((e) => {
+    const target = document.querySelector(e.dataset.csTarget);
+
+    e.onclick = (evt) => {
+      const clone = target.cloneNode(true);
+
+      if (clone.value) {
+        clone.value = "";
+      }
+      if (clone.checked) {
+        clone.checked = false;
+      }
+
+      target.parentElement.appendChild(clone);
+    };
+  });
+});
+
+window.addDecimalPlaces = (element) => {
+  if (element.value > element.max) {
+    element.value = element.max;
+  } else if (element.value < element.min) {
+    element.value = element.min;
+  }
+
+  element.value = parseFloat(element.value).toFixed(2);
+};
+
+/**
  * Add the templated work description to the payroll day
  *
  * @param {HTMLElement} element
@@ -45,39 +87,66 @@ window.addWorkDescription = (element) => {
 };
 
 /**
- * Recalculate the payroll day's total units (hours/days)
+ * Recalculate the payroll week's total hourly units
  *
- * @param {HTMLElement} element
+ * @param {string} id Week element ID
  */
-window.calculateDayUnits = (element) => {
-  const parent = element.parentElement.parentElement;
-  const units = parent.dataset.units;
+window.recalculateWeekHours = (id) => {
+  const week = document.getElementById(id);
+  let total = 0;
 
-  const start = parent.querySelector("[name='start_time']");
-  const startTime = moment(start.value, "HH:mm", true);
-  const end = parent.querySelector("[name='end_time']");
-  const endTime = moment(end.value, "HH:mm", true);
-  if (!startTime.isValid() || !endTime.isValid()) {
-    return;
-  }
+  const rows = week.querySelectorAll(".row[id*='day']");
+  rows.forEach(row => {
+    const start = row.querySelector("[name*='start_time']");
+    const startTime = moment(start.value, "HH:mm", true);
+    const end = row.querySelector("[name*='end_time']");
+    const endTime = moment(end.value, "HH:mm", true);
 
-  if (startTime.isAfter(endTime)) {
-    return;
-  }
+    if (!startTime.isValid() || !endTime.isValid()) {
+      return;
+    }
 
-  const adjustment = parent.querySelector("[name='adjustment']");
-  if (!adjustment.value || parseInt(adjustment.value) % 15 !== 0) {
-    adjustment.value = 0;
-  } else {
-    endTime.add(parseInt(adjustment.value), "minutes");
-  }
+    if (startTime.isAfter(endTime)) {
+      start.classList.add('is-invalid');
+      end.classList.add('is-invalid');
+      return;
+    } else {
+      start.classList.remove('is-invalid');
+      end.classList.remove('is-invalid');
+    }
 
-  const duration = moment.duration(endTime.diff(startTime));
-  switch (units) {
-    case "hours":
-      parent.querySelector("[data-day-sum]").textContent = `${duration.asHours()} ${units}`;
-      break;
-    default:
-      break;
-  }
+    const adjustment = row.querySelector("[name*='adjustment']");
+    if (!adjustment.value || parseInt(adjustment.value) % 15 !== 0) {
+      adjustment.value = 0;
+    } else {
+      endTime.add(parseInt(adjustment.value), "minutes");
+    }
+
+    const duration = moment.duration(endTime.diff(startTime));
+    total += duration.asHours() || 0;
+    row.querySelector("[data-day-sum]").textContent = duration.asHours().toFixed(2) + " hours";
+    row.querySelector("[name*='total_units']").value = duration.asHours().toFixed(2);
+  });
+
+  week.querySelector("[data-week-sum]").textContent = total.toFixed(2) + " hours";
+};
+
+/**
+ * Recalculate a week's total day (salary) units
+ *
+ * @param {string} id Week element ID
+ */
+window.recalculateWeekDays = (id) => {
+  const week = document.getElementById(id);
+  let total = 0;
+
+  const rows = week.querySelectorAll(".row[id*='day']");
+  rows.forEach(row => {
+    const units = row.querySelector("[name*='total_units']");
+
+    total += parseFloat(units.value).toFixed(2) || 0;
+    row.querySelector("[data-day-sum]").textContent = parseFloat(units.value || 0).toFixed(2) + " days";
+  });
+
+  week.querySelector("[data-week-sum]").textContent = parseFloat(total).toFixed(2) + " days";
 };
