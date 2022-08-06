@@ -137,7 +137,11 @@ class EmployeeController extends Controller
     }
 
     // Get Timesheet
-    $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first() ?? new Timesheet(["period" => "$year-$month-01", "employee_id" => $employee->id]);
+    $timesheet = $employee->timesheets()->where("period", "$year-$month-01")->first() ?? new Timesheet([
+      "period" => "$year-$month-01",
+      "pay_type" => $employee->pay_type,
+      "employee_id" => $employee->id,
+    ]);
 
     return view('employees.timesheet', compact("timesheet", "employee"));
   }
