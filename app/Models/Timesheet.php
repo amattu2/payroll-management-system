@@ -68,7 +68,7 @@ class Timesheet extends Model
   /**
    * Get the timesheet days that belong to this timesheet
    */
-  public function Days()
+  public function TimesheetDays()
   {
     return $this->hasMany(TimesheetDay::class)->orderBy("date");
   }
@@ -111,7 +111,7 @@ class Timesheet extends Model
       }
 
       $this->attributes["weeks"][$week]["days"][] = [
-        "day" => $this->Days()->where("date", $cloned->format("Y-m-d"))->first() ?? new TimesheetDay([
+        "day" => $this->TimesheetDays()->where("date", $cloned->format("Y-m-d"))->first() ?? new TimesheetDay([
           "date" => $cloned->format("Y-m-d"),
           "timesheet_id" => $this->id,
         ]),
@@ -146,7 +146,7 @@ class Timesheet extends Model
   /**
    * Generate a PDF of this timesheet
    *
-   * @return Fpdf\Fpdf
+   * @return Fpdf
    */
   public function toPDF()
   {

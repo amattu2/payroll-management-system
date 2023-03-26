@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
         // Create Roles
         $this->call([
             RoleAndPermissionSeeder::class,
+            UsersTableSeeder::class,
         ]);
     }
 }

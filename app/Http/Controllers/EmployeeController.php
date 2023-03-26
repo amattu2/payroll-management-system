@@ -231,7 +231,7 @@ class EmployeeController extends Controller
       $timesheet->update(["pay_type" => $employee->pay_type]);
     }
 
-    $days = $timesheet->days();
+    $days = $timesheet->TimesheetDays();
     foreach ($validated["days"] as $date => $day) {
       $day['date'] = $date;
       $day['adjustment'] = isset($day['adjustment']) && $day['adjustment'] % 15 === 0 ? $day['adjustment'] : 0;

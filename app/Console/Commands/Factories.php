@@ -22,6 +22,8 @@
 
 namespace App\Console\Commands;
 
+use App;
+use Illuminate;
 use Illuminate\Console\Command;
 
 class Factories extends Command
@@ -48,23 +50,23 @@ class Factories extends Command
   public function handle()
   {
     // Delete old data
-    \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    \App\Models\Employee::truncate();
-    \App\Models\Leave::truncate();
-    \App\Models\Timesheet::truncate();
-    \App\Models\TimesheetDay::truncate();
-    \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+    App\Models\Employee::truncate();
+    App\Models\Leave::truncate();
+    App\Models\Timesheet::truncate();
+    App\Models\TimesheetDay::truncate();
+    Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
     // Disable Observer
-    \App\Models\Employee::unsetEventDispatcher();
+    App\Models\Employee::unsetEventDispatcher();
 
     // Create new models
-    \App\Models\Employee::factory()->count(rand(6, 45))
-      ->has(\App\Models\Timesheet::factory()->count(rand(1, 8))
-          ->has(\App\Models\TimesheetDay::factory()->count(rand(1, 22))))
-      ->has(\App\Models\Leave::factory()->count(rand(1, 3)))
+    App\Models\Employee::factory()->count(rand(6, 45))
+      ->has(App\Models\Timesheet::factory()->count(rand(1, 8))
+          ->has(App\Models\TimesheetDay::factory()->count(rand(1, 22))))
+      ->has(App\Models\Leave::factory()->count(rand(1, 3)))
       ->create();
 
-    return 0;
+    return Command::SUCCESS;
   }
 }
